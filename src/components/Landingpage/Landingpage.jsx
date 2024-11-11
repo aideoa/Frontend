@@ -28,7 +28,7 @@ const Landingpage = () => {
               <LinkButtonv2 />
             </Link>
           {
-            user.userType==='employee' &&   <Link to="/mutualtransfer">
+            user?.userType==='employee' &&   <Link to="/mutualtransfer">
             <MutualTransfer />
           </Link>
           }
