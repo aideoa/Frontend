@@ -32,7 +32,7 @@ import { AuthContext } from "./context/authContext";
 import { AdminAuthContext } from "./context/adminAuthContext";
 import AdminPanel from "./adminpanel/AdminPanel";
 import Payment from "./data/Payment";
-import Profile from "./components/profile/Profile";
+import Profile from "./components/profile/Profile"
 import AdminLogin from "./adminpanel/components/AdminLogin";
 
 export default function App() {
