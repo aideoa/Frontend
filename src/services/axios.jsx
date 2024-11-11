@@ -1,5 +1,5 @@
 import axios from "axios";
-const url=`http://localhost:4000/api/auth`
+const url=`${import.meta.env.VITE_API_BACKEND_URL}/api/auth`
 export const SignUpFunc = async (user)=>{
 
     try{
