@@ -1,0 +1,21 @@
+.info_heading{
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    margin: auto;
+}
+.heading{
+    width: fit-content;
+    font-size: 35px;
+    font-weight: 600;
+    margin: auto;
+}
+.info_heading_description{
+    text-align: center;
+}
+
+.info_heading_description *{
+    font-size: 15px;
+    font-weight: 400; 
+    color: gray;
+}

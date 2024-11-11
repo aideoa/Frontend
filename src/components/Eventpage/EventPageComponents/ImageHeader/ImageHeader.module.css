@@ -1,0 +1,30 @@
+.header_image {
+  position: relative;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.1)),
+    url(../../../../../public/Rectangle128.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 308px;
+  margin-bottom: 80px;
+}
+
+.cover_image {
+  position: absolute;
+  background-image:
+    url(../../../../../public/Rectangle\ 145.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 267px;
+  bottom: 0;
+}
+
+.cover_image h1 {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  color: white;
+  font-weight: 600;
+  font-size: 42px;
+  font-family: "Poppins";
+}
