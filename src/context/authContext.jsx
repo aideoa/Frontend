@@ -29,7 +29,7 @@ const AuthContextProvider = ({ children }) => {
     console.log("pre", refreshToken);
     try {
       const resp = await axios.post(
-        "http://localhost:4000/api/auth/refresh-token",
+        `${import.meta.env.VITE_API_BACKEND_URL}/api/auth/refresh-token`,
         { refreshToken }
       );
       const { accessToken } = resp.data;

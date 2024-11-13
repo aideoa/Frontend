@@ -3,7 +3,7 @@ import axios from "axios";
 export const latestNewgetdata = async () => {
   try {
     const response = await axios.get(
-      "http://localhost:4000/api/latestnews/posts"
+      `${import.meta.env.VITE_API_BACKEND_URL}/api/latestnews/posts`
     );
     return response;
   } catch (error) {

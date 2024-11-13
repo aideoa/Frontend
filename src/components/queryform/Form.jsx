@@ -1,7 +1,7 @@
 import axios from 'axios';
 import  { useState } from 'react'
 import toast from 'react-hot-toast';
-const url=`http://localhost:4000/api`
+const url=`${import.meta.env.VITE_API_BACKEND_URL}/api`
 const Form = () => {
     const [formdata, setFormData] = useState({
         name: '',

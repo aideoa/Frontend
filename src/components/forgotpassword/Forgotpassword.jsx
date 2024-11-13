@@ -15,7 +15,7 @@ import {
 import { MdAlternateEmail } from 'react-icons/md';
 import { Link, useNavigate } from "react-router-dom";
 
-const url = `http://localhost:4000/api/auth`;
+const url = `${import.meta.env.VITE_API_BACKEND_URL}/api/auth`;
 const Forgotpassword = () => {
   const nav=useNavigate()
     const [formData, setFormData] = useState({

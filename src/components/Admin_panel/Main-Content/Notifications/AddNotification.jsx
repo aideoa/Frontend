@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
-const url = `http://localhost:4000/api/auth`;
+const url = `${import.meta.env.VITE_API_BACKEND_URL}/api/auth`;
 const AddNotification = ({ setActiveComponent }) => {
   const [formData, setFormData] = useState({
     name: "",

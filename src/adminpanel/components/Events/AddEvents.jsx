@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-const url = `http://localhost:4000/api`;
 const AddEvent = ({ setActiveComponent }) => {
   const [formData, setFormData] = useState({
     title: "",

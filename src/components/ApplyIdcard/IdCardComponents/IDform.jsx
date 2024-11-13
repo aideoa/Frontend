@@ -59,7 +59,7 @@ const IDform = () => {
 
   const authenticator = async () => {
     try {
-      const response = await fetch("http://localhost:4000/image");
+      const response = await fetch(`${import.meta.env.VITE_API_BACKEND_URL}/image`);
 
       if (!response.ok) {
         const errorText = await response.text();

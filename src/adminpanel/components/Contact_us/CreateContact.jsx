@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
-const url = `http://localhost:4000/api/auth`;
+const url = import.meta.env.VITE_API_BACKEND_URL;
 const CreateContact = ({ setActiveComponent }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -17,7 +17,7 @@ const CreateContact = ({ setActiveComponent }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${url}/signup`, formData);
+      const res = await axios.post(`${url}/api/auth/signup`, formData);
     } catch (error) {
       console.log(error);
     }

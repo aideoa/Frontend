@@ -15,7 +15,7 @@ import UserRoleSelect from "./Cards/UserRoleSelect";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { validateEmail } from "../functions/validate";
-const url = `http://localhost:4000/api/auth`;
+
 const Signup = () => {
   const [formData, setFormData] = useState({
     fullName: "",
@@ -191,7 +191,7 @@ const Signup = () => {
               />
             </div>
           )}
-          <Link to="http://localhost:4000/api/social/google">
+          <Link to={`${import.meta.env.VITE_API_BACKEND_URL}/api/social/google`}>
             <GoogleSignInButton />
           </Link>
 

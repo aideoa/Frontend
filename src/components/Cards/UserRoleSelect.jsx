@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
-const url = `http://localhost:4000/api/auth`;
+const url = `${import.meta.env.VITE_API_BACKEND_URL}/api/auth`;
 const UserRoleSelect = ({ userTypemodal, setUserTypeModal, formData }) => {
   const [userType, setUserType] = useState("");
   const navigate = useNavigate();

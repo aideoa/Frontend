@@ -136,7 +136,7 @@ const Login = () => {
       
         </form>
         <div className="mt-4 text-center text-white">
-          <Link to="http://localhost:4000/api/social/google">
+          <Link to={`${import.meta.env.VITE_API_BACKEND_URL}/api/social/google`}>
               <GoogleSignInButton title={"SignIn"} />
             </Link>
             <span>
