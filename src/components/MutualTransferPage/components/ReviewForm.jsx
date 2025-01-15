@@ -41,7 +41,9 @@ const ReviewForm = ({ formData, setOpen, setFormData }) => {
   };
   return (
     <div className=" bg-white border  border-1 dropshadowbox rounded-2xl w-full my-20 customScrollbar  overflow-y-scroll  scroll-smooth  h-[80vh] ">
+
       <form 
+
         onSubmit={handleSubmit}
         className=" overflow-x-hidden gap-5 flex flex-col py-5 justify-center items-center"
       >

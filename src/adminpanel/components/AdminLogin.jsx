@@ -1,3 +1,6 @@
+
+
+
 import { useContext, useEffect, useState } from "react";
 
 import { AdminAuthContext } from "../../context/adminAuthContext";
@@ -32,7 +35,10 @@ const AdminLogin = () => {
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-xl">
         <div className="text-center">
           <img
+
             src="/AIDEOA LOGO 3.png"
+
+           
             alt="AIDEOA Logo"
             className="mx-auto mb-2 w-12"
           />

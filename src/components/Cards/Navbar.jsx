@@ -48,20 +48,25 @@ const Navbar = () => {
         <div className="  max-lg:hidden lg:flex  lg:flex-row  gap-2 ">
           <div className=" adeiou flex flex-row justify-between items-center">
             <NavLink
+
               className={` wo py-3 px-4 hover:text-purple-600 hover:border-b  hover:border-purple-600  ${pathname === "/" && "text-purple-600 border-purple-600 border-b"
                 } `}
+
               to="/"
             >
               Home
             </NavLink>
             <NavLink
+
               className={` wo py-3 px-4 hover:text-purple-600 hover:border-b  hover:border-purple-600 ${pathname === "/event" &&
                 "text-purple-600 border-purple-600 border-b"
                 } `}
+
               to="/event"
             >
               AIDEOA Events
             </NavLink>
+
             {
               user?.userType === 'employee' && <NavLink
                 className={` wo py-3 px-4 hover:text-purple-600 hover:border-b  hover:border-purple-600 ${pathname === "/mutualtransfer" &&
@@ -76,31 +81,38 @@ const Navbar = () => {
               className={` wo py-3 px-4 hover:text-purple-600 hover:border-b  hover:border-purple-600 ${pathname === "/education" &&
                 "text-purple-600 border-purple-600 border-b"
                 } `}
+
               to="/education"
             >
               Our Team
             </NavLink>
             <NavLink
               className={` wo py-3 px-4 hover:text-purple-600 hover:border-b  hover:border-purple-600 
+
               ${pathname === "/about" &&
                 "text-purple-600 border-purple-600 border-b"
                 } `}
+
               to="/about"
             >
               About us
             </NavLink>
             <NavLink
+
               className={` wo py-3 px-4 hover:text-purple-600 hover:border-b  hover:border-purple-600 ${pathname === "/query" &&
                 "text-purple-600 border-purple-600 border-b"
                 } `}
+
               to="/query"
             >
               Query
             </NavLink>
             <NavLink
+
               className={` wo py-3 px-4 hover:text-purple-600 hover:border-b  hover:border-purple-600 ${pathname === "/contact" &&
                 "text-purple-600 border-purple-600 border-b"
                 } `}
+
               to="/contact"
             >
               Contact us
@@ -129,9 +141,11 @@ const Navbar = () => {
                 <Link to="/profile">
                   <MenuItem onClick={handleClose}>Profile</MenuItem>
                 </Link>
+
                 <MenuItem onClick={() => {
                   handleLogout()
                   setAnchorEl(null);
+
                 }}>Logout</MenuItem>
               </Menu>
             </div>
@@ -150,8 +164,10 @@ const Navbar = () => {
           <RxHamburgerMenu className="w-[44px] cursor-pointer mx-3 h-[44px]" />
         </div>
         <div
+
           className={`fixed bg-white flex flex-col lg:hidden  inset-0 ${ham ? "hidden" : "block"
             } `}
+
         >
           <div className="flex flex-row border-b border-gray-300 justify-between items-center ">
             <div
@@ -176,21 +192,26 @@ const Navbar = () => {
             <div className="flex flex-col-reverse max-lg:flex-col  ">
               <div className="flex flex-col">
                 <NavLink
+
                   className={`block py-3 px-6 hover:text-purple-600 hover:bg-gray-100 ${pathname === "/" && "text-purple-600 "
                     }`}
+
                   to="/"
                   onClick={sethamfunc}
                 >
                   Home
                 </NavLink>
                 <NavLink
+
                   className={`block py-3 px-6 hover:text-purple-600 hover:bg-gray-100 ${pathname === "/event" && "text-purple-600 "
                     }`}
+
                   to="/event"
                   onClick={sethamfunc}
                 >
                   AIDEOA Events
                 </NavLink>
+
                 {
                   user?.userType === 'employee' && <NavLink
                     className={`block py-3 px-6 hover:text-purple-600 hover:bg-gray-100 ${pathname === "/mutualtransfer" && "text-purple-600 "
@@ -204,30 +225,37 @@ const Navbar = () => {
                 <NavLink
                   className={`block py-3 px-6 hover:text-purple-600 hover:bg-gray-100 ${pathname === "/education" && "text-purple-600 "
                     }`}
+
                   to="/education"
                   onClick={sethamfunc}
                 >
                   Our Team
                 </NavLink>
                 <NavLink
+
                   className={`block py-3 px-6 hover:text-purple-600 hover:bg-gray-100 ${pathname === "/about" && "text-purple-600 "
                     }`}
+
                   to="/about"
                   onClick={sethamfunc}
                 >
                   About us
                 </NavLink>
                 <NavLink
+
                   className={`block py-3 px-6 hover:text-purple-600 hover:bg-gray-100 ${pathname === "/query" && "text-purple-600 "
                     }`}
+
                   to="/query"
                   onClick={sethamfunc}
                 >
                   Query
                 </NavLink>
                 <NavLink
+
                   className={`block py-3 px-6 hover:text-purple-600 hover:bg-gray-100 ${pathname === "/contact" && "text-purple-600 "
                     }`}
+
                   to="/contact"
                   onClick={sethamfunc}
                 >
@@ -238,8 +266,10 @@ const Navbar = () => {
               {user ? (
                 <div>
                   <NavLink
+
                     className={` py-3 px-6 flex items-center gap-1 hover:text-purple-600 hover:bg-gray-100 ${pathname === "/profile" && "text-purple-600 "
                       }`}
+
                     to="/profile"
                     onClick={sethamfunc}
                   >

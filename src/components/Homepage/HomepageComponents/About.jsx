@@ -2,6 +2,7 @@ import MissionModal from "../../../utils/MissionModal"
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+
 const flow = [{ head: "Aideoa Events", p: "1200+  events", link: "/event" },
 { head: "Online Test", p: "1200+  events", link: "/onlinetest" },
 { head: "Student Corner", p: "1200+  materials", link: "/studentcorner" },
@@ -14,9 +15,11 @@ const aboutArray = [
   { head: "Our Mission", tag: "At AIDEOA, we strive to address and resolve issues faced by mining students and professionals.", icon: "/flag.png" },
   { head: "Our Support and Resources", tag: "We offer a wide range of study materials to aid mining students and professionals in their preparation for various examinations", icon: "/laptop.png", link: "/contact" },
   { head: "Online Classes", tag: "JWe conduct online classes where students can engage in discussions about different mining topics and field-related issues.", icon: "/headset.png", link: "/onlineclass" },
+
 ]
 
 const About = () => {
+
 
   const [open, setOpen] = useState(false)
   const bodyStyle = document.body.style;
@@ -45,6 +48,7 @@ const About = () => {
             })
           }
 
+
         </div>
         <div className="mt-28  flex flex-col gap-8 text-center">
           <h3 className=" font-black text-3xl ">
@@ -57,6 +61,7 @@ const About = () => {
             Know about our organization, mission, and objectives.
           </p>
           <div className="flex justify-center gap-12 relative flex-wrap ">
+
 
             {open && <div className="fixed container px-48 max-lg:px-14 max-lg:px-6 top-[57%] left-1/2  transform -translate-x-1/2 -translate-y-1/2 transition ease-in duration-500 ">
               <MissionModal setOpen={setOpen} />
@@ -77,6 +82,7 @@ const About = () => {
                   </p>
                 </div>
               </div></Link>
+
             })}
           </div>
         </div>

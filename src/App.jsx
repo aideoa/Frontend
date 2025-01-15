@@ -45,7 +45,9 @@ export default function App() {
     <ScrollToTop>
       <Routes>
         <Route path="/" element={<MainLayout />}>
+
           <Route index element={<Home />} />  {/*index route= When the user navigates to the parent route (e.g., /), this route will automatically render */}
+          <Route index element={<Home />} />
           <Route path="event" element={<Event />} />
           <Route path="contact" element={<ContactUs />} />
           <Route path="login" element={<Login />} />
@@ -83,8 +85,6 @@ export default function App() {
           <Route path="forgotpassword" element={<Forgotpassword />} />
           <Route path="onlineclass" element={<OnlineClass />} />
           <Route path="additional" element={<UserRoleSelect />} />
-          <Route path="student-form" element={<StudentForm />} />
-          <Route path="employee-form" element={<EmployeeForm />} />
           <Route path="profile" element={<Profile />} />
           
         </Route>

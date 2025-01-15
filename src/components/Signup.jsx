@@ -130,7 +130,7 @@ const Signup = () => {
                 required
                 value={formData.password}
                 onChange={handleChange}
-              />      
+              />
               {pass ? (
                 <FaRegEye
                   onClick={() => setPass(!pass)}

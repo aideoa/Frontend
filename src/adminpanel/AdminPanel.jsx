@@ -124,7 +124,9 @@ const AdminPanel = () => {
     }
   };
   return (
+
     <div className=" flex overflow-y-scroll scrollbar-hide" >
+
     <div className="lg:w-[20%] max-lg:w-[10%]">
       <AdminSidebar
         activeComponent={activeComponent}

@@ -63,7 +63,9 @@ console.log(dataList)
         <Box>
           <TabList onChange={handleChange} aria-label="lab API tabs example">
             <Tab label="My transfer requests" value="1" />
+
             {/* <Tab label="My Approved requests" value="2" /> */}
+
           </TabList>
         </Box>
         <TabPanel value="1">
@@ -112,9 +114,11 @@ console.log(dataList)
               <th className=" p-1 text-white bg-purple-400  ">
                 <p>Date</p>
               </th>
+
               {/* <th className=" p-1 text-white bg-purple-400  ">
                 <p>Status</p>
               </th> */}
+
           
             </tr>
           </thead>
@@ -167,9 +171,11 @@ console.log(dataList)
                   <td className="border p-1 text-center text-xs text-nowrap  border-gray-300">
                     <p>{data?.createdAt.toString().slice(0, 10)} </p>
                   </td>
+
                   {/* <td className="border p-1 text-center text-xs text-nowrap  border-gray-300">
                     <p>{data?.status} </p>
                   </td> */}
+
               
                 </tr>
               ))}
@@ -177,7 +183,9 @@ console.log(dataList)
         </table>
       </div>
    </TabPanel>
+
        {/*  <TabPanel value="2">
+
         <div className="overflow-x-auto">
         <table className="">
           <thead className="rounded-t-2xl">
@@ -284,7 +292,9 @@ console.log(dataList)
           </tbody>
         </table>
       </div>
+
         </TabPanel> */}
+
       </TabContext>
     </Box>
     </>

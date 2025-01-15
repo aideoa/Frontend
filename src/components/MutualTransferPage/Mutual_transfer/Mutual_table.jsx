@@ -98,7 +98,9 @@ const Mutual_table = () => {
               <th className="text-white bg-purple-400">Transfer Subsidiary</th>
               <th className="text-white bg-purple-400">Transfer Mine</th>
               <th className="text-white bg-purple-400">Date</th>
+
              
+
             </tr>
           </thead>
 
@@ -120,9 +122,10 @@ const Mutual_table = () => {
                 <td className="border p-1 text-center">{data.preferredTransferArea}</td>
                 <td className="border p-1 text-center">{data.preferredTransferSubsidiary}</td>
                 <td className="border p-1 text-center">{data.preferredTransferMine}</td>
-                <td className="border p-1 text-center text-xs w-[100px]">{data.createdAt.toString().slice(0, 10)}</td>
+<td className="border p-1 text-center text-xs w-[100px]">{data.createdAt.toString().slice(0, 10)}</td>
                 
                 
+
               </tr>
             ))}
           </tbody>

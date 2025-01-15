@@ -16,14 +16,17 @@ const sidebar = [
   { icon: TiDocumentText, heading: "Resource" },
   { icon: TiDocumentText, heading: "Latest News" },
   { icon: FaRegQuestionCircle, heading: "Query" },
+
   { icon: BiTransferAlt , heading: "Mutual Transfer" },
   { icon: PiIdentificationBadgeDuotone, heading: "ID Card" },
   { icon: FaBell, heading: "Newsletter" },
 
  // { icon: BiTransferAlt , heading: "Mutual Request" },
+
   { icon: GoGoal , heading: "Our Missions" },
   { icon: RiMoneyRupeeCircleLine, heading: "Donation" },
 ];
+
 
 const AdminSidebar = ({sidebarRef, handleScroll, activeComponent, setActiveComponent }) => {
   return (
@@ -42,6 +45,7 @@ const AdminSidebar = ({sidebarRef, handleScroll, activeComponent, setActiveCompo
          >
         <ul className="flex lg:p-5 flex-col gap-2 ">
     
+
           {sidebar.map((item, index) => {
             const Icon = item.icon;
             return (
@@ -78,7 +82,9 @@ const AdminSidebar = ({sidebarRef, handleScroll, activeComponent, setActiveCompo
             );
           })}
         </ul>
+
         </div>
+
       </div>
     </div>
   );

@@ -7,7 +7,9 @@ const ImageCarousel = () => {
 
   const goToPrevious = () => {
     if (currentIndex === 0) {
+
       setCurrentIndex(images.length - 1);   
+
 
       return;
     }

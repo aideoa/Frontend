@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 
 const url = `${import.meta.env.VITE_API_BACKEND_URL}/api/auth`;
 
+
 const UserRoleSelect = ({ userTypemodal, setUserTypeModal, formData }) => {
 const [userType, setUserType] = useState("");
 const navigate = useNavigate();
@@ -164,12 +165,14 @@ return (
                 type="text"
                 placeholder={
                  userType === "employee"
+
                     ? "Enter your company"
                     : "Enter University name"
                 }
                 value={org}
                 onChange={(e) => setOrg(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none "
+
              />
             </div>
          )}
@@ -182,12 +185,15 @@ return (
                 type="text"
                 placeholder={
                  userType === "employee"
+
+
                     ? "Enter employee Id"
                     : "Enter Student Id"
                 }
                 value={idNo}
                 onChange={(e) => setIdNo(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none "
+
              />
             </div>
          )}
@@ -219,11 +225,13 @@ return (
             <div className="mb-4">
              <label className="block mb-2">Mobile No</label>
              <input
+
                 type="text"
                 placeholder={"Enter Mobile No"}
                 value={mobile}
                 onChange={(e) => setMobile(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none "
+
              />
             </div>
          )}
@@ -240,6 +248,7 @@ return (
      </div>
     </div>
 );
+
 };
 
 export default UserRoleSelect;
