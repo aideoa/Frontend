@@ -86,6 +86,8 @@ export default function App() {
           <Route path="onlineclass" element={<OnlineClass />} />
           <Route path="additional" element={<UserRoleSelect />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="student-form" element={<StudentForm />} />
+          <Route path="student-form" element={<EmployeeForm />} />
           
         </Route>
         <Route
