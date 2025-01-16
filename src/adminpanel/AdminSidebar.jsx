@@ -16,24 +16,36 @@ const sidebar = [
   { icon: TiDocumentText, heading: "Resource" },
   { icon: TiDocumentText, heading: "Latest News" },
   { icon: FaRegQuestionCircle, heading: "Query" },
+
+  { icon: BiTransferAlt , heading: "Mutual Transfer" },
   { icon: PiIdentificationBadgeDuotone, heading: "ID Card" },
   { icon: FaBell, heading: "Newsletter" },
-  { icon: BiTransferAlt , heading: "Mutual Transfer" },
-  { icon: BiTransferAlt , heading: "Mutual Request" },
+
+ // { icon: BiTransferAlt , heading: "Mutual Request" },
+
   { icon: GoGoal , heading: "Our Missions" },
   { icon: RiMoneyRupeeCircleLine, heading: "Donation" },
 ];
 
-const AdminSidebar = ({ activeComponent, setActiveComponent }) => {
+
+const AdminSidebar = ({sidebarRef, handleScroll, activeComponent, setActiveComponent }) => {
   return (
     <div className="flex">
-      <div className="bg-white w-full h-screen p-4 max-md:px-2">
-        <div className="text-[#5A2175] text-2xl font-bold mb-6 flex items-center">
-          <img src="122.jpg" className="w-10" alt="Logo" />
+      <div className="bg-white w-full h-screen overflow-y-scroll p-4 max-md:px-2">
+      <div className='bg-white w-[20%] h-16 flex justify-center items-center fixed top-0 shadow-md z-10'>
+        <div className="text-[#5A2175] text-2xl font-bold mb-6 flex justify-center items-center pt-2">
+          <img src="/AIDEOA LOGO 3.png" className="w-10" alt="Logo" /> 
           <span className="hidden lg:inline">AIDEOA</span>{" "}
           {/* Text hidden on smaller screens */}
         </div>
-        <ul className="flex lg:p-5 flex-col gap-2">
+        </div>
+        <div className="pt-16"
+         ref={sidebarRef}
+         onScroll={handleScroll}
+         >
+        <ul className="flex lg:p-5 flex-col gap-2 ">
+    
+
           {sidebar.map((item, index) => {
             const Icon = item.icon;
             return (
@@ -70,6 +82,9 @@ const AdminSidebar = ({ activeComponent, setActiveComponent }) => {
             );
           })}
         </ul>
+
+        </div>
+
       </div>
     </div>
   );

@@ -98,8 +98,9 @@ const Mutual_table = () => {
               <th className="text-white bg-purple-400">Transfer Subsidiary</th>
               <th className="text-white bg-purple-400">Transfer Mine</th>
               <th className="text-white bg-purple-400">Date</th>
-              <th className="text-white bg-purple-400">Status</th>
-              <th className="text-white bg-purple-400">Select</th>
+
+             
+
             </tr>
           </thead>
 
@@ -121,23 +122,10 @@ const Mutual_table = () => {
                 <td className="border p-1 text-center">{data.preferredTransferArea}</td>
                 <td className="border p-1 text-center">{data.preferredTransferSubsidiary}</td>
                 <td className="border p-1 text-center">{data.preferredTransferMine}</td>
-                <td className="border p-1 text-center text-xs">{data.createdAt.toString().slice(0, 10)}</td>
-                <td className="border p-1 text-center text-xs">{data?.status}</td>
-                <td className="border px-2 py-1 text-center text-xs">
-                  <button
-                    type="button"
-                    disabled={
-                      data?.userId === user?.sub || data?.status === "approved"
-                    }
-                    onClick={() => handleAccept(data)}
-                    className={`bg-purple-400 text-white px-2 py-1 text-xs rounded-md ${
-                      (data?.userId === user?.sub || data?.status === "approved") &&
-                      "bg-gray-300 cursor-not-allowed"
-                    }`}
-                  >
-                    Accept
-                  </button>
-                </td>
+<td className="border p-1 text-center text-xs w-[100px]">{data.createdAt.toString().slice(0, 10)}</td>
+                
+                
+
               </tr>
             ))}
           </tbody>

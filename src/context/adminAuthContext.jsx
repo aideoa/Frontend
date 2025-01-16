@@ -64,15 +64,25 @@ const AdminAuthContextProvider = ({ children }) => {
     setAdminUser(null);
     setAuthToken(null);
     localStorage.removeItem("adminAuthToken");
+
+    toast.success("Logged out successfully!");
+    navigate("/admin/login");
+
   };
 
   useEffect(() => {
     if (adminAuthToken) {
       isTokenExpired();
     }
-  }, []);
+
+    
+  }, [adminAuthToken]);
+
   return (
-    <AdminAuthContext.Provider value={{ handleLogin, adminUser, adminAuthToken }}>
+    <AdminAuthContext.Provider
+      value={{ handleLogin, adminUser, adminAuthToken, handleLogout }} // Include handleLogout here
+    >
+
       {children}
     </AdminAuthContext.Provider>
   );
