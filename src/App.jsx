@@ -76,7 +76,7 @@ export default function App() {
           <Route path="about" element={<About />} />
           <Route path="education" element={<EducationCell />} />
           <Route path="idcard" element={<ApplyIdCard />} />
-          <Route path="home" element={<Landingpage />} />
+          <Route path="home" element={user ?<Landingpage />:<Navigate to="/signup" />} />
           <Route path="onlinetest" element={<Onlinetest />} />
           <Route path="studentcorner" element={<StudentCorner />} />
           <Route path="employeecorner" element={<Employeecorner />} />

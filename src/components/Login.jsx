@@ -136,9 +136,9 @@ const Login = () => {
       
         </form>
         <div className="mt-4 text-center text-white">
-          <Link to={`${import.meta.env.VITE_API_BACKEND_URL}/api/social/google`}>
+          {/* <Link to={`${import.meta.env.VITE_API_BACKEND_URL}/api/social/google`}>
               <GoogleSignInButton title={"SignIn"} />
-            </Link>
+            </Link> */}
             <span>
               Not have account yet?{" "}
               <Link

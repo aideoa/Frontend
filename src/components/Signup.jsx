@@ -188,12 +188,13 @@ const Signup = () => {
               <UserRoleSelect
                 formData={formData}
                 userTypemodal={userTypemodal}
+                setUserTypeModal={setUserTypeModal}
               />
             </div>
           )}
-          <Link to={`${import.meta.env.VITE_API_BACKEND_URL}/api/social/google`}>
+          {/* <Link to={`${import.meta.env.VITE_API_BACKEND_URL}/api/social/google`}>
             <GoogleSignInButton />
-          </Link>
+          </Link> */}
 
           <div className="mt-4 text-center text-white pb-10">
             <span>
