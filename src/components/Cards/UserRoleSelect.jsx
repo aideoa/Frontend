@@ -248,8 +248,8 @@ const UserRoleSelect = ({ userTypemodal, setUserTypeModal, formData }) => {
                         className="w-full px-3 py-2 border border-gray-300 rounded-xl mb-4"
                      >
                         <option value="">-- Select Subsidiary --</option>
-                        {subsidiaries.map((sub) => (
-                           <option key={sub.code} value={sub.name}>
+                        {subsidiaries.map((sub , index) => (
+                           <option key={index} value={sub.name}>
                               {sub.name}
                            </option>
                         ))}
