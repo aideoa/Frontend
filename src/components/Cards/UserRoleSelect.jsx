@@ -25,32 +25,43 @@ const UserRoleSelect = ({ userTypemodal, setUserTypeModal, formData }) => {
    const [seconds, setSeconds] = useState(0);
    const [error, setError] = useState("");
    const [isLoading, setIsLoading] = useState(false);
+   const [subsidiary, setSubsidiary] = useState("");
 
 
    const uploadToImageKit = async (file) => {
       try {
-          const { data } = await axios.get(authEndpoint);
-          if (!data?.token || !data?.signature || !data?.expire) {
-              throw new Error("Invalid authentication data from server.");
-          }
-  
-          const formData = new FormData();
-          formData.append("file", file);
-          formData.append("fileName", file.name);
-          formData.append("token", data.token);
-          formData.append("expire", data.expire);
-          formData.append("signature", data.signature);
-          formData.append("publicKey",publicKey);
-  
-          const response = await axios.post(imageKitUrl, formData);
-          return response.data.url;
-      } catch (error) {
-          console.error("Image upload failed:", error);
-          throw new Error("Failed to upload image. Please try again.");
-      }
-  };
-  
+         const { data } = await axios.get(authEndpoint);
+         if (!data?.token || !data?.signature || !data?.expire) {
+            throw new Error("Invalid authentication data from server.");
+         }
 
+         const formData = new FormData();
+         formData.append("file", file);
+         formData.append("fileName", file.name);
+         formData.append("token", data.token);
+         formData.append("expire", data.expire);
+         formData.append("signature", data.signature);
+         formData.append("publicKey", publicKey);
+
+         const response = await axios.post(imageKitUrl, formData);
+         return response.data.url;
+      } catch (error) {
+         console.error("Image upload failed:", error);
+         throw new Error("Failed to upload image. Please try again.");
+      }
+   };
+
+   const subsidiaries = [
+      {  name: "Bharat Coking Coal Limited (BCCL)" },
+      {  name: "Central Coalfields Limited (CCL)" },
+      {  name: "Central Mine Planning and Design Institute (CMPDI)" },
+      { name: "Eastern Coalfields Limited (ECL)" },
+      {  name: "Mahanadi Coalfields Limited (MCL)" },
+      {  name: "Northern Coalfields Limited (NCL)" },
+      {  name: "South Eastern Coalfields Limited (SECL)" },
+      {  name: "Western Coalfields Limited (WCL)" },
+      {  name: "Others" },
+    ];
 
    const handleSubmit = async (e) => {
       e.preventDefault();
@@ -86,7 +97,7 @@ const UserRoleSelect = ({ userTypemodal, setUserTypeModal, formData }) => {
                navigate("/login");
 
             }
-            } else {
+         } else {
             const token = Cookies.get("accessToken");
             if (!token) throw new Error("Authentication token missing");
 
@@ -123,17 +134,17 @@ const UserRoleSelect = ({ userTypemodal, setUserTypeModal, formData }) => {
    const handleFileChange = (setter) => (e) => {
       const file = e.target.files[0];
       if (file) {
-          if (file.size > 5 * 1024 * 1024) { // 5 MB limit (example)
-              toast.error("File size exceeds 5MB.");
-              return;
-          }
-          if (!["image/jpeg", "image/png"].includes(file.type)) {
-              toast.error("Only JPEG or PNG files are allowed.");
-              return;
-          }
-          setter(file);
+         if (file.size > 5 * 1024 * 1024) { // 5 MB limit (example)
+            toast.error("File size exceeds 5MB.");
+            return;
+         }
+         if (!["image/jpeg", "image/png"].includes(file.type)) {
+            toast.error("Only JPEG or PNG files are allowed.");
+            return;
+         }
+         setter(file);
       }
-  };
+   };
 
    const handleOtp = async () => {
       if (!validateEmail(formData?.email)) {
@@ -174,6 +185,15 @@ const UserRoleSelect = ({ userTypemodal, setUserTypeModal, formData }) => {
       return () => clearInterval(interval);
    }, [seconds]);
 
+   useEffect(()=>{
+      if(subsidiary === 'Others' || userType === 'student'){
+         setOrg('');
+      }else{
+         setOrg(subsidiary);
+      }
+      
+    },[subsidiary , userType]);
+
    return (
       <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
          <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 sm:w-2/3 xl:w-1/3 max-h-[90vh] overflow-y-auto scrollbar-hide">
@@ -205,26 +225,51 @@ const UserRoleSelect = ({ userTypemodal, setUserTypeModal, formData }) => {
                      </option>
                   </select>
                </div>
-               {userType && (
+
+               {userType === "student" && (
                   <div className="mb-4">
-                     <label className="block mb-2">
-                        {userType === "employee" ? "Company Name" : "University Name"}
-                     </label>
+                     <label className="block mb-2">University Name</label>
                      <input
                         type="text"
-                        placeholder={
-                           userType === "employee"
-
-                              ? "Enter your company"
-                              : "Enter University name"
-                        }
+                        placeholder="Enter your University name"
                         value={org}
                         onChange={(e) => setOrg(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none "
-
+                        className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none"
                      />
                   </div>
                )}
+
+               {userType === "employee" && (
+                  <div className="mb-4">
+                     <label className="block mb-2">Select your Company</label>
+                     <select
+                        value={subsidiary}
+                        onChange={(e) => setSubsidiary(e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-xl mb-4"
+                     >
+                        <option value="">-- Select Subsidiary --</option>
+                        {subsidiaries.map((sub) => (
+                           <option key={sub.code} value={sub.name}>
+                              {sub.name}
+                           </option>
+                        ))}
+                     </select>
+
+                     {subsidiary === "Others" && (
+                        <div className="mt-4">
+                           <label className="block mb-2">Enter your Company</label>
+                           <input
+                              type="text"
+                              placeholder="Enter your company"
+                              value={org}
+                              onChange={(e) => setOrg(e.target.value)}
+                              className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none"
+                           />
+                        </div>
+                     )}
+                  </div>
+               )}
+
                {userType && (
                   <div className="mb-4">
                      <label className="block mb-2">
