@@ -25,8 +25,8 @@ import NotFound from "./components/notfound/Notfound";
 import Forgotpassword from "./components/forgotpassword/Forgotpassword";
 import OnlineClass from "./components/onlineclass/OnlineClass";
 import UserRoleSelect from "./components/Cards/UserRoleSelect";
-import StudentForm from "./components/Cards/StudentForm";
-import EmployeeForm from "./components/Cards/EmployeeForm";
+/* import StudentForm from "./components/Cards/StudentForm";
+import EmployeeForm from "./components/Cards/EmployeeForm"; */
 import { Toaster } from "react-hot-toast";
 import { useContext, useEffect } from "react";
 import axios from "axios";
@@ -86,9 +86,9 @@ export default function App() {
           <Route path="onlineclass" element={<OnlineClass />} />
           <Route path="additional" element={<UserRoleSelect />} />
           <Route path="profile" element={<Profile />} />
-          <Route path="student-form" element={<StudentForm />} />
+         {/*  <Route path="student-form" element={<StudentForm />} />
           <Route path="student-form" element={<EmployeeForm />} />
-          
+           */}
         </Route>
         <Route
           path="/admin/dashboard"
