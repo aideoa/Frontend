@@ -48,10 +48,12 @@ const Resources = () => {
         return <UpdateFile  fileData={fileData} setActiveComponent={setActiveComponent} />;
       case "Employee Corner":
         return (
+  
           <Employeecorner
             setEmployeeData={setEmployeeData}
             setActiveComponent={setActiveComponent}
           />
+      
         );
       case "Add Employeenews":
         return <AddEmployeeNews setActiveComponent={setActiveComponent} />;
@@ -64,6 +66,7 @@ const Resources = () => {
         );
       case "Student Corner":
         return (
+      
           <StudentCorner
             setStudentData={setStudentData}
             setActiveComponent={setActiveComponent}
@@ -83,7 +86,7 @@ const Resources = () => {
     }
   };
   return (
-    <div className="rounded-xl pt-4 bg-gray-50">
+    <div className="rounded-xl pt-4 bg-gray-50 mt-12">
       <div className="flex space-x-4 mb-4 px-4 max-lg:flex-col-reverse max-lg:gap-2">
         <div className="flex space-x-4">
           <div

@@ -9,7 +9,6 @@ const UpdateStudentNews = ({ setActiveComponent,studentData }) => {
     category: studentData.category,
   
   });
-  console.log(studentData)
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
