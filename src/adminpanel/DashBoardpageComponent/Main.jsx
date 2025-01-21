@@ -23,8 +23,8 @@ const Main = ({mainRef,handleScroll }) => {
    
     <div className="w-full relative pt-16 h-screen">
       <div className="lg:h-[11.94%] max-lg:h-[240px]   flex max-lg:flex-col justify-between mb-5 flex-wrap items-center">
-        {arr.map((data) => (
-          <div className="bg-white shadow-md flex flex-col justify-between items-start p-4 lg:w-[22%] max-lg:w-[40%] max-lg:h-[45%] rounded-lg">
+        {arr.map((data , index) => (
+          <div key={index} className="bg-white shadow-md flex flex-col justify-between items-start p-4 lg:w-[22%] max-lg:w-[40%] max-lg:h-[45%] rounded-lg">
 
             <h3 className=" text-gray-500">{data.head}</h3>
             <p className="font-semibold text-2xl">{data.no}</p>

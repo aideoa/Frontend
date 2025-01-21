@@ -6,6 +6,7 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 
 const ReviewForm = ({ formData, setOpen, setFormData }) => {
   const {authToken}=React.useContext(AuthContext)
+  console.log(authToken);
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
