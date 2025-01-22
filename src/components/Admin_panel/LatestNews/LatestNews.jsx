@@ -63,7 +63,7 @@ const Resources = ({ setActiveComponent, setEventsData }) => {
   };
 
   return (
-    <div className="py-4 bg-white rounded-xl">
+    <div className="py-4 bg-white rounded-xl mt-16">
       <div className="flex space-x-4 mb-4 max-lg:flex-col-reverse max-lg:gap-2 px-4">
         <div className="flex space-x-4">
           <div className="bg-[#4B0082] w-48 text-center text-white shadow-md rounded-xl flex flex-col justify-center items-center p-2 h-16">

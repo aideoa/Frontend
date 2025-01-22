@@ -18,7 +18,7 @@ const sidebar = [
   { icon: FaRegQuestionCircle, heading: "Query" },
 
   { icon: BiTransferAlt, heading: "Mutual Transfer" },
-  { icon: PiIdentificationBadgeDuotone, heading: "ID Card" },
+  // { icon: PiIdentificationBadgeDuotone, heading: "ID Card" },
   { icon: FaBell, heading: "Newsletter" },
 
   // { icon: BiTransferAlt , heading: "Mutual Request" },

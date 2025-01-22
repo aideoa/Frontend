@@ -56,7 +56,7 @@ const IdCard = () => {
   };
  
   return (
-    <div className=" bg-white rounded-xl py-4 lightdropshadowbox">
+    <div className=" bg-white mt-16 rounded-xl py-4 lightdropshadowbox">
       <div className="flex flex-col">
         <div className="flex  space-x-4 mb-4 items-center">
           <div className="flex space-x-3 items-center">

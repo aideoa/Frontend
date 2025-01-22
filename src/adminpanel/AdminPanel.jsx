@@ -36,7 +36,7 @@ const AdminPanel = () => {
   const renderComponent = () => {
     switch (activeComponent) {
       case "Dashboard":
-        return <Main />;
+        return <Main setActiveComponent={setActiveComponent} />;
       case "Events":
         return (
           <Events
@@ -71,8 +71,8 @@ const AdminPanel = () => {
         return <Query />;
         case "Donation":
           return <Donation />;
-      case "ID Card":
-        return <IdCard />;
+      // case "ID Card":
+      //   return <IdCard />;
       case "Mutual Transfer":
         return <MutualTransfer />;
 
@@ -134,7 +134,7 @@ const AdminPanel = () => {
     </div>
     <div className="lg:w-[80%] max-lg:w-[90%] h-screen bg-gray-200 overflow-y-auto">
       <AdminNavbar />
-      <div className="p-8 max-lg:px-4 bg-gray-200 h-screen">
+      <div className="p-8 max-lg:px-4 bg-gray-200 h-screen ">
         {renderComponent()}
       </div>
     </div>
