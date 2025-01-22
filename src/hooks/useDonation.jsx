@@ -26,7 +26,7 @@ const useDonation = () => {
       throw new Error(error);
     }
   };
-
+  console.log(dataList)
 
   return {dataList,loading,fetchData}
 }

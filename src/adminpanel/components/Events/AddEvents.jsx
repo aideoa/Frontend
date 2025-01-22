@@ -35,7 +35,7 @@ const AddEvent = ({ setActiveComponent }) => {
   };
 
   return (
-    <div className="rounded-xl p-4 bg-gray-50 min-h-screen">
+    <div className="rounded-xl p-4 bg-gray-50 min-h-screen mt-16">
       <h2 className="text-2xl font-semibold mb-4 text-[#4B0082]">
         Add New Event
       </h2>

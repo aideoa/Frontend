@@ -1,7 +1,7 @@
 import React from "react";
 import MyAreaChart from "./LineChart";
 
-const Tr = () => {
+const Tr = ({totalMember}) => {
   return (
     <div className="w-[65%] max-lg:w-full  bg-white p-5 rounded-lg mb-5 shadow-md">
       <div className="flex max-xl:flex-col gap-y-2 max-xl:justify-center items-center justify-between mb-4">
@@ -27,7 +27,7 @@ const Tr = () => {
         </button>
       </div>
       <div className="h-[180px]">
-        <MyAreaChart />
+        <MyAreaChart totalMember={totalMember} />
       </div>
     </div>
   );

@@ -18,7 +18,8 @@ const  Resources = ({ setActiveComponent, setEventsData }) => {
   const getdata = async (searchTerm) => {
     try {
       const data = await eventgetdata(searchTerm);
-      setd(data.data);
+      setd(data.data.events);
+      console.log(data.data);
     } catch (error) {
       console.log(`error in getdata in Events.jsx ${error}`);
     }
@@ -86,7 +87,7 @@ const  Resources = ({ setActiveComponent, setEventsData }) => {
   };
 
   return (
-    <div className="py-4 bg-white rounded-xl">
+    <div className="py-4 bg-white rounded-xl mt-16">
       <div className="flex space-x-4 mb-4 max-lg:flex-col-reverse max-lg:gap-2 px-4">
         <div className="flex space-x-4">
           <div className="bg-[#4B0082] w-32 text-center text-white shadow-md rounded-xl flex flex-col justify-center items-center p-2 h-16">
@@ -156,7 +157,7 @@ const  Resources = ({ setActiveComponent, setEventsData }) => {
             </tr>
           </thead>
           <tbody>
-            {d.map((item, index) => (
+            {d.length > 0 ? d.map((item, index) => (
               <tr
                 key={index}
                 className="border-b border-gray-200 h-16 cursor-pointer"
@@ -195,7 +196,13 @@ const  Resources = ({ setActiveComponent, setEventsData }) => {
                   />
                 </td>
               </tr>
-            ))}
+            )):(
+              <tr>
+                <td colSpan={7} className="text-center py-4 text-gray-500">
+                  No news available
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
