@@ -1,15 +1,16 @@
 import * as XLSX from "xlsx";
 import { getData } from "./dataSource"; // Import the function to fetch data
 
-export const handleDownloadTrans = (filterStatus) => {
+// Update function to accept filter or transactionId
+export const handleDownloadTrans = (transactionId) => {
   try {
     // Get data
     const data = getData();
 
-    // Filter data if filterStatus is provided
-    const filteredData = filterStatus
-      ? data.filter((item) => item.status === filterStatus)
-      : data;
+    // If transactionId is provided, filter the data for the specific transaction
+    const filteredData = transactionId
+      ? data.filter((item) => item.transaction === transactionId) // Filter based on the selected transactionId
+      : data; // If no transactionId is provided, download all data
 
     if (!filteredData || filteredData.length === 0) {
       alert("No data available to download.");

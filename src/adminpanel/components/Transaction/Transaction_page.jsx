@@ -3,7 +3,6 @@ import { CiSearch } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
 import { getData } from "./dataSource";
 import { handleDownloadTrans } from "./exportTrans";
-
 import { BsThreeDotsVertical } from "react-icons/bs";
 
 const ITEMS_PER_PAGE = 5;
@@ -20,12 +19,10 @@ const Transaction_page = () => {
     const currentPageIds = currentPageData.map((item) => item.employeeId);
 
     if (selectAll) {
-      // Unselect all items on the current page
       setSelected((prevSelected) =>
         prevSelected.filter((id) => !currentPageIds.includes(id))
       );
     } else {
-      // Select all items on the current page
       setSelected((prevSelected) => [
         ...prevSelected,
         ...currentPageIds.filter((id) => !prevSelected.includes(id)), // Avoid duplicates
@@ -48,6 +45,10 @@ const Transaction_page = () => {
 
   const handleExportClick = () => {
     handleDownloadTrans();
+  };
+
+  const handleOneDownload = (transactionId) => {
+    handleDownloadTrans(transactionId);
   };
 
   // Pagination-related handlers
@@ -201,7 +202,15 @@ const Transaction_page = () => {
                     </td>
 
                     <td className="p-2 font-medium text-sm text-gray-600 cursor-pointer">
-                      <BsThreeDotsVertical />
+                      <span>
+                        Actions &rarr;
+                        <button
+                          className="text-blue-500 hover:underline"
+                          onClick={() => handleOneDownload(item.transaction)} // Pass item.transaction to handleExportClick
+                        >
+                          Download Information
+                        </button>
+                      </span>
                     </td>
                   </tr>
                 ))}
