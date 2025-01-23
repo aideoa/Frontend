@@ -7,7 +7,8 @@ import { FaSearch } from "react-icons/fa";
 import { CiSearch } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
 import useMembers from "../../../hooks/useMembers";
-// import * as XLSX from "xlsx";
+import { handleDownloadAll } from "../Members/exportExcel";
+import SearchBar from "./SearchBar";
 
 const Member = () => {
   const [currentSection, setCurrentSection] = useState("All"); // Default section
@@ -20,8 +21,13 @@ const Member = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
-
+  
+const [data, setData] = useState([]);
   const totalPages = 3;
+
+   const handleResults = (filteredData) => {
+     // Handle filtered data here
+   };
 
   const handleOpenPopup = () => {
     setShowPopup(true);
@@ -41,21 +47,16 @@ const Member = () => {
         : item.type === "Student"
     ) || [];
 
-  // Handle switching between sections
-  const handleSectionChange = (section) => {
-    setCurrentSection(section); // Change current section
-    setSelectedItems([]); // Reset selected items
-    setSelectAll(false); // Reset selectAll
-  };
-
   const handleSelectItem = (index) => {
     const newSelectedItems = selectedItems.includes(index)
-      ? selectedItems.filter((item) => item !== index) // Deselect item
-      : [...selectedItems, index]; // Select item
+      ? selectedItems.filter((item) => item !== index)
+      : [...selectedItems, index];
 
     setSelectedItems(newSelectedItems);
 
-    setSelectAll(newSelectedItems.length === dataList[currentSection]?.users?.length);
+    setSelectAll(
+      newSelectedItems.length === dataList[currentSection]?.users?.length
+    );
   };
 
   const handleSelectAll = () => {
@@ -65,21 +66,24 @@ const Member = () => {
       setSelectedItems(dataList?.users?.map((_, index) => index) || []);
     }
 
-    // Dynamically update `selectAll` based on selected items
     if (selectedItems.length + 1 === dataList?.users?.length) {
       setSelectAll(true);
     } else {
       setSelectAll(false);
     }
-    // Toggle selectAll based on action
+
     setSelectAll(!selectAll);
   };
 
   const toggleMenu = (event) => {
-    event.stopPropagation(); // Prevent the event from bubbling up
+    event.stopPropagation();
     const rect = event.target.getBoundingClientRect();
     setMenuPosition({ x: rect.right - 5, y: rect.bottom + window.scrollY });
     setShowMenu((prev) => !prev);
+  };
+
+  const onDownloadAllClick = async () => {
+    handleDownloadAll(userType);
   };
 
   // Close the menu when clicking outside
@@ -105,6 +109,8 @@ const Member = () => {
   const handleTableList = (type) => {
     setUserType(type);
     setCurrentPage(1);
+    setSelectedItems([]);
+    setSelectAll(false);
   };
 
   const handleNextPage = () => {
@@ -143,96 +149,88 @@ const Member = () => {
 
             <div className="flex justify-end flex-1  items-center space-x-4 ">
               <div className="relative w-[55%]">
-                <CiSearch className="absolute  top-3 left-3" />
-                <input
-                  type="text"
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="px-8 py-2 border w-full rounded-full text-sm border-gray-300"
-                  placeholder="Search"
-                />
+                <SearchBar data={data} onResults={handleResults} />
               </div>
               {selectedItems.length >= 2 && <MdDelete size={26} />}
               <div className="flex max-lg:flex-col gap-2">
-                <button className="bg-white text-nowrap font-semibold border shadow-md text-black py-2 px-4 rounded-md mr-2">
+                <button
+                  className="bg-white text-nowrap font-semibold border shadow-md text-black py-2 px-4 rounded-md mr-2"
+                  onClick={onDownloadAllClick}
+                >
                   Download all
                 </button>
               </div>
             </div>
           </div>
           <div className="flex justify-between px-4">
-            <div className="flex space-x-3 items-center ">
+            <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-3 items-center justify-center">
               <button
                 onClick={() => handleTableList("All")}
-                className={` ${
+                className={`${
                   userType === "All"
-                    ? "bg-[#4B0082]  text-white"
+                    ? "bg-[#4B0082] text-white"
                     : "bg-white text-[#4B0082]"
-                } rounded-t-2xl text-sm py-2 w-40 font-medium flex gap-2 justify-center items-center`}
+                } rounded-t-2xl text-sm py-2 px-4 w-full md:w-40 font-medium flex gap-2 justify-center items-center`}
               >
                 <span>All</span>
                 {userType === "All" && (
                   <span
-                    className={`text-xs  font-bold px-2 rounded-md ${
+                    className={`text-xs font-bold px-2 rounded-md ${
                       userType === "All"
                         ? "bg-white text-[#4B0082]"
-                        : "bg-[#4B0082]  text-white"
+                        : "bg-[#4B0082] text-white"
                     }`}
                   >
-                    {dataList &&
-                      dataList.pagination &&
-                      dataList?.pagination?.totalUsers}
+                    {dataList?.pagination?.totalUsers || 0}
                   </span>
                 )}
               </button>
               <button
                 onClick={() => handleTableList("Employees")}
-                className={` ${
+                className={`${
                   userType === "Employees"
-                    ? "bg-[#4B0082]  text-white"
+                    ? "bg-[#4B0082] text-white"
                     : "bg-white text-[#4B0082]"
-                } rounded-t-2xl text-sm py-2 w-40 font-medium flex gap-2 justify-center items-center`}
+                } rounded-t-2xl text-sm py-2 px-4 w-full md:w-40 font-medium flex gap-2 justify-center items-center`}
               >
                 <span>Employees</span>
                 {userType === "Employees" && (
                   <span
-                    className={`text-xs  font-bold px-2 rounded-md   ${
-                      userType == "Employees"
+                    className={`text-xs font-bold px-2 rounded-md ${
+                      userType === "Employees"
                         ? "bg-white text-[#4B0082]"
-                        : "bg-[#4B0082]  text-white"
+                        : "bg-[#4B0082] text-white"
                     }`}
                   >
-                    {dataList &&
-                      dataList.pagination &&
-                      dataList?.pagination?.totalUsers}
+                    {dataList?.pagination?.totalUsers || 0}
                   </span>
                 )}
               </button>
               <button
                 onClick={() => handleTableList("Students")}
-                className={` ${
+                className={`${
                   userType === "Students"
-                    ? "bg-[#4B0082]  text-white"
+                    ? "bg-[#4B0082] text-white"
                     : "bg-white text-[#4B0082]"
-                } rounded-t-2xl text-sm py-2 w-40 font-medium flex gap-2 justify-center items-center`}
+                } rounded-t-2xl text-sm py-2 px-4 w-full md:w-40 font-medium flex gap-2 justify-center items-center`}
               >
                 <span>Students</span>
                 {userType === "Students" && (
                   <span
-                    className={`text-xs  font-bold px-2 rounded-md   ${
-                      userType != "Employees"
+                    className={`text-xs font-bold px-2 rounded-md ${
+                      userType === "Students"
                         ? "bg-white text-[#4B0082]"
-                        : "bg-[#4B0082]  text-white"
+                        : "bg-[#4B0082] text-white"
                     }`}
                   >
-                    {dataList &&
-                      dataList.pagination &&
-                      dataList?.pagination?.totalUsers}
+                    {dataList?.pagination?.totalUsers || 0}
                   </span>
                 )}
               </button>
             </div>
+
             <button
-              className="text-sm font-semibold bg-gradient-to-r from-[#5A00A0] to-[#9B4BFF] text-white py-2 px-6 rounded-full shadow-lg hover:from-[#3A0070] hover:to-[#6D2EDC] hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              className="text-sm font-semibold bg-gradient-to-r from-[#5A00A0] to-[#9B4BFF] text-white py-2 px-6 h-12 rounded-full shadow-lg hover:from-[#3A0070] hover:to-[#6D2EDC] hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               onClick={handleOpenPopup}
             >
               Add User
@@ -310,7 +308,7 @@ const Member = () => {
                   Name
                 </th>
                 <th className="py-3 px-4 text-left font-medium text-sm text-gray-500">
-                  AIDEOA No.
+                  AIDEOA ID.
                 </th>
                 <th className="py-3 px-4 text-left font-medium text-sm text-gray-500">
                   Mobile Number
