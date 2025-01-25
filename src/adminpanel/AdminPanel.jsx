@@ -31,94 +31,94 @@ const AdminPanel = () => {
   const [activeComponent, setActiveComponent] = useState("Dashboard");
   const [eventsData, setEventsData] = useState();
   const [missionData, setMissionData] = useState();
-  const renderComponent = () => {
-    switch (activeComponent) {
-      case "Dashboard":
-        return <Main />;
-      case "Events":
-        return (
-          <Events
-            setActiveComponent={setActiveComponent}
-            setEventsData={setEventsData}
-          />
-        );
-      case "Latest News":
-        return (
-          <LatestNews
-            setActiveComponent={setActiveComponent}
-            setEventsData={setEventsData}
-          />
-        );
-      case "Add Latest News":
-        return (
-          <AddLatestNews
-            setActiveComponent={setActiveComponent}
-            setEventsData={setEventsData}
-          />
-        );
-      case "Transaction":
-        return <Transaction_page />;
-      case "Resource":
-        return <Resources setActiveComponent={setActiveComponent} />;
+  // const renderComponent = () => {
+  //   switch (activeComponent) {
+  //     case "Dashboard":
+  //       return <Main />;
+  //     case "Events":
+  //       return (
+  //         <Events
+  //           setActiveComponent={setActiveComponent}
+  //           setEventsData={setEventsData}
+  //         />
+  //       );
+  //     case "Latest News":
+  //       return (
+  //         <LatestNews
+  //           setActiveComponent={setActiveComponent}
+  //           setEventsData={setEventsData}
+  //         />
+  //       );
+  //     case "Add Latest News":
+  //       return (
+  //         <AddLatestNews
+  //           setActiveComponent={setActiveComponent}
+  //           setEventsData={setEventsData}
+  //         />
+  //       );
+  //     case "Transaction":
+  //       return <Transaction_page />;
+  //     case "Resource":
+  //       return <Resources setActiveComponent={setActiveComponent} />;
 
-      case "Members":
-        return <Member />;
-      case "Query":
-        return <Query />;
-      case "Donation":
-        return <Donation />;
-      case "ID Card":
-        return <IdCard />;
-      case "Mutual Transfer":
-        return <MutualTransfer />;
+  //     case "Members":
+  //       return <Member />;
+  //     case "Query":
+  //       return <Query />;
+  //     case "Donation":
+  //       return <Donation />;
+  //     case "ID Card":
+  //       return <IdCard />;
+  //     case "Mutual Transfer":
+  //       return <MutualTransfer />;
 
-      case "Mutual Request":
-        return <MutualRequest />;
-      case "Contact us":
-        return <ContactUs />;
-      case "Newsletter":
-        return <Notifications />;
+  //     case "Mutual Request":
+  //       return <MutualRequest />;
+  //     case "Contact us":
+  //       return <ContactUs />;
+  //     case "Newsletter":
+  //       return <Notifications />;
 
-      case "Add Teams":
-        return <AddTeams setActiveComponent={setActiveComponent} />;
-      case "Add Events":
-        return <AddEvent setActiveComponent={setActiveComponent} />;
+  //     case "Add Teams":
+  //       return <AddTeams setActiveComponent={setActiveComponent} />;
+  //     case "Add Events":
+  //       return <AddEvent setActiveComponent={setActiveComponent} />;
 
-      case "Events Details":
-        return (
-          <EventDetails
-            setActiveComponent={setActiveComponent}
-            eventsData={eventsData}
-          />
-        );
-      case "Update Events":
-        return (
-          <UpdateEvents
-            setActiveComponent={setActiveComponent}
-            eventsData={eventsData}
-          />
-        );
-      case "Our Missions":
-        return (
-          <Missions
-            setMissionData={setMissionData}
-            setActiveComponent={setActiveComponent}
-          />
-        );
-      case "Add Missions":
-        return <AddMissions setActiveComponent={setActiveComponent} />;
-      case "Update Missions":
-        return (
-          <UpdateMissions
-            missionData={missionData}
-            setActiveComponent={setActiveComponent}
-          />
-        );
+  //     case "Events Details":
+  //       return (
+  //         <EventDetails
+  //           setActiveComponent={setActiveComponent}
+  //           eventsData={eventsData}
+  //         />
+  //       );
+  //     case "Update Events":
+  //       return (
+  //         <UpdateEvents
+  //           setActiveComponent={setActiveComponent}
+  //           eventsData={eventsData}
+  //         />
+  //       );
+  //     case "Our Missions":
+  //       return (
+  //         <Missions
+  //           setMissionData={setMissionData}
+  //           setActiveComponent={setActiveComponent}
+  //         />
+  //       );
+  //     case "Add Missions":
+  //       return <AddMissions setActiveComponent={setActiveComponent} />;
+  //     case "Update Missions":
+  //       return (
+  //         <UpdateMissions
+  //           missionData={missionData}
+  //           setActiveComponent={setActiveComponent}
+  //         />
+  //       );
 
-      default:
-        return <></>;
-    }
-  };
+  //     default:
+  //       return <></>;
+  //   }
+  // };
   return (
     <div className="flex overflow-hidden">
       <div className="lg:w-[20%] max-lg:w-[10%]">
@@ -130,7 +130,7 @@ const AdminPanel = () => {
       <div className="lg:w-[80%] max-lg:w-[90%] h-screen bg-gray-200 overflow-y-auto">
         <AdminNavbar />
         <div className="p-8 max-lg:px-4 bg-gray-200 h-screen">
-          {renderComponent()}
+          {/* {renderComponent()} */}
         </div>
       </div>
     </div>

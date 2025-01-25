@@ -64,25 +64,25 @@ const Scroll = () => {
   return (
     <div
       id="sec2"
-      class="h-full m-4 overflow-x-hidden max-w-[96%]  flex flex-col justify-center items-center"
+      className="h-full m-4 overflow-x-hidden max-w-[96%]  flex flex-col justify-center items-center"
     >
       <img src="./images/logo.png" className="w-[100px] h-[100px]" alt="" />
-      <div class="dibba my-3">
+      <div className="dibba my-3">
         {" "}
-        <h1 class=" teamupdata flex justify-center items-center font-bold text-[30px]">
+        <h1 className=" teamupdata flex justify-center items-center font-bold text-[30px]">
           Already team up and moving forward!
         </h1>
       </div>
-      <p class="my-3 text-center text-lg">
+      <p className="my-3 text-center text-lg">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore, magni?
       </p>
       <div
         id="scroller"
-        class="big flex flex-col justify-center items-center gap-10 "
+        className="big flex flex-col justify-center items-center gap-10 "
       >
         <div
           ref={line1}
-          class="medium my-5 -translate-x-[115px] flex gap-5 justify-center items-center"
+          className="medium my-5 -translate-x-[115px] flex gap-5 justify-center items-center"
         >
           {/* line1 start here */}
           {data.map((d, index) => (
@@ -95,7 +95,7 @@ const Scroll = () => {
         </div>
         <div
           ref={line2}
-          class="medium my-5 -translate-x-5 flex gap-5 justify-center items-center"
+          className="medium my-5 -translate-x-5 flex gap-5 justify-center items-center"
         >
           {/* line1 start here */}
           {data.map((d) => (
