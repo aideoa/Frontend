@@ -8,13 +8,15 @@ import { PiIdentificationBadgeDuotone } from "react-icons/pi";
 import { SiChainlink } from "react-icons/si";
 import { BiTransferAlt } from "react-icons/bi";
 import { GoGoal } from "react-icons/go";
+import { FaNewspaper } from "react-icons/fa";  
+
 const sidebar = [
   { icon: IoMdHome, heading: "Dashboard" },
   { icon: IoIosPersonAdd, heading: "Members" },
   { icon: RiMoneyRupeeCircleLine, heading: "Transaction" },
   { icon: SlCalender, heading: "Events" },
   { icon: TiDocumentText, heading: "Resource" },
-  { icon: TiDocumentText, heading: "Latest News" },
+  { icon: FaNewspaper, heading: "Latest News" },
   { icon: FaRegQuestionCircle, heading: "Query" },
 
   { icon: BiTransferAlt, heading: "Mutual Transfer" },

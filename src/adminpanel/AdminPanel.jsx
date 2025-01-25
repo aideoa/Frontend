@@ -15,7 +15,6 @@ import Transaction_page from "./components/Transaction/Transaction_page";
 import Member from "./components/Members/Member";
 import AddEvent from "./components/Events/AddEvents";
 
-
 import EventDetails from "./components/Events/EventsDetails";
 import UpdateEvents from "./components/Events/UpdateEvents";
 import AddTeams from "./components/Our_Team/AddTeams";
@@ -36,7 +35,7 @@ const AdminPanel = () => {
   const renderComponent = () => {
     switch (activeComponent) {
       case "Dashboard":
-        return <Main setActiveComponent={setActiveComponent} />;
+        return <Main />;
       case "Events":
         return (
           <Events
@@ -61,31 +60,29 @@ const AdminPanel = () => {
       case "Transaction":
         return <Transaction_page />;
       case "Resource":
+        return <Resources setActiveComponent={setActiveComponent} />;
 
-        return <Resources  setActiveComponent={setActiveComponent}/>;
-
-     
       case "Members":
         return <Member />;
       case "Query":
         return <Query />;
-        case "Donation":
-          return <Donation />;
-      // case "ID Card":
-      //   return <IdCard />;
+      case "Donation":
+        return <Donation />;
+      case "ID Card":
+        return <IdCard />;
       case "Mutual Transfer":
         return <MutualTransfer />;
 
-        case "Mutual Request":
-        return <MutualRequest />
+      case "Mutual Request":
+        return <MutualRequest />;
       case "Contact us":
         return <ContactUs />;
       case "Newsletter":
         return <Notifications />;
-  
-          case "Add Teams":
-          return <AddTeams setActiveComponent={setActiveComponent} />;
-        case "Add Events":
+
+      case "Add Teams":
+        return <AddTeams setActiveComponent={setActiveComponent} />;
+      case "Add Events":
         return <AddEvent setActiveComponent={setActiveComponent} />;
 
       case "Events Details":
@@ -124,21 +121,20 @@ const AdminPanel = () => {
     }
   };
   return (
-
     <div className="flex overflow-hidden">
-    <div className="lg:w-[20%] max-lg:w-[10%]">
-      <AdminSidebar
-        activeComponent={activeComponent}
-        setActiveComponent={setActiveComponent}
-      />
-    </div>
-    <div className="lg:w-[80%] max-lg:w-[90%] h-screen bg-gray-200 overflow-y-auto">
-      <AdminNavbar />
-      <div className="p-8 max-lg:px-4 bg-gray-200 h-screen ">
-        {renderComponent()}
+      <div className="lg:w-[20%] max-lg:w-[10%]">
+        <AdminSidebar
+          activeComponent={activeComponent}
+          setActiveComponent={setActiveComponent}
+        />
+      </div>
+      <div className="lg:w-[80%] max-lg:w-[90%] h-screen bg-gray-200 overflow-y-auto">
+        <AdminNavbar />
+        <div className="p-8 max-lg:px-4 bg-gray-200 h-screen">
+          {renderComponent()}
+        </div>
       </div>
     </div>
-  </div>
   );
 };
 
