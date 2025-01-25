@@ -12,6 +12,8 @@ const Transaction_page = () => {
   const [selected, setSelected] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [currentPage, setCurrentPage] = useState(1); // Track the current page
+  const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
+  const [showMenu, setShowMenu] = useState(false);
 
   const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE); // Total number of pages
 
@@ -41,6 +43,13 @@ const Transaction_page = () => {
 
     const currentPageIds = currentPageData.map((item) => item.employeeId);
     setSelectAll(newSelected.length === currentPageIds.length);
+  };
+
+  const toggleMenu = (event) => {
+    event.stopPropagation();
+    const rect = event.target.getBoundingClientRect();
+    setMenuPosition({ x: rect.right + window.scrollY, y: rect.bottom + window.scrollY });
+    setShowMenu((prev) => !prev);
   };
 
   const handleExportClick = () => {
@@ -122,10 +131,10 @@ const Transaction_page = () => {
                   <th className="py-3 px-4 text-left font-medium text-sm w-52 text-gray-500">
                     Name
                   </th>
-                  <th className="py-3 px-4 text-left font-medium text-sm text-gray-500">
+                  <th className="py-3 px-4 w-52 text-left font-medium text-sm text-gray-500">
                     Employee ID
                   </th>
-                  <th className="py-3 px-4 text-left font-medium text-sm text-gray-500">
+                  <th className="py-3 px-4 w-64 text-left font-medium text-sm text-gray-500">
                     AIDEOA ID
                   </th>
                   <th className="py-3 px-4 text-left font-medium text-sm text-gray-500">
@@ -188,36 +197,66 @@ const Transaction_page = () => {
                     </td>
                     <td className="p-2 font-medium text-xs ">
                       <td
-                        className={` rounded-full px-1 mb-1 ${
-                          item.status === "Confirm"
-                            ? "bg-green-100 text-green-700"
-                            : item.status === "Pending"
+                        className={` rounded-full px-1 mb-1 ${item.status === "Confirm"
+                          ? "bg-green-100 text-green-700"
+                          : item.status === "Pending"
                             ? "bg-yellow-100 text-yellow-700"
                             : item.status === "Cancel"
-                            ? "bg-red-100 text-red-700"
-                            : "text-gray-400"
-                        }`}
+                              ? "bg-red-100 text-red-700"
+                              : "text-gray-400"
+                          }`}
                       >
                         {item.status}
                       </td>
                     </td>
+                    <td
+                      className="p-2 font-medium text-sm text-gray-600 cursor-pointer"
+                      onClick={toggleMenu}
+                    >
+                      <BsThreeDotsVertical />
+                    </td>
+                    {showMenu && (
+                      <div
+                        className="absolute bg-white border border-gray-200 rounded shadow-md"
+                        style={{
+                          left: `${menuPosition.x}px`,
+                          top: `${menuPosition.y}px`,
+                          zIndex: 10,
+                        }}
+                      >
+                        <ul className="text-sm text-gray-700">
 
-                    <td className="p-2 font-medium text-sm text-gray-600 cursor-pointer">
+                          <li
+                            className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                            onClick={() => handleOneDownload(item.transaction)}
+                          >
+                            Download
+                          </li>
+
+                        </ul>
+                      </div>
+                    )}
+
+                    {/* <td className="p-2 font-medium text-sm text-gray-600 cursor-pointer">
                       <span>
-                        Actions &rarr;
                         <button
                           className="text-blue-500 hover:underline"
                           onClick={() => handleOneDownload(item.transaction)} // Pass item.transaction to handleExportClick
                         >
-                          Download Information
+                          Download
                         </button>
                       </span>
-                    </td>
+                    </td> */}
                   </tr>
                 ))}
+
               </tbody>
             </table>
           </div>
+
+
+
+
 
           <div className="flex justify-between items-center mt-4 px-4">
             <button
@@ -231,11 +270,10 @@ const Transaction_page = () => {
               {[...Array(totalPages).keys()].map((page) => (
                 <button
                   key={page}
-                  className={`py-2 px-4 rounded-md shadow-md border ${
-                    currentPage === page + 1
-                      ? "bg-purple-700 text-white"
-                      : "bg-white text-black"
-                  }`}
+                  className={`py-2 px-4 rounded-md shadow-md border ${currentPage === page + 1
+                    ? "bg-purple-700 text-white"
+                    : "bg-white text-black"
+                    }`}
                   onClick={() => handlePageClick(page + 1)}
                 >
                   {page + 1}
