@@ -86,7 +86,7 @@ const Resources = () => {
     }
   };
   return (
-    <div className="rounded-xl pt-4 bg-gray-50 mt-12">
+    <div className="rounded-xl pt-4 bg-gray-50 mt-16">
       <div className="flex space-x-4 mb-4 px-4 max-lg:flex-col-reverse max-lg:gap-2">
         <div className="flex space-x-4">
           <div

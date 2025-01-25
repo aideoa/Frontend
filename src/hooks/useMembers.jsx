@@ -12,7 +12,7 @@ const useMembers = (userType) => {
       const res = await axios.get(
         `${
           import.meta.env.VITE_API_BACKEND_URL
-        }/api/members?userType=${userType}&page=${currentPage}&limit=4`
+        }/api/members?userType=${userType || "All"}&page=${currentPage || 1}&limit=4`
       );
       console.log("res.data", res.data);
       
@@ -24,9 +24,9 @@ const useMembers = (userType) => {
     }
   };
 
-  // useEffect(() => {
-  //   fetchData(userType);
-  // }, [userType]);
+  useEffect(() => {
+    fetchData(userType);
+  }, [userType]);
   return { dataList, loading, fetchData };
 };
 

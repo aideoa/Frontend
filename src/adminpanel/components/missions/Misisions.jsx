@@ -56,11 +56,13 @@ const Missions = ({ setActiveComponent, setMissionData }) => {
     });
   };
   return (
+
     <div style={{ marginTop: "50px" }}>
       <div className="py-4 bg-white rounded-xl lightdropshadowbox">
         <div className="flex px-4 space-x-4 mb-4 items-center">
           <div className="flex space-x-3 items-center ">
             <h2 className="font-bold text-lg">Our Missions</h2>
+
           </div>
           <div className="flex justify-end flex-1  items-center space-x-4 ">
             <div className="relative w-[55%]">

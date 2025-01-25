@@ -134,10 +134,12 @@ const [data, setData] = useState([]);
 
   return (
     <>
+
       <div
         style={{ marginTop: "50px" }}
         className="bg-white py-4 rounded-xl lightdropshadowbox"
       >
+
         <div className="flex px-4 flex-col">
           <div className="flex  space-x-4 mb-4 items-center">
             <div className="flex w-[34%] h-[40%] items-center gap-2">

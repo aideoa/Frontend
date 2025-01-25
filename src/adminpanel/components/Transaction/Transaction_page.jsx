@@ -73,6 +73,7 @@ const Transaction_page = () => {
   const currentPageData = data.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   return (
+
     <>
       <div style={{ marginTop: "50px" }}>
         <div className="bg-white py-4 rounded-xl lightdropshadowbox">

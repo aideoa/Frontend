@@ -79,6 +79,7 @@ const Notifications = () => {
     });
   };
   return (
+
     <div style={{ marginTop: "50px" }}>
       <div>
         <div className="py-4 bg-white rounded-xl lightdropshadowbox">
