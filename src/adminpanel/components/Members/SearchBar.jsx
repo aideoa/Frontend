@@ -64,41 +64,6 @@ const SearchBar = ({ data, onResults }) => {
           placeholder={`Search by ${searchType}`}
         />
       </div>
-
-      <div className="relative">
-        <button
-          className="absolute top-2 right- sm:right-2 text-sm bg-gray-200 rounded px-4 py-2 cursor-pointer flex items-center justify-between"
-          onClick={() => setDropdownOpen(!dropdownOpen)}
-          style={{ minWidth: "100px", textAlign: "center" }} // Ensure consistent width
-        >
-          {searchType} ▼
-        </button>
-
-        {dropdownOpen && (
-          <ul
-            className="absolute bg-white border border-gray-300 rounded shadow-lg w-full mt-1 z-20 sm:w-40 md:w-auto md:max-w-none md:overflow-visible"
-            style={{
-              maxWidth: "200px",
-              overflow: "hidden",
-              position: "absolute", // Ensure it stays relative to the button
-              top: "40px", // Position it below the button
-            }}
-          >
-            {searchTypes.map((type) => (
-              <li
-                key={type}
-                className="p-2 cursor-pointer hover:bg-gray-100"
-                onClick={() => {
-                  setSearchType(type);
-                  setDropdownOpen(false);
-                }}
-              >
-                {type}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
     </div>
   );
 };

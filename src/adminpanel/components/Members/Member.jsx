@@ -162,6 +162,12 @@ const [data, setData] = useState([]);
                   Download all
                 </button>
               </div>
+              <button
+              className="text-sm font-semibold bg-gradient-to-r from-[#5A00A0] to-[#9B4BFF] text-white py-2 px-6 h-12 rounded-full shadow-lg hover:from-[#3A0070] hover:to-[#6D2EDC] hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              onClick={handleOpenPopup}
+            >
+              Add User
+            </button>
             </div>
           </div>
           <div className="flex justify-between px-4">
@@ -230,13 +236,6 @@ const [data, setData] = useState([]);
                 )}
               </button>
             </div>
-
-            <button
-              className="text-sm font-semibold bg-gradient-to-r from-[#5A00A0] to-[#9B4BFF] text-white py-2 px-6 h-12 rounded-full shadow-lg hover:from-[#3A0070] hover:to-[#6D2EDC] hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-              onClick={handleOpenPopup}
-            >
-              Add User
-            </button>
           </div>
         </div>
 
