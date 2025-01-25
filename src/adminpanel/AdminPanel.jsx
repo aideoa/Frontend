@@ -9,7 +9,6 @@ import Query from "./components/Query";
 import IdCard from "./components/IdCard";
 import Notifications from "../components/Admin_panel/Main-Content/Notifications/Notifications";
 import ContactUs from "../components/Admin_panel/Main-Content/Contact_Us/Contact-us";
-import OurTeams from "../components/Admin_panel/Main-Content/Our-Teams/Our-Teams";
 import Main from "./DashBoardpageComponent/Main";
 import Transaction_page from "./components/Transaction/Transaction_page";
 import Member from "./components/Members/Member";
