@@ -1,13 +1,9 @@
-
-
-
 import { useContext, useEffect, useState } from "react";
-
 import { AdminAuthContext } from "../../context/adminAuthContext";
 import { useNavigate } from "react-router-dom";
 
 const AdminLogin = () => {
-  const { handleLogin,adminUser } = useContext(AdminAuthContext);
+  const { handleLogin, adminUser } = useContext(AdminAuthContext);
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -20,11 +16,11 @@ const AdminLogin = () => {
       [name]: value,
     });
   };
-  const nav=useNavigate()
- useEffect(()=>{
-  if(adminUser)
-    nav("/admin/dashboard")
- },[adminUser])
+  const nav = useNavigate()
+  useEffect(() => {
+    if (adminUser)
+      nav("/admin/dashboard")
+  }, [adminUser])
   const handleSubmit = async (e) => {
     e.preventDefault();
     await handleLogin(formData);
@@ -38,7 +34,7 @@ const AdminLogin = () => {
 
             src="/AIDEOA LOGO 3.png"
 
-           
+
             alt="AIDEOA Logo"
             className="mx-auto mb-2 w-12"
           />
@@ -86,7 +82,7 @@ const AdminLogin = () => {
               onChange={handleChange} // Handle input changes
             />
           </div>
-        
+
           <button
             type="submit" // Submit button triggers the form submission
             className="w-full bg-[#4B0082] text-white font-medium py-2 px-4 rounded-lg hover:opacity-80 duration-300"

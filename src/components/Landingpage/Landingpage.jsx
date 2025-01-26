@@ -18,9 +18,11 @@ const Landingpage = () => {
         </div>
         <div className="flex justify-center">
           <div className="grid grid-cols-2 gap-20 h-full items-center max-md:grid-cols-1 max-md:gap-5">
+            {user?.userType === 'employee' &&
             <Link to="/membership">
               <LinkButton />
             </Link>
+             }
             <Link to="/donation">
               <DonationButton />
             </Link>
