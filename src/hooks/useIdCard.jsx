@@ -5,12 +5,34 @@ import toast from "react-hot-toast";
 const useStudentIdCard = (userType) => {
     const [data, setDataList] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [totalIdCard , setTotalIdCard] = useState(0);
   
     const getIdCard=async(userType,searchTerm,currentPage,limit)=>{
         setLoading(true);
         console.log(searchTerm)
         let res;
            try {
+            if(userType == 'All'){
+              let res1 = await axios.get(
+                `${import.meta.env.VITE_API_BACKEND_URL}/api/employeeidcard`,{ 
+                 params:{searchTerm:searchTerm,
+                   page:currentPage,
+                   limit
+                 }
+                }
+              );
+
+              let res2 = await axios.get(
+                `${import.meta.env.VITE_API_BACKEND_URL}/api/studentidcard`,{ 
+                params:{searchTerm:searchTerm,
+                  page:currentPage,
+                  limit
+                }
+                })
+
+              setTotalIdCard(res1 + res2);
+
+            }
             if(userType==='Employees')
            {  res = await axios.get(
                `${import.meta.env.VITE_API_BACKEND_URL}/api/employeeidcard`,{ 
@@ -82,6 +104,6 @@ const useStudentIdCard = (userType) => {
     }
    
    
-  return {data,loading,approveIdCard,getIdCard,getIdCardById}
+  return {data,loading,approveIdCard,getIdCard,getIdCardById , totalIdCard}
 }
 export default useStudentIdCard

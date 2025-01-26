@@ -10,10 +10,9 @@ import {
 } from "recharts";
 
 const data = [
-  { name: "Feb", value1: 20, value2: 15 },
-  { name: "Mar", value1: 25, value2: 18 },
-  { name: "Apr", value1: 30, value2: 20 },
-  { name: "May", value1: 35, value2: 22 },
+  
+  { name: "Apr", value1: 0, value2: 0 },
+  { name: "May", value1: 0, value2: 0 },
   { name: "Jun", value1: 45, value2: 25 }, // June 2021
   { name: "Jul", value1: 50, value2: 30 },
   { name: "Aug", value1: 55, value2: 32 },
@@ -22,6 +21,8 @@ const data = [
   { name: "Nov", value1: 70, value2: 42 },
   { name: "Dec", value1: 75, value2: 45 },
   { name: "Jan", value1: 80, value2: 50 },
+  { name: "Feb", value1: 20, value2: 15 },
+  { name: "Mar", value1: 25, value2: 18 },
 ];
 
 const CustomTooltip = ({ active, payload, label }) => {
@@ -37,7 +38,7 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null;
 };
 
-const MyAreaChart = () => {
+const MyAreaChart = ({totalMember}) => {
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <ResponsiveContainer width="100%" height={"100%"}>

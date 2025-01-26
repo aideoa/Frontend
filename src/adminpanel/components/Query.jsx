@@ -74,7 +74,10 @@ const Query = () => {
     });
   };
   return (
+     <div style={{ marginTop: "50px" }}>
+   
     <div className="py-4 bg-white rounded-xl lightdropshadowbox">
+
       <div className="flex px-4 space-x-4 mb-4 items-center">
         <div className="flex space-x-3 items-center">
           <h2 className="font-bold text-lg">Query</h2>
@@ -201,6 +204,7 @@ const Query = () => {
             Next
           </button>
         </div>
+    </div>
     </div>
   );
 };

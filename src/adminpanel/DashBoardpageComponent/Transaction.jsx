@@ -33,7 +33,7 @@ const transactions = [
   },
 ];
 
-const TransactionTable = () => {
+const TransactionTable = ({setActiveComponent}) => {
   return (
     <div className=" lg:min-w-full  min-w-[700px]">
       {/* Header with See All Transactions */}
@@ -45,7 +45,7 @@ const TransactionTable = () => {
               Recently transaction overall fees of users
             </p>
           </div>
-          <a href="#" className="text-purple-600 text-sm">
+          <a onClick={()=>{setActiveComponent('Transaction')}} className="text-purple-600 text-sm cursor-pointer">
             See All Transactions
           </a>
         </div>
