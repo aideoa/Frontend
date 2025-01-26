@@ -2,7 +2,9 @@ import React, { useContext, useState } from "react";
 
 import {
   FaDribbble,
+  FaFacebook,
   FaInstagram,
+  FaLinkedin,
   FaRegEye,
   FaRegEyeSlash,
   FaTwitter,
@@ -15,6 +17,7 @@ import { loginfunc } from "../services/axios";
 import { AuthContext } from "../context/authContext";
 import toast from "react-hot-toast";
 import useCommonLinks from "../hooks/useCommonLinks";
+import { TbBrandX } from "react-icons/tb";
 
 
 const Login = () => {
@@ -150,21 +153,34 @@ const Login = () => {
             </span>
           </div>
         <div className="flex gap-4 absolute text-white bottom-3 left-[50%] -translate-x-[50%] -translate-y-[50%] ">
-          <Link >
-          <FaInstagram className="cursor-pointer" />
-          </Link>
-          <Link >
-          <FaDribbble className="cursor-pointer" />
-          </Link>
-          <Link >
-          <FaYoutube className="cursor-pointer" />
-          </Link>
-          <Link >
-          <FaTwitter className="cursor-pointer" />
-          </Link>
-         
-        
-
+          <a
+            href="https://www.facebook.com/groups/234765374272589/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaFacebook className="cursor-pointer text-xl  hover:text-[#0866ff]" />
+          </a>
+          <a
+            href="https://www.linkedin.com/company/aideoa/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaLinkedin className="cursor-pointer text-xl  hover:text-[#0077B5]" />
+          </a>
+          <a
+            href="https://x.com/Aideoa2020"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <TbBrandX className="cursor-pointer text-xl hover:text-[#000000]" />
+          </a>
+          <a
+            href="https://www.youtube.com/@aideoa"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaYoutube className="cursor-pointer text-xl hover:text-[#FF0000]" />
+          </a>
         </div>
       </div>
     </div>
