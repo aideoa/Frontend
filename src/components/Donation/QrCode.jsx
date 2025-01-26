@@ -1,17 +1,35 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState,useRef,useEffect } from "react";
 import toast from "react-hot-toast";
-import QRCode from "react-qr-code";
+
 
 const Payment = ({ setStep, amount,setAmount }) => {
   const [formData, setFormData] = useState({
-    name: "",
+    Name: "",
     mobileNumber: "",
-    transactionId: ""
+    email: ""
+    
   });
+  const paymentFormRef = useRef(null); // Reference for appending form
+  const [paymentForm, setPaymentForm] = useState("");
+  const [donationamount, setDonationamount] = useState(amount);
+  const [membershipfee, setMembershipfee] = useState(0);
 
-  const upiId = "vinaynathtiwary-1@okicici";
-  const qrCodeData = `upi://pay?pa=${upiId}&pn=${formData.name}&am=${amount}&cu=INR`;
+  useEffect(() => {
+      if (paymentForm && paymentFormRef.current) {
+        // Clear the current content and append new HTML as DOM nodes
+        paymentFormRef.current.innerHTML = ""; // Clear existing nodes
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(paymentForm, "text/html");
+        const formElement = doc.body.firstChild;
+  
+        if (formElement) {
+          paymentFormRef.current.appendChild(formElement);
+          // Submit the form programmatically
+          formElement.submit();
+        }
+      }
+    }, [paymentForm]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,40 +42,46 @@ const Payment = ({ setStep, amount,setAmount }) => {
   const handleSubmit = async() => {
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_API_BACKEND_URL}/api/donations`,{donationAmount:amount,...formData});
-      if (res.status === 200) {
-        toast.success(res.data.message);
-        setStep(1);
-        setFormData({
-          name: "",
-          mobileNumber: "",
-          transactionId: ""
-        })
-        setAmount()
-      }
+        `${import.meta.env.VITE_API_BACKEND_URL}/payu/pay`,
+        {
+          firstname: formData.Name,
+          email: formData.email ,
+          phone: formData.mobileNumber,
+          amount:parseFloat(membershipfee) + parseFloat(donationamount) ,
+          productinfo: "donation",
+          membershipfee :  membershipfee.toString(),
+          donationamount : donationamount.toString() , 
+        }
+      );
+
+      console.log("Payment response:", res.data);
+      setPaymentForm(res.data); 
     } catch (error) {
       console.log(error)
     }
   };
 
   return (
+
+    <>
+    <div ref={paymentFormRef}></div>
     <div className=" bg-gray-50 flex justify-center ">
       <div className="flex  md:flex-row justify-center items-center w-full max-w-6xl px-4">
         <div className="w-full md:w-1/2 bg-white shadow-md rounded-lg p-8  md:mt-0">
-          <h5 className="text-2xl font-semibold mb-4 text-center">
-            Payment QR Code
+          <h5 className="text-4xl font-semibold mb-4 text-center">
+            Fill Your Detail
           </h5>
-          <p className="text-center mb-6">Scan the QR code to pay ₹{amount}</p>
+         {/*  <p className="text-center mb-6">Scan the QR code to pay ₹{amount}</p>
           <div className="flex justify-center mb-6">
             <QRCode value={qrCodeData} size={256} />
-          </div>
+          </div> */}
           <div className="text-center mb-6">
             <h6 className="text-xl font-medium">Amount: ₹{amount}</h6>
           </div>
           <div className="flex flex-col gap-2">
             <input
-              name="name"
-              value={formData.name}
+              name="Name"
+              value={formData.Name}
               onChange={handleChange}
               placeholder="Your Name"
               className="h-14 px-4 rounded-2xl focus:outline-none border-2 border-AIDEOTYPO"
@@ -70,10 +94,10 @@ const Payment = ({ setStep, amount,setAmount }) => {
               className="h-14 px-4 rounded-2xl focus:outline-none border-2 border-AIDEOTYPO"
             />
             <input
-              name="transactionId"
-              value={formData.transactionId}
+              name="email"
+              value={formData.email}
               onChange={handleChange}
-              placeholder="Your Transaction Id"
+              placeholder="Email"
               className="h-14 px-4 rounded-2xl focus:outline-none border-2 border-AIDEOTYPO"
             />
             <button
@@ -86,6 +110,13 @@ const Payment = ({ setStep, amount,setAmount }) => {
         </div>
       </div>
     </div>
+    
+    </>
+
+
+
+
+    
   );
 };
 
