@@ -159,7 +159,7 @@ const Footer = () => {
               >
                 <FaFacebookF className="cursor-pointer" />
               </Link>
-              <Link to="">
+              <Link to="https://www.linkedin.com/company/aideoa/">
                 <FaLinkedin className="cursor-pointer" />
               </Link>
               <Link to="https://x.com/Aideoa2020" target="_blank">

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
+import { TbBrandX } from "react-icons/tb";
 import {
   FaRegEyeSlash,
   FaUser,
-  FaInstagram,
-  FaDribbble,
+  FaFacebook,
+  FaLinkedin,
   FaTwitter,
   FaYoutube,
   FaRegEye,
@@ -35,7 +36,7 @@ const Signup = () => {
   };
 
   const handleSignupButton = async (E) => {
-    E.preventDefault()
+    E.preventDefault();
     if (!formData.fullName) {
       setError("Please enter your full name");
       return;
@@ -44,11 +45,10 @@ const Signup = () => {
       setError("Please enter email address");
       return;
     }
-    if(!userTypemodal &&(!formData.mobile || formData.mobile.length!==10))
-      {
-        setError("Enter correct mobile number")
-        return;
-      }
+    if (!userTypemodal && (!formData.mobile || formData.mobile.length !== 10)) {
+      setError("Enter correct mobile number");
+      return;
+    }
     if (!formData.mobile) {
       setError("Please enter mobile number");
       return;
@@ -62,7 +62,7 @@ const Signup = () => {
       setError("Mismatch passwords");
       return;
     }
-        setUserTypeModal(true);
+    setUserTypeModal(true);
   };
 
   return (
@@ -76,7 +76,7 @@ const Signup = () => {
             All India Diploma Engineers And Officials Association
           </h1>
           <p className="text-center mb-3 text-white font-semibold">Sign Up</p>
-          <form   onSubmit={handleSignupButton}>
+          <form onSubmit={handleSignupButton}>
             <div className="relative">
               <input
                 className="glass-effect bg-white w-full mb-3 px-3 py-2 text-white rounded-3xl focus:outline-none"
@@ -107,7 +107,7 @@ const Signup = () => {
                 size={14}
               />
             </div>
- 
+
             <div className="relative">
               <input
                 type="text"
@@ -116,9 +116,8 @@ const Signup = () => {
                 placeholder={"Mobile number"}
                 value={formData.mobile}
                 onChange={handleChange}
-                 className="glass-effect bg-white w-full mb-3 px-3 py-2 text-white rounded-3xl focus:outline-none"
+                className="glass-effect bg-white w-full mb-3 px-3 py-2 text-white rounded-3xl focus:outline-none"
               />
-            
             </div>
 
             <div className="relative">
@@ -170,14 +169,12 @@ const Signup = () => {
               )}
             </div>
 
-         
             <span className="text-center text-sm text-red-500">{error}</span>
 
             <div className="mt-4">
               <button
                 className="bg-purplebtn hover:bg-purple-700 text-white py-2 px-4 rounded-full w-full"
                 type="submit"
-              
               >
                 Sign Up
               </button>
@@ -206,10 +203,34 @@ const Signup = () => {
           </div>
         </div>
         <div className="flex gap-4 absolute text-white bottom-3 left-[50%] -translate-x-[50%] -translate-y-[50%] ">
-          <FaInstagram className="cursor-pointer" />
-          <FaDribbble className="cursor-pointer" />
-          <FaTwitter className="cursor-pointer" />
-          <FaYoutube className="cursor-pointer" />
+          <a
+            href="https://www.facebook.com/groups/234765374272589/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaFacebook className="cursor-pointer text-xl  hover:text-[#0866ff]" />
+          </a>
+          <a
+            href="https://www.linkedin.com/company/aideoa/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaLinkedin className="cursor-pointer text-xl  hover:text-[#0077B5]" />
+          </a>
+          <a
+            href="https://x.com/Aideoa2020"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <TbBrandX className="cursor-pointer text-xl hover:text-[#000000]" />
+          </a>
+          <a
+            href="https://www.youtube.com/@aideoa"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaYoutube className="cursor-pointer text-xl hover:text-[#FF0000]" />
+          </a>
         </div>
       </div>
     </>
