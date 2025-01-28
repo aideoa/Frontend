@@ -14,31 +14,33 @@ const JoinNow = () => {
 
   if (!user) nav("/login");
 
-  // useEffect(() => {
-  //   if (paymentForm && paymentFormRef.current) {
-  //     // Clear the current content and append new HTML as DOM nodes
-  //     paymentFormRef.current.innerHTML = ""; // Clear existing nodes
-  //     const parser = new DOMParser();
-  //     const doc = parser.parseFromString(paymentForm, "text/html");
-  //     const formElement = doc.body.firstChild;
 
-  //     if (formElement) {
-  //       paymentFormRef.current.appendChild(formElement);
-  //       // Submit the form programmatically
-  //       formElement.submit();
-  //     }
-  //   }
-  // }, [paymentForm]);
+// useEffect(() => {
+//     if (paymentForm && paymentFormRef.current) {
+//       // Clear the current content and append new HTML as DOM nodes
+//       paymentFormRef.current.innerHTML = ""; // Clear existing nodes
+//       const parser = new DOMParser();
+//       const doc = parser.parseFromString(paymentForm, "text/html");
+//       const formElement = doc.body.firstChild;
 
 
+//       if (formElement) {
+//         paymentFormRef.current.appendChild(formElement);
+//         // Submit the form programmatically
+//         formElement.submit();
+//       }
+//     }
+//   }, [paymentForm]);
 
-  useEffect(() => {
-          const paymentFormId =  document.getElementById("payment_post")
-          if (paymentFormId)
-          {
-            paymentFormId.submit()
-          }
-  }, [paymentForm]);
+
+useEffect(() => {
+  const paymentFormId =  document.getElementById("payment_post")
+  if (paymentFormId)
+  {
+    paymentFormId.submit()
+  }
+}, [paymentForm]);
+
 
   const handlePayment = async () => {
     try {
@@ -65,8 +67,12 @@ const JoinNow = () => {
   return (
     <>
       {/* This div will safely hold the dynamic payment form */}   
-      {/* <div ref={paymentFormRef}></div> */}
-      <div dangerouslySetInnerHTML={{__html: paymentForm}}></div>
+     {/* <div ref={paymentFormRef}></div>   */}
+
+     <div dangerouslySetInnerHTML={{__html: paymentForm}}></div>
+
+
+      
 
       <div className="flex items-center justify-center h-full mt-24 max-sm:p-2">
         <div className="w-96 flex flex-col gap-6">
