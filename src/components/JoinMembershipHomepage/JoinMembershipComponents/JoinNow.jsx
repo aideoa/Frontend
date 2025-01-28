@@ -26,7 +26,7 @@ useEffect(() => {
 
     if (formElement) {
       paymentFormRef.current.appendChild(formElement);
-      // Submit the form programmatically
+      console.log("Form element appended:", formElement);
       formElement.submit();
     } else {
       console.error("No <form> element found in the payment form data.");
