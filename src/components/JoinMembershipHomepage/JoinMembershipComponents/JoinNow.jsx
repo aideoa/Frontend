@@ -14,7 +14,7 @@ const JoinNow = () => {
 
   if (!user) nav("/login");
 
-  useEffect(() => {
+useEffect(() => {
     if (paymentForm && paymentFormRef.current) {
       // Clear the current content and append new HTML as DOM nodes
       paymentFormRef.current.innerHTML = ""; // Clear existing nodes
