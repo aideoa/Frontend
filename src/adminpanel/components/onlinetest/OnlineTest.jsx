@@ -104,7 +104,7 @@ const OnlineTest = ({setActiveComponent,setData}) => {
             </tr>
           </thead>
           <tbody>
-            {dataList.map((item, index) => (
+            {/* {dataList.map((item, index) => (
               <tr key={index} className="border-b border-gray-200 h-16">
                 <td className="p-2 px-4 font-medium text-sm text-gray-600">
                   <input
@@ -134,7 +134,7 @@ const OnlineTest = ({setActiveComponent,setData}) => {
                   }}/>
                 </td>
               </tr>
-            ))}
+            ))} */}
           </tbody>
         </table>
       </div>

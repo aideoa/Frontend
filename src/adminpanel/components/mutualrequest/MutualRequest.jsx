@@ -59,7 +59,7 @@ useEffect(()=>{
 getPairs(searchTerm,limit,currentPage)
 },[searchTerm,currentPage])
   return (
-    <div className="bg-white rounded-xl py-4 lightdropshadowbox">
+    <div className="bg-white rounded-xl py-4 lightdropshadowbox mt-16">
       <div className="flex flex-col">
         
         <div className="flex space-x-4 mb-4 items-center">

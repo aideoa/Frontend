@@ -1,10 +1,13 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
+import { usePage } from '../context/PageContext';
 
 const useEducation = (searchTerm) => {
-    const [dataList, setDataList] = useState([]);
+  const [dataList, setDataList] = useState([]);
+  const [pagination, setPagination] = useState(null);
   const [loading, setLoading] = useState(false);
+  const { currentPage } = usePage(); 
 
   const fetchData = async ( value) => {
 
@@ -18,9 +21,11 @@ const useEducation = (searchTerm) => {
           {
             params: {
               searchTerm: searchTerm || "",
+              page: currentPage ||1 ,
             },
           }
         );
+        if (res.status === 200) setDataList(res.data.files);
       }
       else{
         res = await axios.get(
@@ -28,17 +33,20 @@ const useEducation = (searchTerm) => {
           {
             params: {
               searchTerm: searchTerm || "",
+              page: currentPage ||1 ,
             },
           }
         );
+        if (res.status === 200) setDataList(res.data.videos);
       }
       
-      if (res.status === 200) setDataList(res.data);
-      setLoading(false);
-      return res.data
+      
+      setPagination(res.data.pagination);
     } catch (error) {
       setLoading(false);
       throw new Error(error);
+    }finally {
+      setLoading(false);
     }
   };
   const deleteFile = async (id,value) => {
@@ -68,7 +76,7 @@ const useEducation = (searchTerm) => {
     }
   };
 
-  return {dataList,loading,deleteFile,fetchData}
+  return {dataList,loading,deleteFile,fetchData,pagination}
 }
 
 export default useEducation

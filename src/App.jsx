@@ -25,8 +25,7 @@ import NotFound from "./components/notfound/Notfound";
 import Forgotpassword from "./components/forgotpassword/Forgotpassword";
 import OnlineClass from "./components/onlineclass/OnlineClass";
 import UserRoleSelect from "./components/Cards/UserRoleSelect";
-import StudentForm from "./components/Cards/StudentForm";
-import EmployeeForm from "./components/Cards/EmployeeForm";
+
 import { Toaster } from "react-hot-toast";
 import { useContext, useEffect } from "react";
 import axios from "axios";
@@ -36,6 +35,7 @@ import AdminPanel from "./adminpanel/AdminPanel";
 import Payment from "./data/Payment";
 import Profile from "./components/profile/Profile"
 import AdminLogin from "./adminpanel/components/AdminLogin";
+import PayStatus from "./pages/PayStatus"
 
 export default function App() {
   useEffect(() => {}, []);
@@ -86,9 +86,10 @@ export default function App() {
           <Route path="onlineclass" element={<OnlineClass />} />
           <Route path="additional" element={<UserRoleSelect />} />
           <Route path="profile" element={<Profile />} />
-          <Route path="student-form" element={<StudentForm />} />
+          <Route path="paystatus/:txnid/:firstname/:status/:amt" element={<PayStatus />} />
+         {/*  <Route path="student-form" element={<StudentForm />} />
           <Route path="student-form" element={<EmployeeForm />} />
-          
+           */}
         </Route>
         <Route
           path="/admin/dashboard"

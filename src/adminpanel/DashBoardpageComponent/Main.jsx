@@ -1,54 +1,90 @@
 
-import React,{useRef} from "react";
-
+import React, { useEffect, useRef, useState } from "react";
+import useMembers from '../../hooks/useMembers'
+import useDonation from "../../hooks/useDonation";
+import { eventgetdata } from "../../Connection/Api";
+import useIdCard from '../../hooks/useIdCard'
+import useQuery from "../../hooks/useQuery";
 
 import Tr from "./Tr";
 import TrafficSourceChart from "./TransactionBar";
 import ID_CARD from "./ID_CARD";
 import TransactionTable from "./Transaction";
-const arr = [
-  { head: "Total Team Members", no: "2680" },
-  { head: "Transaction", no: "10,583" },
-  { head: "Id Card", no: "10293" },
-  { head: "Events", no: "89000" },
-];
 
-const Main = ({mainRef,handleScroll }) => {
+const Main = ({ mainRef, handleScroll , setActiveComponent}) => {
+  const { dataList: totalMember } = useMembers();
+  const { dataList: donation } = useDonation();
+  const { totalIdCard } = useIdCard('All');
+  const [events, setEvents] = useState();
+  const totalUsers = totalMember?.pagination?.totalUsers || 0;
+  const {dataList:query} = useQuery();
+
+  const getdata = async () => {
+    try {
+      const data = await eventgetdata();
+      setEvents(data.data.pagination.totalEvents);
+      console.log(data.data);
+    } catch (error) {
+      console.log(`error in getdata in Events.jsx ${error}`);
+    }
+  };
+  useEffect(() => {
+
+    getdata();
+  }, []);
+
+  console.log()
+
+  const arr = [
+    { head: "Total Team Members", no: totalUsers },
+    { head: "Transaction", no: donation?.pagination?.totalDonations || 0 },  // here we only show totalDonation after adding membership funtionality it must be updating again.
+    { head: "Id Card", no: totalIdCard }, // it is also updated after adding the idcard funtionality
+    { head: "Events", no: events || 0 },
+  ];
+
+  // Sample data from your image
+  const data = [
+    { name: "Transaction", value: donation?.pagination?.totalDonations || 0, width: totalUsers > 0 ? `${((donation?.pagination?.totalDonations) / totalUsers) * 100}%` : "0%" },
+    { name: "ID Card", value: totalIdCard, width: totalUsers > 0 ? `${(totalIdCard / totalUsers) * 100}%` : "0%" },
+    { name: "Events", value: events || 0, width: totalUsers > 0 ? `${(events / 100) * 100}%` : "0%", },
+    { name: "Query", value: query?.pagination?.totalQueries || 0, width: totalUsers > 0 ? `${((query?.pagination?.totalQueries || 0)  / totalUsers) * 100}%` : "0%", },
+  ];
+
   return (
     <div
-    ref = {mainRef}
-    onScroll={handleScroll}
+      ref={mainRef}
+      onScroll={handleScroll}
     >
 
-   
-    <div className="w-full relative pt-16 h-screen">
-      <div className="lg:h-[11.94%] max-lg:h-[240px]   flex max-lg:flex-col justify-between mb-5 flex-wrap items-center">
-        {arr.map((data) => (
-          <div className="bg-white shadow-md flex flex-col justify-between items-start p-4 lg:w-[22%] max-lg:w-[40%] max-lg:h-[45%] rounded-lg">
 
-            <h3 className=" text-gray-500">{data.head}</h3>
-            <p className="font-semibold text-2xl">{data.no}</p>
+      <div className="w-full relative h-screen mt-16">
+        <div className="lg:h-[11.94%] max-lg:h-[240px]   flex max-lg:flex-col justify-between mb-5 flex-wrap items-center">
+          {arr.map((data, index) => (
+            <div key={index} className="bg-white shadow-md flex flex-col justify-between items-start p-4 lg:w-[22%] max-lg:w-[40%] max-lg:h-[45%] rounded-lg">
+
+              <h3 className=" text-gray-500">{data.head}</h3>
+              <p className="font-semibold text-2xl">{data.no}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex flex-row max-lg:flex-col w-full max-lg:items-center lg:justify-between mb-6 pt-10">
+
+          <Tr totalMember={totalMember} />
+          <TrafficSourceChart data={data} />
+        </div>
+        <div className="   max-lg:flex-col flex justify-between max-lg:items-center  ">
+          <div className="w-[65%] max-lg:w-full  bg-white p-5 rounded-lg mb-5 shadow-md">
+            <div className="overflow-x-auto">
+
+              <TransactionTable setActiveComponent={setActiveComponent}/>
+            </div>
           </div>
-        ))}
-      </div>
-
-      <div className="flex flex-row max-lg:flex-col w-full max-lg:items-center lg:justify-between mb-6 pt-10">
-
-        <Tr />
-        <TrafficSourceChart />
-      </div>
-      <div className="   max-lg:flex-col flex justify-between max-lg:items-center  ">
-        <div className="w-[65%] max-lg:w-full  bg-white p-5 rounded-lg mb-5 shadow-md">
-          <div className="overflow-x-auto">
-
-          <TransactionTable />
+          <div className="bg-white shadow-lg w-[32%] max-lg:w-full p-4 rounded-lg">
+            <ID_CARD setActiveComponent={setActiveComponent} totalMember={totalMember} />
           </div>
         </div>
-        <div className="bg-white shadow-lg w-[32%] max-lg:w-full p-4 rounded-lg">
-          <ID_CARD />
-        </div>
       </div>
-    </div>
 
     </div>
 

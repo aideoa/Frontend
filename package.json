@@ -18,6 +18,8 @@
     "@mui/material": "^6.1.3",
     "@splidejs/react-splide": "^0.7.12",
     "axios": "^1.7.7",
+    "exceljs": "^4.4.0",
+    "file-saver": "^2.0.5",
     "firebase": "^10.13.1",
     "gsap": "^3.12.5",
     "html2canvas": "^1.4.1",
@@ -37,10 +39,8 @@
     "react-qr-code": "^2.0.15",
     "react-router-dom": "^6.26.1",
     "react-table": "^7.8.0",
-
     "recharts": "^2.12.7",
     "tailwind-scrollbar-hide": "^2.0.0"
-
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
@@ -49,8 +49,8 @@
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.20",
-    "eslint": "^9.9.0",
-    "eslint-plugin-react": "^7.35.0",
+    "eslint": "^9.19.0",
+    "eslint-plugin-react": "^7.37.4",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.9",
     "globals": "^15.9.0",

@@ -2,30 +2,31 @@ import React, { useEffect, useState } from 'react'
 import { FiEdit2 } from 'react-icons/fi';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import useEducation from "../../../hooks/useEducation";
+
 const Files = ({value,setFileData,setActiveComponent}) => {
     const [selectedItems, setSelectedItems] = useState([]);
     const [selectAll, setSelectAll] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const totalPages = 3;
-    const data = [
-        {
-          title: "AIDEOA Hostsdasdsa sdsadas safdsad Summit",
-          eventDateTime: "12 Nov 2025 5:30 am - 6:30 pm",
-          days: "2 days",
-          location: "Hotel Baker",
-          description: "candiceThe roads in our area...",
-          url: "https://www.example.com",
-        },
-        {
-          title: "Phoenix Baker Alumni",
-          eventDateTime: "12 Nov 2025 5:30 am - 6:30 pm",
-          days: "15 days",
-          location: "Hotel Baker",
-          description: "our area have developed...",
-          url: "https://www.example.com",
-        },
+    // const data = [
+    //     {
+    //       title: "AIDEOA Hostsdasdsa sdsadas safdsad Summit",
+    //       eventDateTime: "12 Nov 2025 5:30 am - 6:30 pm",
+    //       days: "2 days",
+    //       location: "Hotel Baker",
+    //       description: "candiceThe roads in our area...",
+    //       url: "https://www.example.com",
+    //     },
+    //     {
+    //       title: "Phoenix Baker Alumni",
+    //       eventDateTime: "12 Nov 2025 5:30 am - 6:30 pm",
+    //       days: "15 days",
+    //       location: "Hotel Baker",
+    //       description: "our area have developed...",
+    //       url: "https://www.example.com",
+    //     },
       
-      ];
+    //   ];
     
     const handleSelectAll = () => {
       if (selectAll) {
@@ -75,7 +76,7 @@ const Files = ({value,setFileData,setActiveComponent}) => {
             </tr>
           </thead>
           <tbody>
-            {dataList?.map((item, index) => (
+            {/* {dataList?.map((item, index) => (
               <tr key={index} className="border-b border-gray-200 h-16">
                 <td className="p-2 px-4 font-medium text-sm text-gray-600">
                   <input
@@ -100,7 +101,7 @@ const Files = ({value,setFileData,setActiveComponent}) => {
                   }}/>
                 </td>
               </tr>
-            ))}
+            ))} */}
           </tbody>
         </table>
       </div>
