@@ -15,25 +15,20 @@ const JoinNow = () => {
   if (!user) nav("/login");
 
 useEffect(() => {
-  if (paymentForm && paymentFormRef.current) {
-    // Clear current content
-    paymentFormRef.current.innerHTML = "";
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(paymentForm, "text/html");
+    if (paymentForm && paymentFormRef.current) {
+      // Clear the current content and append new HTML as DOM nodes
+      paymentFormRef.current.innerHTML = ""; // Clear existing nodes
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(paymentForm, "text/html");
+      const formElement = doc.body.firstChild;
 
-    // Select the form element explicitly
-    const formElement = doc.querySelector("form");
-
-    if (formElement) {
-      paymentFormRef.current.appendChild(formElement);
-      console.log("Form element appended:", formElement);
-      formElement.submit();
-    } else {
-      console.error("No <form> element found in the payment form data.");
+      if (formElement) {
+        paymentFormRef.current.appendChild(formElement);
+        // Submit the form programmatically
+        formElement.submit();
+      }
     }
-  }
-}, [paymentForm]);
-
+  }, [paymentForm]);
 
   const handlePayment = async () => {
     try {
