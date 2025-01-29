@@ -18,7 +18,7 @@ const JoinNow = () => {
  useEffect(() => {
     if (paymentForm && paymentFormRef.current) {
       // Clear the current content and append new HTML as DOM nodes
-      pymentFormRef.current.innerHTML = ""; // Clear existing nodes
+      paymentFormRef.current.innerHTML = ""; // Clear existing nodes
       const parser = new DOMParser();
       const doc = parser.parseFromString(paymentForm, "text/html");
       const formElement = doc.body.firstChild;
