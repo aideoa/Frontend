@@ -8,17 +8,17 @@ const JoinNow = () => {
   const [membershipfee, setMembershipfee] = useState(100);
   const nav = useNavigate();
   const [donationamount, setDonationamount] = useState(0);
-  const [paymentForm, setPaymentForm] = useState("");
+  const [paymeantForm, setPaymentForm] = useState("");
   const paymentFormRef = useRef(null); // Reference for appending form
   const { user, authToken } = useContext(AuthContext);
 
   if (!user) nav("/login");
 
 
-useEffect(() => {
+/* useEffect(() => {
     if (paymentForm && paymentFormRef.current) {
       // Clear the current content and append new HTML as DOM nodes
-      paymentFormRef.current.innerHTML = ""; // Clear existing nodes
+      pymentFormRef.current.innerHTML = ""; // Clear existing nodes
       const parser = new DOMParser();
       const doc = parser.parseFromString(paymentForm, "text/html");
       const formElement = doc.body.firstChild;
@@ -31,9 +31,14 @@ useEffect(() => {
       }
     }
   }, [paymentForm]);
-
-
-
+ */
+  useEffect(() => {
+    const paymentFormId =  document.getElementById("payment_post")
+    if (paymentFormId)
+    {
+      paymentFormId.submit()
+    }
+}, [paymentForm]);
 
 
   const handlePayment = async () => {
