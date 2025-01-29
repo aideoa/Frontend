@@ -15,7 +15,7 @@ const JoinNow = () => {
   if (!user) nav("/login");
 
 
-/* useEffect(() => {
+ useEffect(() => {
     if (paymentForm && paymentFormRef.current) {
       // Clear the current content and append new HTML as DOM nodes
       pymentFormRef.current.innerHTML = ""; // Clear existing nodes
@@ -31,14 +31,14 @@ const JoinNow = () => {
       }
     }
   }, [paymentForm]);
- */
-  useEffect(() => {
-    const paymentFormId =  document.getElementById("payment_post")
-    if (paymentFormId)
-    {
-      paymentFormId.submit()
-    }
-}, [paymentForm]);
+
+//   useEffect(() => {
+//     const paymentFormId =  document.getElementById("payment_post")
+//     if (paymentFormId)
+//     {
+//       paymentFormId.submit()
+//     }
+// }, [paymentForm]);
 
 
   const handlePayment = async () => {
@@ -66,9 +66,9 @@ const JoinNow = () => {
   return (
     <>
       {/* This div will safely hold the dynamic payment form */}   
-     {/* <div ref={paymentFormRef}></div>   */}
+      <div ref={paymentFormRef}></div>   
 
-     <div dangerouslySetInnerHTML={{__html: paymentForm}}></div>
+{/*      <div dangerouslySetInnerHTML={{__html: paymentForm}}></div> */}
       <div className="flex items-center justify-center h-full mt-24 max-sm:p-2">
         <div className="w-96 flex flex-col gap-6">
           <p className="text-center font-normal">
