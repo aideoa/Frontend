@@ -8,7 +8,7 @@ const JoinNow = () => {
   const [membershipfee, setMembershipfee] = useState(100);
   const nav = useNavigate();
   const [donationamount, setDonationamount] = useState(0);
-  const [paymeantForm, setPaymentForm] = useState("");
+  const [paymentForm, setPaymentForm] = useState("");
   const paymentFormRef = useRef(null); // Reference for appending form
   const { user, authToken } = useContext(AuthContext);
 
