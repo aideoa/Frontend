@@ -15,31 +15,25 @@ const JoinNow = () => {
   if (!user) nav("/login");
 
 
-// useEffect(() => {
-//     if (paymentForm && paymentFormRef.current) {
-//       // Clear the current content and append new HTML as DOM nodes
-//       paymentFormRef.current.innerHTML = ""; // Clear existing nodes
-//       const parser = new DOMParser();
-//       const doc = parser.parseFromString(paymentForm, "text/html");
-//       const formElement = doc.body.firstChild;
-
-
-//       if (formElement) {
-//         paymentFormRef.current.appendChild(formElement);
-//         // Submit the form programmatically
-//         formElement.submit();
-//       }
-//     }
-//   }, [paymentForm]);
-
-
 useEffect(() => {
-  const paymentFormId =  document.getElementById("payment_post")
-  if (paymentFormId)
-  {
-    paymentFormId.submit()
-  }
-}, [paymentForm]);
+    if (paymentForm && paymentFormRef.current) {
+      // Clear the current content and append new HTML as DOM nodes
+      paymentFormRef.current.innerHTML = ""; // Clear existing nodes
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(paymentForm, "text/html");
+      const formElement = doc.body.firstChild;
+
+
+      if (formElement) {
+        paymentFormRef.current.appendChild(formElement);
+        // Submit the form programmatically
+        formElement.submit();
+      }
+    }
+  }, [paymentForm]);
+
+
+
 
 
   const handlePayment = async () => {
