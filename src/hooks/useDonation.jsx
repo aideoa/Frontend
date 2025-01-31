@@ -5,7 +5,7 @@ const useDonation = () => {
     const [dataList, setDataList] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchData = async (searchTerm, currentPage=1,limit) => {
+  const fetchData = async (searchTerm, currentPage=1,limit=8) => {
 
     setLoading(true);
     try {
@@ -15,7 +15,6 @@ const useDonation = () => {
           params: {
             searchTerm:searchTerm||"",
             page:currentPage,
-            limit
           },
         }
       );

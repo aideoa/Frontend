@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   AreaChart,
   Area,
@@ -9,46 +9,88 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const data = [
-  
-  { name: "Apr", value1: 0, value2: 0 },
-  { name: "May", value1: 0, value2: 0 },
-  { name: "Jun", value1: 45, value2: 25 }, // June 2021
-  { name: "Jul", value1: 50, value2: 30 },
-  { name: "Aug", value1: 55, value2: 32 },
-  { name: "Sep", value1: 60, value2: 35 },
-  { name: "Oct", value1: 65, value2: 40 },
-  { name: "Nov", value1: 70, value2: 42 },
-  { name: "Dec", value1: 75, value2: 45 },
-  { name: "Jan", value1: 80, value2: 50 },
-  { name: "Feb", value1: 20, value2: 15 },
-  { name: "Mar", value1: 25, value2: 18 },
-];
-
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
       <div className="custom-tooltip">
-        <p className="label">{`${label} 2021`}</p>
-        <p className="intro">{`Value: ${payload[0].value}`}</p>
+        <p className="label">{`${label} Financial Year`}</p>
+        <p className="intro">
+          {`Students: ${payload[0].value} / Employees: ${payload[1].value}`}
+        </p>
       </div>
     );
   }
-
   return null;
 };
 
-const MyAreaChart = ({totalMember}) => {
+const MyAreaChart = ({ totalMember }) => {
+  const [data, setData] = useState([]);
+  const [year, setYear] = useState(new Date().getFullYear()); // Default to current year
+
+  useEffect(() => {
+    const processData = () => {
+      const months = [
+        "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar"
+      ];
+
+      const monthlyData = months.map((month) => ({
+        name: month,
+        students: 0,
+        employees: 0,
+      }));
+
+      totalMember?.users?.forEach((user) => {
+        const createdDate = new Date(user.createdAt);
+        const userMonth = createdDate.getMonth(); // 0-11 (Jan-Dec)
+        const userYear = createdDate.getFullYear();
+
+        if (userYear === year) {
+          const adjustedIndex = userMonth < 3 ? userMonth + 9 : userMonth - 3;
+          if (user.userType === "student") {
+            monthlyData[adjustedIndex].students += 1;
+          } else if (user.userType === "employee") {
+            monthlyData[adjustedIndex].employees += 1;
+          }
+        }
+      });
+
+      setData(monthlyData);
+    };
+
+    processData();
+  }, [year, totalMember]);
+
+  const handleYearChange = (newYear) => {
+    setYear(newYear);
+  };
+
   return (
     <div style={{ width: "100%", height: "100%" }}>
+      <div className="flex flex-row justify-between">
+        <button
+          className="bg-blue-600 rounded text-white p-1"
+          onClick={() => handleYearChange(year - 1)}
+        >
+          Previous Year
+        </button>
+        <h3 className="text-center font-medium text-gray-600">
+          Showing Data for {year} Financial Year
+        </h3>
+        <button
+          className="bg-blue-600 rounded text-white p-1"
+          onClick={() => handleYearChange(year + 1)}
+        >
+          Next Year
+        </button>
+      </div>
       <ResponsiveContainer width="100%" height={"100%"}>
         <AreaChart data={data}>
           <defs>
-            <linearGradient id="colorValue1" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id="colorStudents" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
               <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
             </linearGradient>
-            <linearGradient id="colorValue2" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id="colorEmployees" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
               <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
             </linearGradient>
@@ -59,17 +101,17 @@ const MyAreaChart = ({totalMember}) => {
           <Tooltip content={<CustomTooltip />} />
           <Area
             type="monotone"
-            dataKey="value1"
+            dataKey="students"
             stroke="#8884d8"
             fillOpacity={1}
-            fill="url(#colorValue1)"
+            fill="url(#colorStudents)"
           />
           <Area
             type="monotone"
-            dataKey="value2"
+            dataKey="employees"
             stroke="#82ca9d"
             fillOpacity={1}
-            fill="url(#colorValue2)"
+            fill="url(#colorEmployees)"
           />
         </AreaChart>
       </ResponsiveContainer>

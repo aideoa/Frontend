@@ -14,6 +14,7 @@ const sidebar = [
   { icon: IoMdHome, heading: "Dashboard" },
   { icon: IoIosPersonAdd, heading: "Members" },
   { icon: RiMoneyRupeeCircleLine, heading: "Transaction" },
+  { icon: RiMoneyRupeeCircleLine, heading: "Donation" },
   { icon: SlCalender, heading: "Events" },
   { icon: TiDocumentText, heading: "Resource" },
   { icon: FaNewspaper, heading: "Latest News" },
@@ -26,7 +27,7 @@ const sidebar = [
   // { icon: BiTransferAlt , heading: "Mutual Request" },
 
   { icon: GoGoal, heading: "Our Missions" },
-  { icon: RiMoneyRupeeCircleLine, heading: "Donation" },
+
 ];
 
 

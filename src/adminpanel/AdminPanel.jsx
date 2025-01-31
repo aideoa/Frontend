@@ -34,7 +34,7 @@ const AdminPanel = () => {
   const renderComponent = () => {
     switch (activeComponent) {
       case "Dashboard":
-        return <Main />;
+        return <Main setActiveComponent={setActiveComponent} />;
       case "Events":
         return (
           <Events
