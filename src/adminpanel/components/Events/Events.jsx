@@ -19,8 +19,8 @@ const Resources = ({ setActiveComponent, setEventsData }) => {
   const getdata = async (searchTerm) => {
     try {
       const data = await eventgetdata(searchTerm);
-      console.log(data); // Check the structure of the response
-      setd(Array.isArray(data?.data) ? data.data : []); // Ensure it's an array
+      console.log(data.data.events); // Check the structure of the response
+      setd(data?.data.events); // Ensure it's an array
     } catch (error) {
       console.log(`Error in getdata in Events.jsx: ${error}`);
     }

@@ -10,9 +10,10 @@ import useMembers from "../../../hooks/useMembers";
 import { handleDownloadAll } from "../Members/exportExcel";
 import SearchBar from "./SearchBar";
 
+
 const Member = () => {
   const [currentSection, setCurrentSection] = useState("All"); // Default section
-  const [currentPage, setCurrentPage] = useState(2);
+  const [currentPage, setCurrentPage] = useState(1);
   const [userType, setUserType] = useState("All");
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
@@ -21,13 +22,17 @@ const Member = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
-  
-const [data, setData] = useState([]);
+  const [order, setOrder] = useState('desc');
+  const [viewingPdf, setViewingPdf] = useState(null);
+  const [isStudent, setIsStudent] = useState(false);
+
   const totalPages = 3;
 
-   const handleResults = (filteredData) => {
-     // Handle filtered data here
-   };
+  const handleResults = (filteredData) => {
+    console.log(filteredData);
+    fetchData(userType, currentPage, order, filteredData);
+  };
+
 
   const handleOpenPopup = () => {
     setShowPopup(true);
@@ -43,8 +48,8 @@ const [data, setData] = useState([]);
       userType === "All"
         ? true
         : userType === "Employees"
-        ? item.type === "Employee"
-        : item.type === "Student"
+          ? item.type === "Employee"
+          : item.type === "Student"
     ) || [];
 
   const handleSelectItem = (index) => {
@@ -76,12 +81,18 @@ const [data, setData] = useState([]);
   };
 
   const toggleMenu = (event) => {
-    event.stopPropagation();
-    const rect = event.target.getBoundingClientRect();
-    setMenuPosition({ x: rect.right - 5, y: rect.bottom + window.scrollY });
-    setShowMenu((prev) => !prev);
+    event.stopPropagation(); // Prevent click from propagating to parent elements
+    
+    const rect = event.target.getBoundingClientRect(); // Get the bounding rectangle of the clicked element
+    
+    setMenuPosition({
+      x: rect.left + window.scrollX, // Horizontal position with scroll offset
+      y: rect.bottom + window.scrollY, // Vertical position with scroll offset
+    });
+    
+    setShowMenu((prev) => !prev); // Toggle menu visibility
   };
-
+  
   const onDownloadAllClick = async () => {
     handleDownloadAll(userType);
   };
@@ -90,8 +101,9 @@ const [data, setData] = useState([]);
   const closeMenu = () => setShowMenu(false);
 
   useEffect(() => {
-    fetchData(userType, currentPage);
-  }, [userType, currentPage]);
+    console.log(order)
+    fetchData(userType, currentPage, order);
+  }, [userType, currentPage, order]);
 
   React.useEffect(() => {
     if (showMenu) {
@@ -132,6 +144,11 @@ const [data, setData] = useState([]);
     });
   };
 
+  const viewIdProof = (pdfUrl) => {
+    console.log(pdfUrl)
+    setViewingPdf(pdfUrl); // Show PDF modal
+  };
+
   return (
     <>
 
@@ -140,20 +157,34 @@ const [data, setData] = useState([]);
         className="bg-white py-4 rounded-xl lightdropshadowbox"
       >
 
-        <div className="flex px-4 flex-col">
-          <div className="flex  space-x-4 mb-4 items-center">
+        <div className="flex px-2 flex-col">
+          <div className="flex  mb-4 items-center">
             <div className="flex w-[34%] h-[40%] items-center gap-2">
               <h3 className="h-full  text-[18px] font-[500]">Member</h3>
-              {/* <p className="text-[14px] px-3 text-purple-800 rounded-lg bg-purple-200 my-auto">
-                100 users
-              </p> */}
+              <p className="text-[14px] px-3 text-purple-800 rounded-lg bg-purple-200 my-auto">
+                {dataList?.pagination?.totalUsers || 0} users
+              </p>
             </div>
 
             <div className="flex justify-end flex-1  items-center space-x-4 ">
               <div className="relative w-[55%]">
-                <SearchBar data={data} onResults={handleResults} />
+                <SearchBar onResults={handleResults} />
               </div>
               {selectedItems.length >= 2 && <MdDelete size={26} />}
+              <div className="py-3 px-4 text-left font-medium text-sm text-gray-500 flex flex-col items-center space-y-1">
+                <span className="font-semibold">sorting</span>
+                <div className="flex space-x-2">
+                  {/* Down Arrow (for Sorting) */}
+                  <button className="text-gray-500 hover:text-green-700 " onClick={() => { setOrder('desc') }} >
+                    <FaArrowDownLong size={14} />
+                  </button>
+
+                  {/* Up Arrow (for Sorting) */}
+                  <button className="text-gray-500 hover:text-red-700" onClick={() => { setOrder('asc') }} >
+                    <FaArrowUpLong size={14} />
+                  </button>
+                </div>
+              </div>
               <div className="flex max-lg:flex-col gap-2">
                 <button
                   className="bg-white text-nowrap font-semibold border shadow-md text-black py-2 px-4 rounded-md mr-2"
@@ -163,31 +194,29 @@ const [data, setData] = useState([]);
                 </button>
               </div>
               <button
-              className="text-sm font-semibold bg-gradient-to-r from-[#5A00A0] to-[#9B4BFF] text-white py-2 px-6 h-12 rounded-full shadow-lg hover:from-[#3A0070] hover:to-[#6D2EDC] hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-              onClick={handleOpenPopup}
-            >
-              Add User
-            </button>
+                className="text-sm font-semibold  bg-[#5A00A0] text-white py-2 px-3 w-24 h-10 rounded-lg shadow-lg  hover:shadow-xl "
+                onClick={handleOpenPopup}
+              >
+                Add User
+              </button>
             </div>
           </div>
           <div className="flex justify-between px-4">
             <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-3 items-center justify-center">
               <button
                 onClick={() => handleTableList("All")}
-                className={`${
-                  userType === "All"
-                    ? "bg-[#4B0082] text-white"
-                    : "bg-white text-[#4B0082]"
-                } rounded-t-2xl text-sm py-2 px-4 w-full md:w-40 font-medium flex gap-2 justify-center items-center`}
+                className={`${userType === "All"
+                  ? "bg-[#4B0082] text-white"
+                  : "bg-white text-[#4B0082]"
+                  } rounded-t-2xl text-sm py-2 px-4 w-full md:w-40 font-medium flex gap-2 justify-center items-center`}
               >
                 <span>All</span>
                 {userType === "All" && (
                   <span
-                    className={`text-xs font-bold px-2 rounded-md ${
-                      userType === "All"
-                        ? "bg-white text-[#4B0082]"
-                        : "bg-[#4B0082] text-white"
-                    }`}
+                    className={`text-xs font-bold px-2 rounded-md ${userType === "All"
+                      ? "bg-white text-[#4B0082]"
+                      : "bg-[#4B0082] text-white"
+                      }`}
                   >
                     {dataList?.pagination?.totalUsers || 0}
                   </span>
@@ -195,20 +224,18 @@ const [data, setData] = useState([]);
               </button>
               <button
                 onClick={() => handleTableList("Employees")}
-                className={`${
-                  userType === "Employees"
-                    ? "bg-[#4B0082] text-white"
-                    : "bg-white text-[#4B0082]"
-                } rounded-t-2xl text-sm py-2 px-4 w-full md:w-40 font-medium flex gap-2 justify-center items-center`}
+                className={`${userType === "Employees"
+                  ? "bg-[#4B0082] text-white"
+                  : "bg-white text-[#4B0082]"
+                  } rounded-t-2xl text-sm py-2 px-4 w-full md:w-40 font-medium flex gap-2 justify-center items-center`}
               >
                 <span>Employees</span>
                 {userType === "Employees" && (
                   <span
-                    className={`text-xs font-bold px-2 rounded-md ${
-                      userType === "Employees"
-                        ? "bg-white text-[#4B0082]"
-                        : "bg-[#4B0082] text-white"
-                    }`}
+                    className={`text-xs font-bold px-2 rounded-md ${userType === "Employees"
+                      ? "bg-white text-[#4B0082]"
+                      : "bg-[#4B0082] text-white"
+                      }`}
                   >
                     {dataList?.pagination?.totalUsers || 0}
                   </span>
@@ -216,20 +243,18 @@ const [data, setData] = useState([]);
               </button>
               <button
                 onClick={() => handleTableList("Students")}
-                className={`${
-                  userType === "Students"
-                    ? "bg-[#4B0082] text-white"
-                    : "bg-white text-[#4B0082]"
-                } rounded-t-2xl text-sm py-2 px-4 w-full md:w-40 font-medium flex gap-2 justify-center items-center`}
+                className={`${userType === "Students"
+                  ? "bg-[#4B0082] text-white"
+                  : "bg-white text-[#4B0082]"
+                  } rounded-t-2xl text-sm py-2 px-4 w-full md:w-40 font-medium flex gap-2 justify-center items-center`}
               >
                 <span>Students</span>
                 {userType === "Students" && (
                   <span
-                    className={`text-xs font-bold px-2 rounded-md ${
-                      userType === "Students"
-                        ? "bg-white text-[#4B0082]"
-                        : "bg-[#4B0082] text-white"
-                    }`}
+                    className={`text-xs font-bold px-2 rounded-md ${userType === "Students"
+                      ? "bg-white text-[#4B0082]"
+                      : "bg-[#4B0082] text-white"
+                      }`}
                   >
                     {dataList?.pagination?.totalUsers || 0}
                   </span>
@@ -328,22 +353,11 @@ const [data, setData] = useState([]);
                 </th>
 
                 <th className="py-3 px-4 text-left font-medium text-sm text-gray-500">
-                  Actions
+                  Id Proof
                 </th>
 
-                <th className="py-3 px-4 text-left font-medium text-sm text-gray-500 flex flex-col items-center space-y-1">
-                  <span className="font-semibold">Status</span>
-                  <div className="flex space-x-2">
-                    {/* Down Arrow (for Sorting) */}
-                    <button className="text-gray-500 hover:text-green-700">
-                      <FaArrowDownLong size={14} />
-                    </button>
-
-                    {/* Up Arrow (for Sorting) */}
-                    <button className="text-gray-500 hover:text-red-700">
-                      <FaArrowUpLong size={14} />
-                    </button>
-                  </div>
+                <th className="py-3 px-4 text-left font-medium text-sm text-gray-500">
+                  Actions
                 </th>
               </tr>
             </thead>
@@ -383,28 +397,46 @@ const [data, setData] = useState([]);
                     </td>
                     <td className="p-2 font-medium text-xs ">
                       <td
-                        className={` rounded-full px-1 mb-1 ${
-                          item.status === "Approve"
-                            ? "bg-green-100 text-green-700 "
-                            : "bg-red-100 text-red-700"
-                        }`}
+                        className={` rounded-full px-1 mb-1 ${item.status === "Approve"
+                          ? "bg-green-100 text-green-700 "
+                          : "bg-red-100 text-red-700"
+                          }`}
                       >
                         {item.status === "Approve" ? "Active" : "Inactive"}
                       </td>
                     </td>
+                    <td className="p-2 font-medium text-sm text-gray-600 cursor-pointer">
+                      <button
+                        onClick={() => viewIdProof(item.idCard)} // URL or identifier for the ID proof PDF
+                        className="underline text-[#5A00A0] px-4 py-2 rounded"
+                      >
+                        View
+                      </button>
+                    </td>
                     <td
                       className="p-2 font-medium text-sm text-gray-600 cursor-pointer"
-                      onClick={toggleMenu}
+                      onClick={(event) => {
+                        toggleMenu(event)
+                        setIsStudent(item.userType === 'student');
+                      }}
                     >
                       <BsThreeDotsVertical />
                     </td>
-                    <td className="p-2 font-medium text-sm text-gray-600 cursor-pointer">
-                      <BsThreeDotsVertical />
-                    </td>
+
                   </tr>
                 ))}
             </tbody>
           </table>
+          {viewingPdf && <div className="pdf-modal-overlay"></div>}
+          {viewingPdf && (
+            <div className="pdf-modal">
+              <button className="close-btn" onClick={() => setViewingPdf(null)}>
+                Close
+              </button>
+
+              <img src={viewingPdf} alt="id Proof" />
+            </div>
+          )}
         </div>
 
         {/* Dropdown menu */}
@@ -430,6 +462,22 @@ const [data, setData] = useState([]);
               >
                 Download
               </li>
+              {
+                isStudent ? <>
+                  <li
+                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                    onClick={() => alert("Approve clicked")}
+                  >
+                    Approve
+                  </li>
+                  <li
+                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                    onClick={() => alert("Reject clicked")}
+                  >
+                    Reject
+                  </li>
+                </> : <></>
+              }
               <li
                 className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                 onClick={() => alert("Suspend clicked")}
@@ -457,11 +505,11 @@ const [data, setData] = useState([]);
             {[...Array(totalPages).keys()].map((page) => (
               <button
                 key={page}
-                className={`py-2 px-4 rounded-md shadow-md border ${
-                  currentPage === page + 1
-                    ? "bg-purple-700 text-white"
-                    : " bg-white  text-black "
-                }`}
+                className={`py-2 px-4 rounded-md shadow-md border ${currentPage === page + 1
+                  ? "bg-purple-700 text-white"
+                  : " bg-white  text-black "
+                  }`}
+                onClick={() => (setCurrentPage(page + 1))}
               >
                 {page + 1}
               </button>
