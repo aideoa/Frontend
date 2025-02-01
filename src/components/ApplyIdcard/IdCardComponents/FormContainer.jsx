@@ -21,51 +21,53 @@ const FormContainer = () => {
   // }, [user, getIdCardById]);
   if (!user) return <LoginPrompt title="Login to Apply for ID Card" />;
 
-  if (data?.status === "pending") {
-    return <AlreadyApplied />;
-  }
+  // if (user?.idCardStatus === "PENDING") {
+  //   return <AlreadyApplied />;
+  // }
 
-  if (data?.status === "rejected") {
+  if (user?.idCardStatus === "REJECTED") {
     toast("Your last application was rejected. Please apply again.");
     return null;
   }
 
   const renderContent = () => {
     if (user.userType === "employee") {
-      if (!data?.isMember) {
+      if (user?.idCardStatus === 'APPROVED') {
         return (
           <div>
-            <p className="text-xl font-medium text-red-600">Membership Required</p>
-            <p className="text-lg text-gray-700 mb-4">Please pay the membership fee to access your ID card.</p>
-            <Link
-              to="/membership"
-              className="bg-blue-600 text-white hover:bg-blue-700 font-semibold py-2 px-4 rounded-lg transition duration-200"
-            >
-              Pay Membership Fee
-            </Link>
+            <p className="text-xl font-medium">Employee ID Card</p>
+            <EmployeeIdCard data={user} />
+            <button className="btn-download">Download ID Card</button>
           </div>
         );
+        
       }
+      
       return (
         <div>
-          <p className="text-xl font-medium">Employee ID Card</p>
-          <EmployeeIdCard data={data} />
-          <button className="btn-download">Download ID Card</button>
+          <p className="text-xl font-medium text-red-600">Membership Required</p>
+          <p className="text-lg text-gray-700 mb-4">Please pay the membership fee to access your ID card.</p>
+          <Link
+            to="/membership"
+            className="bg-blue-600 text-white hover:bg-blue-700 font-semibold py-2 px-4 rounded-lg transition duration-200"
+          >
+            Pay Membership Fee
+          </Link>
         </div>
       );
     }
 
     if (user.userType === "student") {
-      if (data?.status === "verified") {
+      if (user?.idCardStatus === "APPROVED") {
         return (
           <div>
             <p className="text-xl font-medium">Student ID Card</p>
-            <IdCardPurple data={data} />
+            <IdCardPurple data={user} />
             <button className="btn-download">Download ID Card</button>
           </div>
         );
       }
-      if (data?.status === "denied") {
+      if (user?.idCardStatus === "REJECTED") {
         return (
           <div>
             <p className="text-xl font-medium text-red-600">Student Verification Denied</p>
