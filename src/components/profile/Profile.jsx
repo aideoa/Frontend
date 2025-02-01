@@ -9,7 +9,7 @@ const Profile = () => {
   const { user, authToken } = useContext(AuthContext);
   if (!user) nav("/login");
 
-
+  console.log(user);
 
   return (
     <div className="bg-gradient-to-r from-[#3f1473] to-[#8a63bb] min-h-screen flex items-center justify-center p-4">

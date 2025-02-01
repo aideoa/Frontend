@@ -429,7 +429,7 @@ const Member = () => {
           </table>
           {viewingPdf && <div className="pdf-modal-overlay"></div>}
           {viewingPdf && (
-            <div className="pdf-modal">
+            <div className="pdf-modal h-[80%] overflow-scroll">
               <button className="close-btn" onClick={() => setViewingPdf(null)}>
                 Close
               </button>
