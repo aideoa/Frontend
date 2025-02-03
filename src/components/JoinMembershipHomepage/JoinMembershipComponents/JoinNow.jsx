@@ -1,3 +1,4 @@
+
 import React, { useState, useContext, useEffect, useRef } from "react";
 import { FaCircleCheck } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
@@ -8,17 +9,17 @@ const JoinNow = () => {
   const [membershipfee, setMembershipfee] = useState(100);
   const nav = useNavigate();
   const [donationamount, setDonationamount] = useState(0);
-  const [paymeantForm, setPaymentForm] = useState("");
+  const [paymentForm, setPaymentForm] = useState("");
   const paymentFormRef = useRef(null); // Reference for appending form
   const { user, authToken } = useContext(AuthContext);
 
   if (!user) nav("/login");
 
 
-/* useEffect(() => {
-if (paymentForm && paymentFormRef.current) {
+ useEffect(() => {
+    if (paymentForm && paymentFormRef.current) {
       // Clear the current content and append new HTML as DOM nodes
-      pymentFormRef.current.innerHTML = ""; // Clear existing nodes
+      paymentFormRef.current.innerHTML = ""; // Clear existing nodes
       const parser = new DOMParser();
       const doc = parser.parseFromString(paymentForm, "text/html");
       const formElement = doc.body.firstChild;
@@ -31,15 +32,6 @@ if (paymentForm && paymentFormRef.current) {
       }
     }
   }, [paymentForm]);
- */
-  useEffect(() => {
-    const paymentFormId =  document.getElementById("payment_post")
-    if (paymentFormId)
-    {
-      paymentFormId.submit()
-    }
-}, [paymentForm]);
-
 
 //   useEffect(() => {
 //     const paymentFormId =  document.getElementById("payment_post")
@@ -75,11 +67,9 @@ if (paymentForm && paymentFormRef.current) {
   return (
     <>
       {/* This div will safely hold the dynamic payment form */}   
-
       <div ref={paymentFormRef}></div>   
 
 {/*      <div dangerouslySetInnerHTML={{__html: paymentForm}}></div> */}
-
       <div className="flex items-center justify-center h-full mt-24 max-sm:p-2">
         <div className="w-96 flex flex-col gap-6">
           <p className="text-center font-normal">
