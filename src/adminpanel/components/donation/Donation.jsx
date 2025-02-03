@@ -9,9 +9,9 @@ const Donation = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchterm] = useState("");
 
-  const { dataList: data, fetchData } = useDonation();
+  const { dataList, fetchData } = useDonation();
 
-  const totalPages = data?.pagination?.totalPages;
+  const totalPages = dataList?.pagination?.totalPages;
   const limit = 6;
 
   useEffect(() => {
@@ -100,8 +100,8 @@ const Donation = () => {
               </tr>
             </thead>
             <tbody>
-              {data &&
-                data?.donations?.slice(0, limit)?.map((item, index) => (
+              {dataList &&
+                dataList?.donations?.slice(0, limit)?.map((item, index) => (
                   <tr key={index} className="border-b border-gray-200 h-16 ">
                     <td className="p-2 px-4 font-medium text-sm text-gray-600">
                       <input

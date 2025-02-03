@@ -38,9 +38,9 @@ import AdminLogin from "./adminpanel/components/AdminLogin";
 import PayStatus from "./pages/PayStatus"
 
 export default function App() {
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
   const { user } = useContext(AuthContext);
-  const {adminUser}=useContext(AdminAuthContext)
+  const { adminUser } = useContext(AdminAuthContext)
   return (
     <ScrollToTop>
       <Routes>
@@ -61,7 +61,7 @@ export default function App() {
           <Route path="membership" element={<JoinMembership />} />
 
           <Route path="donation" element={<DonationComponent />} />
-            
+
           <Route
             path="mutualtransfer"
             element={
@@ -76,7 +76,7 @@ export default function App() {
           <Route path="about" element={<About />} />
           <Route path="education" element={<EducationCell />} />
           <Route path="idcard" element={<ApplyIdCard />} />
-          <Route path="home" element={user ?<Landingpage />:<Navigate to="/signup" />} />
+          <Route path="home" element={user ? <Landingpage /> : <Navigate to="/signup" />} />
           <Route path="onlinetest" element={<Onlinetest />} />
           <Route path="studentcorner" element={<StudentCorner />} />
           <Route path="employeecorner" element={<Employeecorner />} />
@@ -87,20 +87,21 @@ export default function App() {
           <Route path="additional" element={<UserRoleSelect />} />
           <Route path="profile" element={<Profile />} />
           <Route path="paystatus/:txnid/:firstname/:status/:amt" element={<PayStatus />} />
-         {/*  <Route path="student-form" element={<StudentForm />} />
+          {/*  <Route path="student-form" element={<StudentForm />} />
           <Route path="student-form" element={<EmployeeForm />} />
            */}
+
         </Route>
         <Route
           path="/admin/dashboard"
           element={adminUser ? <AdminPanel /> : <Navigate to="/admin/login" />}
         />
-         <Route
+        <Route
           path="/admin/login"
           element={
-          
-              <AdminLogin />
-         
+
+            <AdminLogin />
+
           }
         />
         <Route path="/pay" element={<Payment />} />

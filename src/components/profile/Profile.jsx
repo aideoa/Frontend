@@ -17,11 +17,17 @@ const Profile = () => {
         <div className="flex flex-col md:flex-row">
           <div className="md:w-1/3 text-center mb-8 md:mb-0">
             <img src={user.image} alt="Profile Picture" className="rounded-full w-48 h-48 mx-auto mb-4 border-4 border-[#3f1473] transition-transform duration-300 hover:scale-105 ring ring-gray-300" />
-            <button className="mt-4 bg-[#3f1473] text-white px-4 py-2 rounded-lg hover:bg-[#8a63bb] transition-colors duration-300 ring ring-gray-300 hover:ring-indigo-300">ID Card Download</button>
+            <div>
+              <p>AIDEOA ID No: {user.aideoaIdNo}</p>
+            </div>
+            <button className="mt-4 bg-[#3f1473] text-white px-4 py-2 rounded-lg hover:bg-[#8a63bb] transition-colors duration-300 ring ring-gray-300 hover:ring-indigo-300"
+             onClick={()=>nav("/idcard")} >
+              ID Card Download
+              </button>
           </div>
           <div className="md:w-2/3 md:pl-8">
             <h1 className="text-2xl font-bold text-indigo-800 mb-2">{user.fullName}</h1>
-            <p className="text-gray-600 mb-6">National President</p>
+            <p className="text-gray-600 mb-6">{user.userType}</p>
 
 
             <h2 className="text-xl font-semibold text-indigo-800 mb-4">Organization Information</h2>

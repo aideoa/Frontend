@@ -12,12 +12,14 @@ import ID_CARD from "./ID_CARD";
 import TransactionTable from "./Transaction";
 
 const Main = ({ mainRef, handleScroll , setActiveComponent}) => {
-  const { dataList: totalMember } = useMembers();
+  const { dataList: totalMember ,allMembers } = useMembers();
   const { dataList: donation } = useDonation();
   const { totalIdCard } = useIdCard('All');
   const [events, setEvents] = useState();
   const totalUsers = totalMember?.pagination?.totalUsers || 0;
   const {dataList:query} = useQuery();
+
+  console.log(allMembers)
 
   const getdata = async () => {
     try {
@@ -70,7 +72,7 @@ const Main = ({ mainRef, handleScroll , setActiveComponent}) => {
 
         <div className="flex flex-row max-lg:flex-col w-full max-lg:items-center lg:justify-between mb-6 pt-10">
 
-          <Tr totalMember={totalMember} />
+          <Tr totalMember={allMembers} />
           <TrafficSourceChart data={data} />
         </div>
         <div className="   max-lg:flex-col flex justify-between max-lg:items-center  ">

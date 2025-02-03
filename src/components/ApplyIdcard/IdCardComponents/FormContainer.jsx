@@ -8,16 +8,17 @@ import AlreadyApplied from "../AlreadyApplied";
 import LoginPrompt from "../../../utils/LoginRequired";
 import { Link } from 'react-router-dom';
 
+const data = ""//testing
+
 const FormContainer = () => {
   const { user } = useContext(AuthContext);
-  const { getIdCardById, data } = useStudentIdCard();
+  // const { getIdCardById, data } = useStudentIdCard();
 
-  useEffect(() => {
-    if (user) {
-      getIdCardById(user.userType);
-    }
-  }, [user, getIdCardById]);
-
+  // useEffect(() => {
+  //   if (user) {
+  //     // getIdCardById(user.userType);
+  //   }
+  // }, [user, getIdCardById]);
   if (!user) return <LoginPrompt title="Login to Apply for ID Card" />;
 
   if (data?.status === "pending") {

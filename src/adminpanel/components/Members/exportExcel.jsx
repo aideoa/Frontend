@@ -17,18 +17,20 @@ export const handleDownloadAll = async (userType) => {
       return;
     }
 
-    // Prepare data for export
+    console.log(data);
+
     const dataToExport = data.users.map((user) => ({
-      ID: user.id,
-      "AIDEOA No": user.aideoaIdNo,
-      Name: user.fullName,
-      Email: user.email,
-      "Mobile No": user.mobile,
-      Role: user.userType,
-      Organization: user.organization,
-      "Created At": new Date(user.createdAt).toLocaleString(), // Format date & time
-      "ID Card": user.idCard,
+      ID: user.id || '', // Ensure there's a fallback in case the data is missing
+      "AIDEOA No": user.aideoaIdNo || '',
+      Name: user.fullName || '',
+      Email: user.email || '',
+      "Mobile No": user.mobile || '',
+      Role: user.userType || '',
+      Organization: user.organization || '',
+      "Created At": user.createdAt ? new Date(user.createdAt).toLocaleString() : '',
+      "ID Card": user.idCard || '',
     }));
+
 
     // Create a new workbook and worksheet
     const workbook = new ExcelJS.Workbook();
