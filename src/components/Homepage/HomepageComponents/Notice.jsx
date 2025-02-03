@@ -8,7 +8,7 @@ export default function Notice() {
        <p className="text-center mt-0.5 max-w-2xl leading-[1.2] sm:leading-snug">
          The AIDEOA website is under development but accessible. Membership
          payments and donations are active. We request all members to start
-         using it actively after February 3rd for the best experience.
+         using it actively after February 5th for the best experience.
        </p>
  
        {/* Notice Footer */}
