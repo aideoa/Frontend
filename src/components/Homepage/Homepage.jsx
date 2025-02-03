@@ -4,11 +4,13 @@ import About from "./HomepageComponents/About";
 import Featured from "./HomepageComponents/Featured";
 import LatestUpdates from "./HomepageComponents/LatestUpdates";
 import Homepage2 from "./HomepageComponents/HomePage2/HomePage2.jsx";
+import Notice from "./HomepageComponents/Notice";
 
 const Homepage = () => {
   return (
     <div className="pt-14 " >
-  
+      
+      <Notice />
       <MembershipComponent />
       <About />
       <Featured />

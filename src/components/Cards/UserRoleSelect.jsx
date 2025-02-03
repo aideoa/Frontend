@@ -194,9 +194,34 @@ const UserRoleSelect = ({ userTypemodal, setUserTypeModal, formData }) => {
       
     },[subsidiary , userType]);
 
+    const handleClose = () => {
+      setUserTypeModal(false);
+    };
+
    return (
       <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
          <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 sm:w-2/3 xl:w-1/3 max-h-[90vh] overflow-y-auto scrollbar-hide">
+         {/* Add close button */}
+         <button
+        onClick={handleClose}
+        className="relative text-AIDEOTYPO hover:text-purple-800"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+
             <h2 className="text-lg font-bold mb-4 text-AIDEOTYPO">
                Are you a Student or an Employee?
             </h2>
@@ -290,6 +315,24 @@ const UserRoleSelect = ({ userTypemodal, setUserTypeModal, formData }) => {
                   <div className="mb-4">
                      <label className="block mb-2">{userType === "employee" ? "Upload Employee ID Card" : "Upload Student ID Card"}</label>
                      <input type="file" onChange={handleFileChange(setIdCard)} className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none" />
+                  </div>
+               )}
+
+
+               {userType ==="employee" && (
+                  <div className="mb-4">
+                     <label className="block mb-2">
+                        OR<br></br>
+                        Enter your Employee ID
+                     </label>
+                     <input
+                        type="text"
+                        placeholder="Enter your Employee ID"
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none "
+
+                     />
                   </div>
                )}
 
