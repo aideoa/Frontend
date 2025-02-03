@@ -17,7 +17,7 @@ const UserRoleSelect = ({ userTypemodal, setUserTypeModal, formData }) => {
    const navigate = useNavigate();
    const [org, setOrg] = useState("");
    const [address, setAddress] = useState("");
-   const [empid, setEmpid] = useState("");
+   // const [empid, setEmpid] = useState("");
    const [otp, setOtp] = useState("");
    const [userImage, setUserImage] = useState(null);
    const [idCard, setIdCard] = useState(null);
@@ -73,7 +73,7 @@ const UserRoleSelect = ({ userTypemodal, setUserTypeModal, formData }) => {
          if (!userType) throw new Error("Select type of user");
          if (!org) throw new Error(userType === "student" ? "Select university name" : "Select company name");
          if (!address) throw new Error(userType === "student" ? "Enter University Address" : "Enter Company address");
-         if(!empid) throw new Error("Enter Employee ID");
+         // if(!empid) throw new Error("Enter Employee ID");
          if (!userImage) throw new Error("Upload user image");
          if (!idCard) throw new Error("Upload ID card");
 
@@ -86,7 +86,7 @@ const UserRoleSelect = ({ userTypemodal, setUserTypeModal, formData }) => {
                ...formData,
                org,
                address,
-               empid,
+               // empid,
                otp,
                userType,
                userImage: uploadedUserImage,
@@ -110,7 +110,7 @@ const UserRoleSelect = ({ userTypemodal, setUserTypeModal, formData }) => {
                   userType,
                   organization: org,
                   address,
-                  empid,
+                  // empid,
                   userImage: uploadedUserImage,
                   idCard: uploadedIdCard,
                   mobile,
@@ -330,27 +330,7 @@ const UserRoleSelect = ({ userTypemodal, setUserTypeModal, formData }) => {
       />
     </div>
 
-    {userType === "employee" && (
-      <>
-        {/* Centered "OR" */}
-        <div className="flex items-center my-4">
-          <hr className="flex-grow border-t border-white" />
-          <span className="mx-2 font-bold text-yellow-400 text-lg">OR</span>
-          <hr className="flex-grow border-t border-white" />
-        </div>
-
-        <div className="mb-4">
-          <label className="block mb-2">Enter your Employee ID</label>
-          <input
-            type="text"
-            placeholder="Enter your Employee ID"
-            value={empid}
-            onChange={(e) => setEmpid(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none text-black bg-white"
-          />
-        </div>
-      </>
-    )}
+   
   </div>
 )}
 
