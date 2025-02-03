@@ -44,7 +44,7 @@ const Profile = () => {
                 </svg>
 
 
-                { user.email }
+                { user.email } 
 
               </li>
 
