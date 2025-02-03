@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import { BsThreeDotsVertical } from "react-icons/bs";
 import { CiSearch } from "react-icons/ci";
 
 import useDonation from "../../../hooks/useDonation";
@@ -8,8 +8,13 @@ const Donation = () => {
   const [selectAll, setSelectAll] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchterm] = useState("");
+  const [showMenu , setShowMenu] = useState(false);
+  
+  const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
 
   const { dataList, fetchData } = useDonation();
+
+  console.log(dataList)
 
   const totalPages = dataList?.pagination?.totalPages;
   const limit = 6;
@@ -17,13 +22,27 @@ const Donation = () => {
   useEffect(() => {
     fetchData(searchTerm, currentPage, limit);
   }, [currentPage, searchTerm]);
+
   const handleSelectAll = () => {
+    const currentPageIds = dataList.donations.map((item) => item.id);
     if (selectAll) {
-      setSelectedItems([]);
+      setSelectedItems((prevSelected) =>
+        prevSelected.filter((id) => !currentPageIds.includes(id))
+      );
     } else {
-      setSelectedItems(data.map((_, index) => index));
+      setSelectedItems((prevSelected) => [
+        ...prevSelected,
+        ...currentPageIds.filter((id) => !prevSelected.includes(id)),
+      ]);
     }
     setSelectAll(!selectAll);
+  };
+
+  const toggleMenu = (event, index) => {
+    event.stopPropagation();
+    const rect = event.currentTarget.getBoundingClientRect();
+    setMenuPosition({ x: rect.left, y: rect.bottom });
+    setShowMenu(showMenu === index ? null : index);
   };
 
   const handleSelectItem = (index) => {
@@ -85,47 +104,74 @@ const Donation = () => {
                     className=" checked:bg-purple-500 checked:border-purple-500 size-4  bg-col"
                   />
                 </th>
-                <th className="py-3 px-4 w-full text-left font-medium text-sm text-gray-500">
-                  Name
-                </th>
-                <th className="py-3 px-4 text-left font-medium text-sm text-gray-500">
-                  Mobile
-                </th>
-                <th className="py-3 px-4 text-left font-medium text-sm text-gray-500">
-                  Amount
-                </th>
-                <th className="py-3 px-4 text-left font-medium text-sm text-gray-500">
-                  UTR No
-                </th>
+                {[
+                  "Name",
+                  "AIDEOA ID",
+                  "Mobile Number",
+                  "Email",
+                  "Date & Time",
+                  "UTR No",
+                  "Amount",
+                  "Status",
+                  "Action",
+                ].map((heading) => (
+                  <th key={heading} className="py-3 px-4 text-left text-gray-500">
+                    {heading}
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody>
               {dataList &&
                 dataList?.donations?.slice(0, limit)?.map((item, index) => (
-                  <tr key={index} className="border-b border-gray-200 h-16 ">
-                    <td className="p-2 px-4 font-medium text-sm text-gray-600">
+                  <tr key={index} className="border-b border-gray-200 h-16">
+                    <td className="p-2 px-4">
                       <input
                         type="checkbox"
-                        className="checked:bg-purple-500 checked:border-purple-500 size-4 bg-col"
-                        checked={selectedItems.includes(index)}
-                        onChange={() => handleSelectItem(index)}
+                        checked={selectedItems.includes(item.id)}
+                        onChange={() => handleSelectItem(item.id)}
                       />
                     </td>
-                    <td className="p-2 font-medium text-sm text-gray-600   whitespace-nowrap overflow-hidden text-ellipsis">
-                      {item.name}
+                    <td className="p-2">{item.name}</td>
+                    <td className="p-2 text-gray-400">{item.user? item.user.aideoaIdNo :"N/A"}</td>
+                    <td className="p-2 text-gray-400">{item.mobileNumber}</td>
+                    <td className="p-2 text-gray-400">{item.email}</td>
+                    <td className="p-2 text-gray-400">{item.createdAt.slice(0, 10)}</td>
+                    <td className="p-2 text-gray-400">{item.utrNo}</td>
+                    <td className="p-2 text-gray-400">{item.donationAmount}</td>
+                    <td className="p-2 text-gray-400">
+                      <span
+                        className={`rounded-full px-1 ${item.status === "success"
+                            ? "bg-green-100 text-green-700"
+                            : item.status === "Pending"
+                              ? "bg-yellow-100 text-yellow-700"
+                              : "bg-red-100 text-red-700"
+                          }`}
+                      >
+                        {item.status}
+                      </span>
                     </td>
-
-                    <td className="p-2 font-medium text-sm text-gray-600   whitespace-nowrap overflow-hidden text-ellipsis">
-                      {item.mobileNumber}
+                    <td
+                      className="p-2 cursor-pointer"
+                      onClick={(e) => toggleMenu(e, index)}
+                    >
+                      <BsThreeDotsVertical />
                     </td>
-
-                    <td className="p-2 font-medium text-sm text-gray-600   whitespace-nowrap overflow-hidden text-ellipsis">
-                      {item.donationAmount}
-                    </td>
-
-                    <td className="p-2 font-medium text-sm text-gray-600   whitespace-nowrap overflow-hidden text-ellipsis">
-                      {item.utrNo}
-                    </td>
+                    {showMenu === index && (
+                      <div
+                        className="absolute bg-white border rounded shadow-md"
+                        style={{ left: menuPosition.x, top: menuPosition.y }}
+                      >
+                        <ul>
+                          <li
+                            className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                            onClick={() => handleOneDownload(item.transaction)}
+                          >
+                            Download
+                          </li>
+                        </ul>
+                      </div>
+                    )}
                   </tr>
                 ))}
             </tbody>
@@ -143,11 +189,10 @@ const Donation = () => {
               <button
                 key={page}
                 onClick={() => setCurrentPage(page + 1)}
-                className={`py-2 px-4 rounded-md shadow-md border ${
-                  currentPage === page + 1
+                className={`py-2 px-4 rounded-md shadow-md border ${currentPage === page + 1
                     ? "bg-purple-700 text-white"
                     : " bg-white  text-black "
-                }`}
+                  }`}
               >
                 {page + 1}
               </button>
