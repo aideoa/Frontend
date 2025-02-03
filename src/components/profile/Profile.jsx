@@ -18,7 +18,7 @@ const Profile = () => {
           <div className="md:w-1/3 text-center mb-8 md:mb-0">
             <img src={user.image} alt="Profile Picture" className="rounded-full w-48 h-48 mx-auto mb-4 border-4 border-[#3f1473] transition-transform duration-300 hover:scale-105 ring ring-gray-300" />
             <div>
-              <p>AIDEOA ID No: {user.aideoaIdNo}</p>
+              <p className="text-gray-600">AIDEOA ID No: {user.aideoaIdNo}</p>
             </div>
             <button className="mt-4 bg-[#3f1473] text-white px-4 py-2 rounded-lg hover:bg-[#8a63bb] transition-colors duration-300 ring ring-gray-300 hover:ring-indigo-300"
              onClick={()=>nav("/idcard")} >
