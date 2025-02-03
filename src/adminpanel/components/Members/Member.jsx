@@ -17,7 +17,7 @@ const Member = () => {
   const [userType, setUserType] = useState("All");
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
-  const { dataList, fetchData } = useMembers(userType, currentPage);
+  const { dataList, fetchData , updateMemberStatus } = useMembers(userType, currentPage);
   const [showPopup, setShowPopup] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -25,6 +25,7 @@ const Member = () => {
   const [order, setOrder] = useState('desc');
   const [viewingPdf, setViewingPdf] = useState(null);
   const [isStudent, setIsStudent] = useState(false);
+  const [studentId , setStudentId] = useState(null);
 
   const totalPages = 3;
 
@@ -343,6 +344,9 @@ const Member = () => {
                   Email Address
                 </th>
                 <th className="py-3 px-4 text-left font-medium text-sm text-gray-500">
+                  Address
+                </th>
+                <th className="py-3 px-4 text-left font-medium text-sm text-gray-500">
                   Date
                 </th>
                 <th className="py-3 px-4 text-left font-medium text-sm text-gray-500">
@@ -388,21 +392,23 @@ const Member = () => {
                     <td className="p-2 font-medium text-sm text-gray-400">
                       {item.email}
                     </td>
+                    <td className="p-2 font-medium text-sm text-gray-400">
+                      {item.address?item.address : 'N/A'}
+                    </td>
                     <td className="p-2 font-medium text-sm text-gray-400 whitespace-nowrap">
                       {item.createdAt.slice(0, 10)}
                     </td>
-
                     <td className="p-2 font-medium text-sm text-gray-400">
                       {item.organization}
                     </td>
                     <td className="p-2 font-medium text-xs ">
                       <td
-                        className={` rounded-full px-1 mb-1 ${item.status === "Approve"
-                          ? "bg-green-100 text-green-700 "
+                        className={` rounded-full px-1 mb-1 ${item.idCardStatus === "APPROVED"
+                          ? "bg-green-100 text-green-700 " :item.idCardStatus == 'PENDING' ?"bg-yellow-100 text-yellow-700"
                           : "bg-red-100 text-red-700"
                           }`}
                       >
-                        {item.status === "Approve" ? "Active" : "Inactive"}
+                        {item.idCardStatus === "APPROVED" ? "APPROVED" : item.idCardStatus == 'PENDING'? "PENDING":"REJECTED"}
                       </td>
                     </td>
                     <td className="p-2 font-medium text-sm text-gray-600 cursor-pointer">
@@ -418,6 +424,7 @@ const Member = () => {
                       onClick={(event) => {
                         toggleMenu(event)
                         setIsStudent(item.userType === 'student');
+                        setStudentId(item.id);
                       }}
                     >
                       <BsThreeDotsVertical />
@@ -466,13 +473,13 @@ const Member = () => {
                 isStudent ? <>
                   <li
                     className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                    onClick={() => alert("Approve clicked")}
+                    onClick={() => updateMemberStatus(studentId, "APPROVED")}
                   >
                     Approve
                   </li>
                   <li
                     className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                    onClick={() => alert("Reject clicked")}
+                    onClick={() => updateMemberStatus(studentId, "REJECTED")}
                   >
                     Reject
                   </li>

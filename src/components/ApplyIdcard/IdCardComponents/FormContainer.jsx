@@ -7,11 +7,19 @@ import toast from "react-hot-toast";
 import AlreadyApplied from "../AlreadyApplied";
 import LoginPrompt from "../../../utils/LoginRequired";
 import { Link } from 'react-router-dom';
+import useMembers from "../../../hooks/useMembers";
 
 const data = ""//testing
 
 const FormContainer = () => {
   const { user } = useContext(AuthContext);
+  const {selectedMember,getMember} = useMembers();
+
+  useEffect(()=>{
+    if(user){
+      getMember(user.id);
+    }
+  },[user]);
   // const { getIdCardById, data } = useStudentIdCard();
 
   // useEffect(() => {
@@ -25,18 +33,20 @@ const FormContainer = () => {
   //   return <AlreadyApplied />;
   // }
 
-  if (user?.idCardStatus === "REJECTED") {
+  if (selectedMember?.idCardStatus === "REJECTED") {
     toast("Your last application was rejected. Please apply again.");
     return null;
   }
 
+  console.log(selectedMember)
+
   const renderContent = () => {
-    if (user.userType === "employee") {
-      if (user?.idCardStatus === 'APPROVED') {
+    if (selectedMember?.userType === "employee") {
+      if (selectedMember?.idCardStatus === 'APPROVED') {
         return (
           <div>
             <p className="text-xl font-medium">Employee ID Card</p>
-            <EmployeeIdCard data={user} />
+            <EmployeeIdCard data={selectedMember} />
             <button className="btn-download">Download ID Card</button>
           </div>
         );
@@ -57,17 +67,17 @@ const FormContainer = () => {
       );
     }
 
-    if (user.userType === "student") {
-      if (user?.idCardStatus === "APPROVED") {
+    if (selectedMember?.userType === "student") {
+      if (selectedMember?.idCardStatus === "APPROVED") {
         return (
           <div>
             <p className="text-xl font-medium">Student ID Card</p>
-            <IdCardPurple data={user} />
+            <IdCardPurple data={selectedMember} />
             <button className="btn-download">Download ID Card</button>
           </div>
         );
       }
-      if (user?.idCardStatus === "REJECTED") {
+      if (selectedMember?.idCardStatus === "REJECTED") {
         return (
           <div>
             <p className="text-xl font-medium text-red-600">Student Verification Denied</p>

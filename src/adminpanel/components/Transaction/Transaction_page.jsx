@@ -27,7 +27,7 @@ const TransactionPage = () => {
 
   // Select All Logic
   const handleSelectAll = () => {
-    const currentPageIds = currentPageData.map((item) => item.employeeId);
+    const currentPageIds = currentPageData.map((item) => item.id);
     if (selectAll) {
       setSelected((prevSelected) =>
         prevSelected.filter((id) => !currentPageIds.includes(id))
@@ -132,7 +132,7 @@ const TransactionPage = () => {
                   "Mobile Number",
                   "Email",
                   "Date & Time",
-                  "Transaction ID",
+                  "UTR No",
                   "Amount",
                   "Status",
                   "Action",
@@ -149,21 +149,21 @@ const TransactionPage = () => {
                   <td className="p-2 px-4">
                     <input
                       type="checkbox"
-                      checked={selected.includes(item.employeeId)}
-                      onChange={() => handleSelectItem(item.employeeId)}
+                      checked={selected.includes(item.id)}
+                      onChange={() => handleSelectItem(item.id)}
                     />
                   </td>
                   <td className="p-2">{item.name}</td>
-                  <td className="p-2 text-gray-400">{item.aideoaId}</td>
+                  <td className="p-2 text-gray-400">{item.user? item.user.aideoaIdNo :"N/A"}</td>
                   <td className="p-2 text-gray-400">{item.mobileNumber}</td>
                   <td className="p-2 text-gray-400">{item.email}</td>
-                  <td className="p-2 text-gray-400">{item.dateTime}</td>
-                  <td className="p-2 text-gray-400">{item.transaction}</td>
-                  <td className="p-2 text-gray-400">{item.amount}</td>
+                  <td className="p-2 text-gray-400">{item.createdAt.slice(0, 10)}</td>
+                  <td className="p-2 text-gray-400">{item.utrNo}</td>
+                  <td className="p-2 text-gray-400">{item.membershipAmount}</td>
                   <td className="p-2 text-gray-400">
                     <span
                       className={`rounded-full px-1 ${
-                        item.status === "Confirm"
+                        item.status === "success"
                           ? "bg-green-100 text-green-700"
                           : item.status === "Pending"
                           ? "bg-yellow-100 text-yellow-700"
