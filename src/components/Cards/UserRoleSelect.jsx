@@ -17,6 +17,7 @@ const UserRoleSelect = ({ userTypemodal, setUserTypeModal, formData }) => {
    const navigate = useNavigate();
    const [org, setOrg] = useState("");
    const [address, setAddress] = useState("");
+   const [empid, setEmpid] = useState("");
    const [otp, setOtp] = useState("");
    const [userImage, setUserImage] = useState(null);
    const [idCard, setIdCard] = useState(null);
@@ -72,6 +73,7 @@ const UserRoleSelect = ({ userTypemodal, setUserTypeModal, formData }) => {
          if (!userType) throw new Error("Select type of user");
          if (!org) throw new Error(userType === "student" ? "Select university name" : "Select company name");
          if (!address) throw new Error(userType === "student" ? "Enter University Address" : "Enter Company address");
+         if(!empid) throw new Error("Enter Employee ID");
          if (!userImage) throw new Error("Upload user image");
          if (!idCard) throw new Error("Upload ID card");
 
@@ -84,6 +86,7 @@ const UserRoleSelect = ({ userTypemodal, setUserTypeModal, formData }) => {
                ...formData,
                org,
                address,
+               empid,
                otp,
                userType,
                userImage: uploadedUserImage,
@@ -107,6 +110,7 @@ const UserRoleSelect = ({ userTypemodal, setUserTypeModal, formData }) => {
                   userType,
                   organization: org,
                   address,
+                  empid,
                   userImage: uploadedUserImage,
                   idCard: uploadedIdCard,
                   mobile,
@@ -202,25 +206,27 @@ const UserRoleSelect = ({ userTypemodal, setUserTypeModal, formData }) => {
       <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
          <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 sm:w-2/3 xl:w-1/3 max-h-[90vh] overflow-y-auto scrollbar-hide">
          {/* Add close button */}
-         <button
-        onClick={handleClose}
-        className="relative text-AIDEOTYPO hover:text-purple-800"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
-      </button>
+         <div className="relative flex justify-end sticky top-0 z-10">
+  <button
+    onClick={handleClose}
+    className="relative text-AIDEOTYPO hover:text-purple-800"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-6 w-6"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M6 18L18 6M6 6l12 12"
+      />
+    </svg>
+  </button>
+</div>
 
             <h2 className="text-lg font-bold mb-4 text-AIDEOTYPO">
                Are you a Student or an Employee?
@@ -311,30 +317,44 @@ const UserRoleSelect = ({ userTypemodal, setUserTypeModal, formData }) => {
                   </div>
                )}
 
-               {userType && (
-                  <div className="mb-4">
-                     <label className="block mb-2">{userType === "employee" ? "Upload Employee ID Card" : "Upload Student ID Card"}</label>
-                     <input type="file" onChange={handleFileChange(setIdCard)} className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none" />
-                  </div>
-               )}
+{userType && (
+  <div className={`mb-2 p-4 ${userType === 'student' ? 'bg-white text-black p-0' : 'bg-purple-500 text-white'} rounded-xl`}>
+    <div className="mb-4">
+      <label className="block mb-2">
+        {userType === "employee" ? "Upload Employee ID Card" : "Upload Student ID Card"}
+      </label>
+      <input
+        type="file"
+        onChange={handleFileChange(setIdCard)}
+        className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none text-black bg-white"
+      />
+    </div>
+
+    {userType === "employee" && (
+      <>
+        {/* Centered "OR" */}
+        <div className="flex items-center my-4">
+          <hr className="flex-grow border-t border-white" />
+          <span className="mx-2 font-bold text-yellow-400 text-lg">OR</span>
+          <hr className="flex-grow border-t border-white" />
+        </div>
+
+        <div className="mb-4">
+          <label className="block mb-2">Enter your Employee ID</label>
+          <input
+            type="text"
+            placeholder="Enter your Employee ID"
+            value={empid}
+            onChange={(e) => setEmpid(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none text-black bg-white"
+          />
+        </div>
+      </>
+    )}
+  </div>
+)}
 
 
-               {userType ==="employee" && (
-                  <div className="mb-4">
-                     <label className="block mb-2">
-                        OR<br></br>
-                        Enter your Employee ID
-                     </label>
-                     <input
-                        type="text"
-                        placeholder="Enter your Employee ID"
-                        value={address}
-                        onChange={(e) => setAddress(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none "
-
-                     />
-                  </div>
-               )}
 
                {userType && (
                   <div className="mb-4">
