@@ -50,7 +50,7 @@ const JoinNow = () => {
 
   const handlePayment = async () => {
     if (donationamount < minDonation) {
-      alert(`Minimum donation is ₹${minDonation}. Resetting to ₹${minDonation}.`);
+      alert(`Minimum amount is ₹${minDonation}`);
       setDonationamount(minDonation); // Reset input field
       return;
     }
@@ -65,8 +65,8 @@ const JoinNow = () => {
           phone: user.mobile,
           amount: parseFloat(donationamount),
           productinfo: "join + donation",
-          membershipfee: membershipfee,
-          donationamount: parseFloat(actualDonationAmount)
+          membershipfee: membershipfee.toString(),
+          donationamount: actualDonationAmount.toString()
         }
       );
 
@@ -77,7 +77,16 @@ const JoinNow = () => {
     }
   };
 
+const handleChange = (e) => {
+  const value =e.target.value;
+  if (!/^\d*$/.test(value))
+  {
+    alert("Only number is allowed")
+  }
 
+  if (value < 0) return;
+  setDonationamount(value);
+}
 
   return (
     <>
@@ -129,7 +138,8 @@ const JoinNow = () => {
           <input
             required
             placeholder="eg. 100"
-            type="number"
+            type="text"
+            inputmode="numeric"
             value={donationamount}
             min={minDonation}
             style={{
@@ -138,11 +148,7 @@ const JoinNow = () => {
               WebkitAppearance: "none",
               margin: 0,
             }}
-            onChange={(e) => {
-              const value = Number(e.target.value);
-              if (value < 0) return;
-              setDonationamount(value);
-            }}
+            onChange={handleChange}
             className="h-14 px-4 rounded-2xl focus:outline-none border-2 border-AIDEOTYPO"
           />
 
