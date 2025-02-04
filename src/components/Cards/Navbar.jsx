@@ -31,7 +31,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="fixed z-10 w-full bg-white opacity-100 flex  flex-row justify-between items-center">
+      <nav className="fixed w-full bg-white opacity-100 flex  flex-row justify-between items-center z-20">
         <Link to="/">
           <div
             className=" adeiou flex  flex-row justify-center items-center"

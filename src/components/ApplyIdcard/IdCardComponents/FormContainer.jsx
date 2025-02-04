@@ -47,7 +47,6 @@ const FormContainer = () => {
           <div>
             <p className="text-xl font-medium">Employee ID Card</p>
             <EmployeeIdCard data={selectedMember} />
-            <button className="btn-download">Download ID Card</button>
           </div>
         );
         
@@ -73,7 +72,6 @@ const FormContainer = () => {
           <div>
             <p className="text-xl font-medium">Student ID Card</p>
             <IdCardPurple data={selectedMember} />
-            <button className="btn-download">Download ID Card</button>
           </div>
         );
       }

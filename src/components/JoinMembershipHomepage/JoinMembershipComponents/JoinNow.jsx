@@ -1,5 +1,7 @@
 
 import React, { useState, useContext, useEffect, useRef } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { FaCircleCheck } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../context/authContext";
@@ -50,7 +52,9 @@ const JoinNow = () => {
 
   const handlePayment = async () => {
     if (donationamount < minDonation) {
-      alert(`Minimum amount is ₹${minDonation}`);
+
+      await showToastPay(); // Wait until toast is closed
+
       setDonationamount(minDonation); // Reset input field
       return;
     }
@@ -76,17 +80,38 @@ const JoinNow = () => {
       console.log("Error in getting payment:", error.message);
     }
   };
+  const showToastPay = () => {
+    return new Promise((resolve) => {
+        toast.error('Minimum amount is 100', {
+            position: "top-center",
+            autoClose: 2000,
+            onClose: resolve // Resolves when toast is closed
+        });
+    });
+};
 
-const handleChange = (e) => {
-  const value =e.target.value;
-  if (!/^\d*$/.test(value))
-  {
-    alert("Only number is allowed")
+  const showToast = () => {
+    return new Promise((resolve) => {
+        toast.error('Only Number is Allowed', {
+            position: "top-center",
+            autoClose: 1000,
+            onClose: resolve // Resolves when toast is closed
+        });
+    });
+};
+
+
+
+  const handleChange = async (e) => {
+    const value = e.target.value;
+    if (!/^\d*$/.test(value)) {
+      await showToast(); // Wait until toast is closed
+        console.log('Toast closed, resuming execution');
+    }
+
+    if (value < 0) return;
+    setDonationamount(value);
   }
-
-  if (value < 0) return;
-  setDonationamount(value);
-}
 
   return (
     <>
@@ -168,6 +193,7 @@ const handleChange = (e) => {
           </button>
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 };

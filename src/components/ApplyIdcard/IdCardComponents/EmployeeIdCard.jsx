@@ -3,7 +3,7 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import Qrcode from "react-qr-code";
 import useStudentIdCard from "../../../hooks/useIdCard";
-const EmployeeIdCard = ({data}) => {
+const EmployeeIdCard = ({ data }) => {
   const [show, setShow] = useState(true);
 
   // Function to generate and download PDF
@@ -48,16 +48,16 @@ const EmployeeIdCard = ({data}) => {
     const year = currentDate.getFullYear();
     const expiryMonth = 2;
     const expiryDay = 31;
-  
-   
+
+
     let expiryDate = new Date(year, expiryMonth, expiryDay);
-  
-   
+
+
     if (currentDate > expiryDate) {
-     
+
       expiryDate = new Date(year + 1, expiryMonth, expiryDay);
     }
-  
+
     return expiryDate;
   }
   const currentDate = new Date()
@@ -79,9 +79,8 @@ const EmployeeIdCard = ({data}) => {
             onMouseEnter={() => {
               setShow(false);
             }}
-            className={`bg-red-200 absolute   ${
-              show ? " z-10" : " z-0"
-            } border border-gray-500 rounded-[30px] overflow-hidden max-xsm:w-[90%]`}
+            className={`bg-red-200 absolute   ${show ? " z-10" : " z-0"
+              } border border-gray-500 rounded-[30px] overflow-hidden max-xsm:w-[90%]`}
           >
             <div className="relative min-height-[549px]">
               <img
@@ -107,12 +106,12 @@ const EmployeeIdCard = ({data}) => {
                   alt="i"
                 />
                 <p className="my-10px absolute text-[20px] top-[220px] left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center font-bold">
-                 {data.fullName}
+                  {data.fullName}
                 </p>
                 <div className="my-[10px] w-[292px] h-[91px] mx-auto bg-white rounded-lg left-1/2 top-[300px] absolute transform -translate-x-1/2 -translate-y-1/2 text-center flex justify-center items-center">
                   <div className="flex flex-col text-[11px] justify-start items-start">
                     <div className="flex justify-start items-start">
-                      <h4 className="font-bold mx-1">AIDEOA ID :</h4>
+                      <h4 className="font-bold mx-1">ID No.:</h4>
                       <p>{data?.aideoaIdNo}</p>
                     </div>
                     <div className="flex justify-start items-start">
@@ -125,29 +124,29 @@ const EmployeeIdCard = ({data}) => {
                     </div>
                     <div className="flex justify-start items-start">
                       <h4 className="font-bold mx-1">Address :</h4>
-                      <p>{data?.address}</p>
+                      <p>{data?.address ? data.address : 'N/A'}</p>
                     </div>
                   </div>
                 </div>
                 <div className=" flex flex-col justify-start items-start left-[130px] top-[420px] absolute transform -translate-x-1/2 -translate-y-1/2 max-xsm:left-[105px] max-xsm:top-[390px]">
                   <img
                     src="/images/send/sign.png"
-                    className=" w-[70px] h-[45px] mx-auto"
+                    className=" w-28 h-[45px] mx-auto"
                     alt="signature"
                   />
-                  <p className="text-[10px] text-purple-700 font-medium">
-                    National General Secretary AIDEOA
+                  <p className="text-[10px] text-purple-700 font-medium text-center">
+                    National General Secretary <br /> AIDEOA
                   </p>
                 </div>
                 <div
                   id="qrcode "
-                  className="absolute top-[72%] left-[75%] max-xsm:left-[78%]"
+                  className="absolute top-[72%] left-[70%] max-xsm:left-[78%]"
                 >
-                  <Qrcode value={`${value}`} size={50} />
+                  <Qrcode value={`${value}`} size={60} />
                 </div>
               </div>
-              <div className=" text-white text-center left-1/2 bottom-[-16px] absolute transform -translate-x-1/2 -translate-y-1/2">
-                <p className="text-[11px]">
+              <div className=" text-white text-center left-1/2 -bottom-1 w-full absolute transform -translate-x-1/2 -translate-y-1/2">
+                <p className="text-sm">
                   Sijua more, katrasgarh, Dhanbad, jharkhand, 828113
                 </p>
               </div>
@@ -163,9 +162,8 @@ const EmployeeIdCard = ({data}) => {
             onMouseLeave={() => {
               setShow(true);
             }}
-            className={`  bg-red-200 absolute ${
-              show ? " z-0" : " z-10"
-            } border border-gray-500 rounded-[30px] overflow-hidden max-xsm:w-[90%] max-xsm:h-fit`}
+            className={`  bg-red-200 absolute ${show ? " z-0" : " z-10"
+              } border border-gray-500 rounded-[30px] overflow-hidden max-xsm:w-[90%] max-xsm:h-fit`}
           >
             <div className="relative min-height-[549px]">
               <img
@@ -189,19 +187,18 @@ const EmployeeIdCard = ({data}) => {
                   Terms and Conditions
                 </p>
                 <p className="max-xsm:m-[5px] mx-5 my-2 text-[12px]">
-                  Lorem ipsum dolor sit amet, consectetul adipicing elit, sad
-                  diam nonummy nibh eulsmod. Lorem ipsum dolor sit amet,
-                  consectetul adipicing elit, sad diam nonummy nibh eulsmod.
+
+                  <span className="-ml-3">1.</span><span> Misuse or involvement in illegal activities will lead to membership cancellation.</span>
+
                 </p>
                 <p className="max-xsm:m-[5px] mx-5 my-2 text-[12px]">
-                  Lorem ipsum dolor sit amet, consectetul adipicing elit, sad
-                  diam nonummy nibh eulsmod. Lorem ipsum dolor sit amet,
-                  consectetul adipicing elit, sad diam nonummy nibh eulsmod.
+
+                <span className="-ml-3">2.</span><span> Your ID number remains the same each financial year; renewal requires payment.</span>
                 </p>
                 <p className="max-xsm:m-[5px] mx-5 my-2 text-[12px]">
-                  Lorem ipsum dolor sit amet, consectetul adipicing elit, sad
-                  diam nonummy nibh eulsmod. Lorem ipsum dolor sit amet,
-                  consectetul adipicing elit, sad diam nonummy nibh eulsmod.
+
+
+                <span className="-ml-3">3.</span><span> The QR code is dynamically linked to our server for verification.</span>
                 </p>
 
                 <div className="max-xsm:m-[5px] mx-5 flex items-center gap-2">
@@ -210,15 +207,15 @@ const EmployeeIdCard = ({data}) => {
                     {updatedExpiryDate.toLocaleString().slice(0, 9)}
                   </p>
                 </div>
-                <div
+                {/* <div
                   id="qrcode "
                   className="absolute top-[100%] left-[72%] max-xsm:left-[78%]"
                 >
                   <Qrcode value={`${value}`} size={50} />
-                </div>
+                </div> */}
               </div>
-              <div className=" text-white text-center left-1/2 bottom-[-16px] absolute transform -translate-x-1/2 -translate-y-1/2">
-                <p className="text-[11px]">
+              <div className=" text-white text-center left-1/2 -bottom-1 w-full absolute transform -translate-x-1/2 -translate-y-1/2">
+                <p className="text-sm">
                   Sijua more, katrasgarh, Dhanbad, jharkhand, 828113
                 </p>
               </div>
