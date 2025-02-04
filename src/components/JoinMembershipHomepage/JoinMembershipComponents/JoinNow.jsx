@@ -50,7 +50,7 @@ const JoinNow = () => {
 
   const handlePayment = async () => {
     if (donationamount < minDonation) {
-      alert(`Minimum donation is ₹${minDonation}. Resetting to ₹${minDonation}.`);
+      alert(`Minimum amount to join membership is ₹${minDonation}. Resetting to ₹${minDonation}.`);
       setDonationamount(minDonation); // Reset input field
       return;
     }

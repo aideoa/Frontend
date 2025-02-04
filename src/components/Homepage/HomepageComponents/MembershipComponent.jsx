@@ -16,10 +16,10 @@ const MembershipComponent = () => {
         <p className="font-medium text-xl text-gray-200 leading-9 ">
           One step With Transparency
         </p>
-        <div className="flex flex-col gap-14 items-center">
+        <div className="flex flex-col gap-8 items-center">
           <Link to={"/home"}>
-            <div className="glass-effect relative flex justify-center rounded-full w-72 h-14 cursor-pointer">
-              <button className="text-white font-medium text-lg mr-10"> Join Membership</button>
+            <div className="glass-effect relative flex justify-center rounded-full w-52 h-14 cursor-pointer">
+              <button className="text-white font-medium text-lg mr-10"> Join Us</button>
               <p className="w-14 h-14  absolute top-0 right-0 rounded-full membershipBtn">  <MdOutlineArrowRightAlt size={30} className="top-1/2 left-1/2  -translate-x-[50%] -translate-y-[50%] text-white absolute" /></p>
 
             </div>
