@@ -27,6 +27,7 @@ const UserRoleSelect = ({ userTypemodal, setUserTypeModal, formData }) => {
    const [error, setError] = useState("");
    const [isLoading, setIsLoading] = useState(false);
    const [subsidiary, setSubsidiary] = useState("");
+   const [idOption, setIdOption] = useState("");
 
 
    const uploadToImageKit = async (file) => {
@@ -318,21 +319,58 @@ const UserRoleSelect = ({ userTypemodal, setUserTypeModal, formData }) => {
                )}
 
 {userType && (
-  <div className={`mb-2 p-4 ${userType === 'student' ? 'bg-white text-black p-0' : 'bg-purple-500 text-white'} rounded-xl`}>
+  <div 
+    className={`mb-2 p-4 rounded-xl 
+        
+        bg-purple-500 text-white
+    }`}
+  >
     <div className="mb-4">
       <label className="block mb-2">
-        {userType === "employee" ? "Upload Employee ID Card" : "Upload Student ID Card"}
+        {userType === "employee" ? "Employee ID Verification" : "Upload Student ID Card"}
       </label>
-      <input
-        type="file"
-        onChange={handleFileChange(setIdCard)}
-        className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none text-black bg-white"
-      />
-    </div>
 
-   
+      {userType === "employee" ? (
+        <div>
+          <label className="block mb-2">Choose an option:</label>
+          <select
+            className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none text-black bg-white mb-2"
+            onChange={(e) => setIdOption(e.target.value)}
+          >
+            <option value="">Select</option>
+            <option value="upload">Upload ID Card</option>
+            <option value="text">Enter Employee ID Number</option>
+          </select>
+
+          {idOption === "upload" && (
+            <input
+              type="file"
+              onChange={handleFileChange(setIdCard)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none text-black bg-white"
+            />
+          )}
+
+          {idOption === "text" && (
+            <input
+              type="text"
+              onChange={(e) => setIdCard(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none text-black bg-white"
+              placeholder="Enter Employee ID Number"
+            />
+          )}
+        </div>
+      ) : (
+        <input
+          type="file"
+          onChange={handleFileChange(setIdCard)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none text-black bg-white"
+        />
+      )}
+    </div>
   </div>
 )}
+
+
 
 
 
