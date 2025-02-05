@@ -17,13 +17,17 @@ const EmployeeIdCard = ({ data }) => {
       if (!frontCoverElement || !backCoverElement) {
         throw new Error("ID card elements not found on the page.");
       }
+      const options = { useCORS: true, scale: 2 };
+
+      // Wait for images to fully load
+      await new Promise((resolve) => setTimeout(resolve, 500));
 
       // Capture the front cover first
-      const frontCanvas = await html2canvas(frontCoverElement);
+      const frontCanvas = await html2canvas(frontCoverElement , options);
       const frontImage = frontCanvas.toDataURL("image/png");
 
       // Capture the back cover after front cover is done
-      const backCanvas = await html2canvas(backCoverElement);
+      const backCanvas = await html2canvas(backCoverElement , options);
       const backImage = backCanvas.toDataURL("image/png");
 
       // Create a PDF document
