@@ -125,26 +125,22 @@ const IdCardPurple = ({data}) => {
                 </p>
 
                 <div className="my-[10px] w-[292px] h-[91px] mx-auto bg-white rounded-lg left-1/2 top-[300px] absolute transform -translate-x-1/2 -translate-y-1/2 text-center flex justify-center items-center">
-                  <div className="flex flex-col text-[11px] justify-start items-start">
+                <div className="flex flex-col text-[11px] justify-start items-start">
                     <div className="flex justify-start items-start">
                       <h4 className="font-bold mx-1">AIDEOA ID :</h4>
-                      {/* <p>{data?.aideoaIdNo}</p> */}
-                      <p>AIDEOA-25-2-3745</p>
+                      <p>{data?.aideoaIdNo}</p>
                     </div>
                     <div className="flex justify-start items-start">
                       <h4 className="font-bold mx-1">Contact :</h4>
-                      {/* <p>{data?.contactNo}</p> */}
-                      <p>+91 7870041270</p>
+                      <p>{data?.mobile}</p>
                     </div>
                     <div className="flex justify-start items-start">
                       <h4 className="font-bold mx-1">E-mail :</h4>
-                      {/* <p>{data?.user?.email}</p> */}
-                      <p>exammining@gmail.com</p>
+                      <p>{data?.email}</p>
                     </div>
                     <div className="flex justify-start items-start">
                       <h4 className="font-bold mx-1">Address :</h4>
-                      {/* <p>{data?.address}</p> */}
-                      <p>Sijua dhanbad jharkhand</p>
+                      <p>{data?.address ? data.address : 'N/A'}</p>
                     </div>
                   </div>
                 </div>
@@ -191,20 +187,23 @@ const IdCardPurple = ({data}) => {
               </p>
 
               <div className="max-xsm:w-full max-xsm:p-[10px] relative top-[-40px] px-6 py-4 h-[266px] w-[391px]">
-                <p className="text-purple-800 max-xsm:text-center font-bold mx-4">
+              <p className="text-purple-800 max-xsm:text-center font-bold mx-4">
                   Terms and Conditions
                 </p>
                 <p className="max-xsm:m-[5px] mx-5 my-2 text-[12px]">
-                  Lorem ipsum dolor sit amet, consectetul adipicing elit, sad diam nonummy nibh eulsmod.
-                  Lorem ipsum dolor sit amet, consectetul adipicing elit, sad diam nonummy nibh eulsmod.
+
+                  <span className="-ml-3">1.</span><span> Students do not hold AIDEOA membership.</span>
+
                 </p>
                 <p className="max-xsm:m-[5px] mx-5 my-2 text-[12px]">
-                  Lorem ipsum dolor sit amet, consectetul adipicing elit, sad diam nonummy nibh eulsmod.
-                  Lorem ipsum dolor sit amet, consectetul adipicing elit, sad diam nonummy nibh eulsmod.
+
+                <span className="-ml-3">2.</span><span> If placed as an employee, you may request AIDEOA membership.</span>
                 </p>
                 <p className="max-xsm:m-[5px] mx-5 my-2 text-[12px]">
-                  Lorem ipsum dolor sit amet, consectetul adipicing elit, sad diam nonummy nibh eulsmod.
-                  Lorem ipsum dolor sit amet, consectetul adipicing elit, sad diam nonummy nibh eulsmod.
+
+
+                <span className="-ml-3">3.</span><span> 3. The QR code on the ID card is dynamically linked to our server for verification.
+                </span>
                 </p>
 
                 <div className="max-xsm:m-[5px] mx-5 flex items-center gap-2">
