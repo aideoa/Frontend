@@ -26,6 +26,14 @@ const Member = () => {
   const [viewingPdf, setViewingPdf] = useState(null);
   const [isStudent, setIsStudent] = useState(false);
   const [studentId , setStudentId] = useState(null);
+  const isUrl = (value) => {
+    try {
+      new URL(value);
+      return true;
+    } catch {
+      return false;
+    }
+  };
 
   const totalPages = dataList?.pagination.totalPages;
 
@@ -143,6 +151,18 @@ const Member = () => {
       }
       return prev;
     });
+  };
+
+  const IdDisplay = ({ viewingPdf }) => {
+    return (
+      <div>
+        {isUrl(viewingPdf) ? (
+          <img src={viewingPdf} alt="ID Proof" />
+        ) : (
+          <p className="text-white text-2xl font-semibold bg-purple-600  rounded-lg py-2 px-4">ID Card Number: {viewingPdf}</p>
+        )}
+      </div>
+    );
   };
 
   const viewIdProof = (pdfUrl) => {
@@ -440,8 +460,7 @@ const Member = () => {
               <button className="close-btn" onClick={() => setViewingPdf(null)}>
                 Close
               </button>
-
-              <img src={viewingPdf} alt="id Proof" />
+            <IdDisplay className="text-white" viewingPdf={viewingPdf} />
             </div>
           )}
         </div>
