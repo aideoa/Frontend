@@ -84,8 +84,14 @@ const Resources = ({ setActiveComponent, setEventsData }) => {
             />
           </div>
 
-          {/* ADDITIONAL HEADER ACTIONS */}
-          {/* Want of content: Add any buttons, links, or actions here as required */}
+          {/* {selectedItems.length >= 2 && <MdDelete size={26} className="cursor-pointer"
+            onClick={handleDeleteSelected} />} */}
+          <div className="flex max-lg:flex-col gap-2">
+            <button onClick={() => setActiveComponent("Add Events")} className="bg-[#4B0082] text-nowrap font-semibold border shadow-md text-white py-2 px-4 rounded-md mr-2">
+              Create
+            </button>
+
+          </div>
         </div>
       </div>
 

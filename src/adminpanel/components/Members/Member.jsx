@@ -27,7 +27,7 @@ const Member = () => {
   const [isStudent, setIsStudent] = useState(false);
   const [studentId , setStudentId] = useState(null);
 
-  const totalPages = 3;
+  const totalPages = dataList?.pagination.totalPages;
 
   const handleResults = (filteredData) => {
     console.log(filteredData);
