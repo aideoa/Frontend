@@ -63,14 +63,13 @@ const TransactionPage = () => {
     setShowMenu(showMenu === index ? null : index);
   };
 
-  const handleExportClick = () => {
-    handleDownloadTrans();
+ const handleExportClick = (data) => {
+    handleDownloadTrans(null , data);
   };
 
-  const handleOneDownload = (transactionId) => {
-    handleDownloadTrans(transactionId);
+  const handleOneDownload = (transactionId , data) => {
+    handleDownloadTrans(transactionId , data);
   };
-
   // Pagination Handlers
   const handlePreviousPage = () => {
     if (currentPage > 1) setCurrentPage((prev) => prev - 1);
@@ -108,7 +107,7 @@ const TransactionPage = () => {
               {selected.length > 1 && <MdDelete size={26} />}
               <button
                 className="bg-white font-semibold border shadow-md text-black py-2 px-4 rounded-md mr-2"
-                onClick={handleExportClick}
+                onClick={()=>handleExportClick(data)}
               >
                 Download All
               </button>
@@ -188,7 +187,7 @@ const TransactionPage = () => {
                       <ul>
                         <li
                           className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                          onClick={() => handleOneDownload(item.transaction)}
+                           onClick={() => handleOneDownload(item.transaction , data)}
                         >
                           Download
                         </li>
