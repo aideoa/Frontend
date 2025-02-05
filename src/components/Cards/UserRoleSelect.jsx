@@ -28,9 +28,13 @@ const UserRoleSelect = ({ userTypemodal, setUserTypeModal, formData }) => {
    const [isLoading, setIsLoading] = useState(false);
    const [subsidiary, setSubsidiary] = useState("");
    const [idOption, setIdOption] = useState("");
+   const [idNumber, setIdNumber] = useState("");
 
 
    const uploadToImageKit = async (file) => {
+      if (!file) {
+         return null;
+      }
       try {
          const { data } = await axios.get(authEndpoint);
          if (!data?.token || !data?.signature || !data?.expire) {
@@ -44,7 +48,6 @@ const UserRoleSelect = ({ userTypemodal, setUserTypeModal, formData }) => {
          formData.append("expire", data.expire);
          formData.append("signature", data.signature);
          formData.append("publicKey", publicKey);
-
          const response = await axios.post(imageKitUrl, formData);
          return response.data.url;
       } catch (error) {
@@ -70,17 +73,27 @@ const UserRoleSelect = ({ userTypemodal, setUserTypeModal, formData }) => {
       setError("");
       setIsLoading(true);
 
+      
       try {
          if (!userType) throw new Error("Select type of user");
          if (!org) throw new Error(userType === "student" ? "Select university name" : "Select company name");
          if (!address) throw new Error(userType === "student" ? "Enter University Address" : "Enter Company address");
          // if(!empid) throw new Error("Enter Employee ID");
          if (!userImage) throw new Error("Upload user image");
-         if (!idCard) throw new Error("Upload ID card");
+         if (!idCard && !idNumber) throw new Error("Upload ID card or enter ID number");
 
          // Upload images to ImageKit
          const uploadedUserImage = await uploadToImageKit(userImage);
-         const uploadedIdCard = await uploadToImageKit(idCard);
+         const uploadedIdCard= await uploadToImageKit(idCard);
+         // if(idCard)
+         // {
+         //    uploadedIdCard = await uploadToImageKit(idCard);
+         // }
+         // else
+         // {
+         //    uploadedIdCard = idNumber;
+         // }
+         console.log(uploadedIdCard)
 
          if (userTypemodal) {
             const fullFormData = {
@@ -91,7 +104,7 @@ const UserRoleSelect = ({ userTypemodal, setUserTypeModal, formData }) => {
                otp,
                userType,
                userImage: uploadedUserImage,
-               idCard: uploadedIdCard,
+               idCard: idNumber || uploadedIdCard,
             };
             console.log(fullFormData);
             const data = await SignUpFunc(fullFormData);
@@ -113,7 +126,7 @@ const UserRoleSelect = ({ userTypemodal, setUserTypeModal, formData }) => {
                   address,
                   // empid,
                   userImage: uploadedUserImage,
-                  idCard: uploadedIdCard,
+                  idCard: idNumber || uploadedIdCard,
                   mobile,
                },
                {
@@ -353,7 +366,7 @@ const UserRoleSelect = ({ userTypemodal, setUserTypeModal, formData }) => {
           {idOption === "text" && (
             <input
               type="text"
-              onChange={(e) => setIdCard(e.target.value)}
+              onChange={(e) => setIdNumber(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none text-black bg-white"
               placeholder="Enter Employee ID Number"
             />
