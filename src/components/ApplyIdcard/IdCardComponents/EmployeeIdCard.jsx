@@ -41,9 +41,9 @@ const EmployeeIdCard = ({ data }) => {
     }
   };
 
-  const name = "james";
-  const id = "45678";
-  const value = `Employee name is ${name} and AIDEOA ID is ${id}`;
+  // const name = "james";
+  // const id = "45678";
+  const value = `Employee name is ${data.fullName} and AIDEOA ID is ${data.aideoaIdNo}`;
   function getExpiryDate(currentDate) {
     const year = currentDate.getFullYear();
     const expiryMonth = 2;

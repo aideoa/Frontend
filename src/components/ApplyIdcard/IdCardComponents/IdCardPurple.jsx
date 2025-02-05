@@ -28,9 +28,9 @@ const IdCardPurple = ({data}) => {
       convertImageToBase64(imageUrl); 
     }, []);
   
-    const name="james";
-    const id="45678"
-    const value=`Employee name is ${name} and AIDEOA ID is ${id}`;
+     // const name = "james";
+  // const id = "45678";
+  const value = `Employee name is ${data.fullName} and AIDEOA ID is ${data.aideoaIdNo}`;
     console.log(data)
     function getExpiryDate(currentDate) {
       const year = currentDate.getFullYear();
