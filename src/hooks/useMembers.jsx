@@ -15,7 +15,7 @@ const useMembers = (userType) => {
       const res = await axios.get(
         `${
           import.meta.env.VITE_API_BACKEND_URL
-        }/api/members?userType=${userType || "All"}&page=${currentPage || 1}&limit=4&order=${order}&search=${search}`
+        }/api/members?userType=${userType || "All"}&page=${currentPage || 1}&limit=8&order=${order}&search=${search}`
       );
       console.log("res.data", res.data);
 
