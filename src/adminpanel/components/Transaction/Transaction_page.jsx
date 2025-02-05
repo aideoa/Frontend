@@ -5,29 +5,30 @@ import { handleDownloadTrans } from "./exportTrans";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import useTransaction from "../../../hooks/useTransaction";
 
-const ITEMS_PER_PAGE = 5;
+// const ITEMS_PER_PAGE = 8;
 
 const TransactionPage = () => {
-  const { dataList: data = [], fetchData } = useTransaction();
+  const [currentPage, setCurrentPage] = useState(1);
+  const { dataList: data = [], fetchData , pagination} = useTransaction(currentPage);
   const [selected, setSelected] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
   const [showMenu, setShowMenu] = useState(null); // Store index of active menu
 
-  const totalPages = Math.ceil((data?.length || 0) / ITEMS_PER_PAGE);
+  const totalPages = pagination?.totalPages || 0;
 
+  console.log(currentPage)
   useEffect(() => {
-    fetchData(currentPage);
-  }, [fetchData, currentPage]);
+    fetchData();
+  }, [currentPage]);
 
   // Pagination Data
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const currentPageData = data.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  // const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  // const currentPageData = data.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   // Select All Logic
   const handleSelectAll = () => {
-    const currentPageIds = currentPageData.map((item) => item.id);
+    const currentPageIds = data.map((item) => item.id);
     if (selectAll) {
       setSelected((prevSelected) =>
         prevSelected.filter((id) => !currentPageIds.includes(id))
@@ -50,7 +51,7 @@ const TransactionPage = () => {
     );
 
     // Update selectAll state based on current selections
-    const currentPageIds = currentPageData.map((item) => item.employeeId);
+    const currentPageIds = data.map((item) => item.employeeId);
     setSelectAll(selected.length + 1 === currentPageIds.length);
   };
 
@@ -92,7 +93,7 @@ const TransactionPage = () => {
             <div className="flex w-[34%] h-[40%] items-center gap-2">
               <h3 className="h-full text-[18px] font-[500]">Transactions</h3>
               <p className="text-[14px] px-3 text-purple-800 rounded-lg bg-purple-200">
-                {data?.length || 0} trans
+                {pagination?.totalMembershipFees || 0} trans
               </p>
             </div>
             <div className="flex justify-end flex-1 items-center space-x-4">
@@ -144,7 +145,7 @@ const TransactionPage = () => {
               </tr>
             </thead>
             <tbody>
-              {currentPageData.map((item, index) => (
+              {data.map((item, index) => (
                 <tr key={index} className="border-b border-gray-200 h-16">
                   <td className="p-2 px-4">
                     <input

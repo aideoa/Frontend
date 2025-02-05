@@ -13,7 +13,7 @@ const data = ""//testing
 
 const FormContainer = () => {
   const { user } = useContext(AuthContext);
-  const {selectedMember,getMember} = useMembers();
+  const {selectedMember,getMember} = useMembers();  
 
   useEffect(()=>{
     if(user){

@@ -17,7 +17,7 @@ const Donation = () => {
   console.log(dataList)
 
   const totalPages = dataList?.pagination?.totalPages;
-  const limit = 6;
+  const limit = 10;
 
   useEffect(() => {
     fetchData(searchTerm, currentPage, limit);
@@ -55,7 +55,7 @@ const Donation = () => {
   const handleNextPage = () => {
     console.log(currentPage);
     setCurrentPage((prev) => {
-      if (prev < data?.pagination?.totalPages) {
+      if (prev < dataList?.pagination?.totalPages) {
         return prev + 1;
       }
       return prev;

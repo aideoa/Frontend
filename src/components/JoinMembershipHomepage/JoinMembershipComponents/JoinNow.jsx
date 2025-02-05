@@ -1,5 +1,7 @@
 
 import React, { useState, useContext, useEffect, useRef } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { FaCircleCheck } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../context/authContext";
@@ -50,7 +52,9 @@ const JoinNow = () => {
 
   const handlePayment = async () => {
     if (donationamount < minDonation) {
-      alert(`Minimum amount to join membership is ₹${minDonation}. Resetting to ₹${minDonation}.`);
+
+      await showToastPay(); // Wait until toast is closed
+
       setDonationamount(minDonation); // Reset input field
       return;
     }
@@ -65,8 +69,8 @@ const JoinNow = () => {
           phone: user.mobile,
           amount: parseFloat(donationamount),
           productinfo: "join + donation",
-          membershipfee: membershipfee,
-          donationamount: parseFloat(actualDonationAmount)
+          membershipfee: membershipfee.toString(),
+          donationamount: actualDonationAmount.toString()
         }
       );
 
@@ -76,8 +80,38 @@ const JoinNow = () => {
       console.log("Error in getting payment:", error.message);
     }
   };
+  const showToastPay = () => {
+    return new Promise((resolve) => {
+        toast.error('Minimum amount is 100', {
+            position: "top-center",
+            autoClose: 2000,
+            onClose: resolve // Resolves when toast is closed
+        });
+    });
+};
+
+  const showToast = () => {
+    return new Promise((resolve) => {
+        toast.error('Only Number is Allowed', {
+            position: "top-center",
+            autoClose: 1000,
+            onClose: resolve // Resolves when toast is closed
+        });
+    });
+};
 
 
+
+  const handleChange = async (e) => {
+    const value = e.target.value;
+    if (!/^\d*$/.test(value)) {
+      await showToast(); // Wait until toast is closed
+        console.log('Toast closed, resuming execution');
+    }
+
+    if (value < 0) return;
+    setDonationamount(value);
+  }
 
   return (
     <>
@@ -129,7 +163,8 @@ const JoinNow = () => {
           <input
             required
             placeholder="eg. 100"
-            type="number"
+            type="text"
+            inputmode="numeric"
             value={donationamount}
             min={minDonation}
             style={{
@@ -138,11 +173,7 @@ const JoinNow = () => {
               WebkitAppearance: "none",
               margin: 0,
             }}
-            onChange={(e) => {
-              const value = Number(e.target.value);
-              if (value < 0) return;
-              setDonationamount(value);
-            }}
+            onChange={handleChange}
             className="h-14 px-4 rounded-2xl focus:outline-none border-2 border-AIDEOTYPO"
           />
 
@@ -162,6 +193,7 @@ const JoinNow = () => {
           </button>
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 };
