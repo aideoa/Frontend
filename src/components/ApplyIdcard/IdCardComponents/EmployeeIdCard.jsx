@@ -111,7 +111,7 @@ const EmployeeIdCard = ({ data }) => {
                 <div className="my-[10px] w-[292px] h-[91px] mx-auto bg-white rounded-lg left-1/2 top-[300px] absolute transform -translate-x-1/2 -translate-y-1/2 text-center flex justify-center items-center">
                   <div className="flex flex-col text-[11px] justify-start items-start">
                     <div className="flex justify-start items-start">
-                      <h4 className="font-bold mx-1">ID No.:</h4>
+                      <h4 className="font-bold mx-1">AIDEOA ID :</h4>
                       <p>{data?.aideoaIdNo}</p>
                     </div>
                     <div className="flex justify-start items-start">
