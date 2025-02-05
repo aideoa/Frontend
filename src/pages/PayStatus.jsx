@@ -34,12 +34,22 @@ const PayStatus = () => {
           </div>
         </div>
 
-        <button
-          onClick={() => navigate("/")}
-          className="mt-4 px-6 py-3 bg-[#3f1473] hover:bg-[#8a63bb] text-white rounded-lg shadow-md transition duration-200"
-        >
-          Back to Home
-        </button>
+        {/* Button Section */}
+        <div className="w-full flex justify-between mt-4">
+          <button
+            onClick={() => navigate("/")}
+            className="px-6 py-3 bg-[#3f1473] hover:bg-[#8a63bb] text-white rounded-lg shadow-md transition duration-200"
+          >
+            Back to Home
+          </button>
+          <button
+            onClick={() => navigate("/idcard")}
+            className="px-6 py-3 bg-[#3f1473] hover:bg-[#8a63bb] text-white rounded-lg shadow-md transition duration-200"
+          >
+            ID Card
+          </button>
+        </div>
+
       </div>
     </div>
   );
