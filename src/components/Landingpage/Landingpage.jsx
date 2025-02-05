@@ -5,13 +5,19 @@ import Header from "./components/Header";
 import LinkButton from "./components/LinkButton";
 import LinkButtonv2 from "./components/LinkButtonv2";
 import MutualTransfer from "./components/MutualTransfer";
-import { useContext } from "react";
+import { useContext,useEffect} from "react";
 import { AuthContext } from "../../context/authContext";
 import useMembers from "../../hooks/useMembers";
 
 const Landingpage = () => {
   const { user } = useContext(AuthContext);
   const { selectedMember, getMember } = useMembers();
+
+  useEffect(()=>{
+      if(user){
+        getMember(user.id);
+      }
+    },[user]);
 
   return (
     <div className="pt-14 flex items-center justify-center flex-col gap-y-10 bg-landingpageBackgroundImage bg-cover min-h-screen p-10">
