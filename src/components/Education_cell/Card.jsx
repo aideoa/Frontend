@@ -6,7 +6,7 @@ const Card = (props) => {
       <div className=" items-center  flex flex-col justify-center sm:w-[300px]  mx-auto my-4 ">
         <div
           id="image"
-          className="flex rounded-full  border  border-black flex-row justify-center items-center  mx-auto sm:w-[200px] sm:h-[200px] sm:my-[10px]"
+          className="flex rounded-full  border  border-black flex-row justify-center items-center  mx-auto w-[200px] h-[200px] sm:my-[10px]"
         >
           <img
             src={props?.name[2]||'/user1.png'}
