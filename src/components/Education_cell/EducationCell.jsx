@@ -41,7 +41,7 @@ const EducationCell = () => {
     ["Shri Nilkanth Akela", "Aideoa Ed. Cell", "./aideoapics/neelkanth.jpeg"],
     // ["Shri Sunil Kumar", "Aideoa Ed. Cell"],
     ["Shri S.R. Chourasia", "Aideoa Ed. Cell", "./aideoapics/rktidwary.jpg"],
-    ["Shri Manish Kumar Yadav", "Aideoa Ed. Cell", "./aideoapics/rkdtiwary.jpg"],
+    ["Shri Manish Kumar Yadav", "Aideoa Ed. Cell", "./aideoa img/18.jpg"],
     // ["Shri Sovan Chatterjee", "Aideoa Ed. Cell","./aideoapics/sovan chatterjee.jpeg"],
 
   ];
