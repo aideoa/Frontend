@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { CiSearch } from "react-icons/ci";
-import { MdDelete } from "react-icons/md";
+// import { MdDelete } from "react-icons/md";
 import { handleDownloadTrans } from "./exportTrans";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import useTransaction from "../../../hooks/useTransaction";
@@ -104,7 +104,7 @@ const TransactionPage = () => {
                   placeholder="Search"
                 />
               </div>
-              {selected.length > 1 && <MdDelete size={26} />}
+              {/* {selected.length > 1 && <MdDelete size={26} />} */}
               <button
                 className="bg-white font-semibold border shadow-md text-black py-2 px-4 rounded-md mr-2"
                 onClick={()=>handleExportClick(data)}
