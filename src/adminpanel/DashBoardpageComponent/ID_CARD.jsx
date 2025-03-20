@@ -41,7 +41,7 @@ const ID_CARD = ({setActiveComponent , totalMember}) => {
   return (
     <>
       {/* Header */}
-      <div className="flex w-[94.4%] h-[16.67%] flex-col  justify-between items-center mb-1">
+      <div className="flex w-[94.4%] h-[16.67%] flex-col  justify-between items-center mb-1 ">
         <div className="h-[53.57%] w-full flex justify-between items-center  my-1">
           <h1 className="text-lg font-semibold">ID Card Application</h1>
           <a onClick={()=>{setActiveComponent('Members')}} className="text-purple-600 cursor-pointer text-sm">
@@ -57,7 +57,7 @@ const ID_CARD = ({setActiveComponent , totalMember}) => {
       </div>
 
       {/* Application List */}
-      <div className="w-[94.4%] h-[80%]">
+      <div className="w-[94.4%] h-[75%] overflow-y-auto">
         {totalMember && totalMember.users.map((application, index) => (
           <div
             key={index}
@@ -69,7 +69,7 @@ const ID_CARD = ({setActiveComponent , totalMember}) => {
                 <img
                   src={application.image || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}
                   alt={application.fullName}
-                  className=" h-[60%] w-[80%] max-lg:h-[40px] max-lg:w-[40px] rounded-full"
+                  className=" h-[60%] w-[85%] max-lg:h-[40px] max-lg:w-[40px] rounded-full"
                 />
               </div>
               <div className="w-[75.86%] h-full">

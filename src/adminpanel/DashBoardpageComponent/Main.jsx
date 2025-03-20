@@ -82,7 +82,7 @@ const Main = ({ mainRef, handleScroll , setActiveComponent}) => {
               <TransactionTable setActiveComponent={setActiveComponent}/>
             </div>
           </div>
-          <div className="bg-white shadow-lg w-[32%] max-lg:w-full p-4 rounded-lg">
+          <div className="bg-white shadow-lg w-[32%] max-lg:w-full p-4 rounded-lg mb-6">
             <ID_CARD setActiveComponent={setActiveComponent} totalMember={totalMember} />
           </div>
         </div>
@@ -94,3 +94,4 @@ const Main = ({ mainRef, handleScroll , setActiveComponent}) => {
 };
 
 export default Main;
+

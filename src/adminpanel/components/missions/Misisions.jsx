@@ -21,15 +21,20 @@ const Missions = ({ setActiveComponent, setMissionData }) => {
   useEffect(() => {
     fetchData(currentPage, limit);
   }, [currentPage, limit]);
-  const handleSelectAll = () => {
+
+   const handleSelectAll = () => {
+    const currentPageIds = data?.missions?.slice(0, limit).map((missions) => missions.id) || [];
+  
     if (selectAll) {
-      setSelectedItems([]);
+      // Deselect only the emails on the current page
+      setSelectedItems((prevSelected) => prevSelected.filter((id) => !currentPageIds.includes(id)));
     } else {
-      setSelectedItems(data.map((_, index) => index));
+      // Select only the emails on the current page that are not already selected
+      setSelectedItems((prevSelected) => [...new Set([...prevSelected, ...currentPageIds])]);
     }
+  
     setSelectAll(!selectAll);
   };
-
   const handleSelectItem = (index) => {
     if (selectedItems.includes(index)) {
       setSelectedItems(selectedItems.filter((item) => item !== index));
@@ -37,6 +42,7 @@ const Missions = ({ setActiveComponent, setMissionData }) => {
       setSelectedItems([...selectedItems, index]);
     }
   };
+
   const handleNextPage = () => {
     console.log(currentPage);
     setCurrentPage((prev) => {
@@ -114,8 +120,8 @@ const Missions = ({ setActiveComponent, setMissionData }) => {
                       <input
                         type="checkbox"
                         className="checked:bg-purple-500 checked:border-purple-500 size-4 bg-col"
-                        checked={selectedItems.includes(index)}
-                        onChange={() => handleSelectItem(index)}
+                        checked={selectedItems.includes(item.id)}
+                        onChange={() => handleSelectItem(item.id)}
                       />
                     </td>
                     <td className="p-2 font-medium text-sm text-gray-600   whitespace-nowrap overflow-hidden text-ellipsis">
