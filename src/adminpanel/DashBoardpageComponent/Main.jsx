@@ -3,8 +3,8 @@ import React, { useEffect, useRef, useState } from "react";
 import useMembers from '../../hooks/useMembers'
 import useDonation from "../../hooks/useDonation";
 import { eventgetdata } from "../../Connection/Api";
-import useIdCard from '../../hooks/useIdCard'
 import useQuery from "../../hooks/useQuery";
+import useTransaction from "../../hooks/useTransaction";
 
 import Tr from "./Tr";
 import TrafficSourceChart from "./TransactionBar";
@@ -12,14 +12,15 @@ import ID_CARD from "./ID_CARD";
 import TransactionTable from "./Transaction";
 
 const Main = ({ mainRef, handleScroll , setActiveComponent}) => {
+  const { dataList, pagination} = useTransaction(1 );
   const { dataList: totalMember ,allMembers } = useMembers();
   const { dataList: donation } = useDonation();
-  const { totalIdCard } = useIdCard('All');
   const [events, setEvents] = useState();
   const totalUsers = totalMember?.pagination?.totalUsers || 0;
-  const {dataList:query} = useQuery();
+  const {dataList:query ,fetchData} = useQuery();
+  const [totalIdCard , setTotalIdCard] = useState(0);
 
-  console.log(allMembers)
+  console.log("all mem",pagination?.totalMembershipFees)
 
   const getdata = async () => {
     try {
@@ -31,22 +32,29 @@ const Main = ({ mainRef, handleScroll , setActiveComponent}) => {
     }
   };
   useEffect(() => {
-
     getdata();
+    fetchData();
   }, []);
 
-  console.log()
+  useEffect(() => {
+    if (allMembers?.users) {
+      const approvedUsers = allMembers.users.filter(
+        (user) => user.idCardStatus === "APPROVED"
+      ).length;
+      setTotalIdCard(approvedUsers);
+    }
+  }, [allMembers]); 
 
   const arr = [
     { head: "Total Team Members", no: totalUsers },
-    { head: "Transaction", no: donation?.pagination?.totalDonations || 0 },  // here we only show totalDonation after adding membership funtionality it must be updating again.
+    { head: "Transaction", no: pagination?.totalMembershipFees || 0 },  // here we only show totalDonation after adding membership funtionality it must be updating again.
     { head: "Id Card", no: totalIdCard }, // it is also updated after adding the idcard funtionality
     { head: "Events", no: events || 0 },
   ];
 
   // Sample data from your image
   const data = [
-    { name: "Transaction", value: donation?.pagination?.totalDonations || 0, width: totalUsers > 0 ? `${((donation?.pagination?.totalDonations) / totalUsers) * 100}%` : "0%" },
+    { name: "Transaction", value: pagination?.totalMembershipFees || 0, width: totalUsers > 0 ? `${((pagination?.totalMembershipFees) / totalUsers) * 100}%` : "0%" },
     { name: "ID Card", value: totalIdCard, width: totalUsers > 0 ? `${(totalIdCard / totalUsers) * 100}%` : "0%" },
     { name: "Events", value: events || 0, width: totalUsers > 0 ? `${(events / 100) * 100}%` : "0%", },
     { name: "Query", value: query?.pagination?.totalQueries || 0, width: totalUsers > 0 ? `${((query?.pagination?.totalQueries || 0)  / totalUsers) * 100}%` : "0%", },

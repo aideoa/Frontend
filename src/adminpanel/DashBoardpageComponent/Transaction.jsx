@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import useTransaction from "../../hooks/useTransaction";
 
 const transactions = [
   {
@@ -34,6 +35,15 @@ const transactions = [
 ];
 
 const TransactionTable = ({setActiveComponent}) => {
+
+  const { dataList: data = [], fetchData } = useTransaction(1,3);
+
+  useEffect(()=>{
+    fetchData("",3)
+  },[])
+
+  console.log(data)
+
   return (
     <div className=" lg:min-w-full  min-w-[700px]">
       {/* Header with See All Transactions */}
@@ -53,7 +63,7 @@ const TransactionTable = ({setActiveComponent}) => {
 
       {/* Transaction List */}
       <div className=" ">
-        {transactions.map((transaction, index) => (
+        {data.map((transaction, index) => (
           <div
             key={index}
             className="flex  items-center justify-between p-1 bg-white rounded-lg shadow-sm"
@@ -63,24 +73,24 @@ const TransactionTable = ({setActiveComponent}) => {
               <div className="flex w-[41.02%]  items-center">
                 {/* Status Indicator with color */}
                 <span
-                  className={`w-4 h-4 rounded-full ${transaction.dotColor}`}
+                  className={`w-4 h-4 rounded-full ${transaction.status === "success" ? "bg-green-500" : transaction.status === "success" ? "bg-red-500": "bg-yellow-500"}`}
                 ></span>
                 <span
-                  className={`ml-2 px-2 py-1 rounded-full text-sm ${transaction.color}`}
+                  className={`ml-2 px-2 py-1 rounded-full text-sm  ${transaction.status === "success" ? "bg-green-100 text-green-700" : transaction.status === "failure" ? "bg-red-100 text-red-700": "bg-yellow-100 text-yellow-700"}`}
                 >
                   {transaction.status}
                 </span>
               </div>
-              <div className="flex w-[50%] flex-col justify-center items-center">
+              <div className="flex w-[50%] flex-col justify-center items-start">
                 <div className="font-medium">{transaction.name}</div>
-                <div className="text-sm text-gray-500">{transaction.phone}</div>
+                <div className="text-sm text-gray-500">{transaction.mobileNumber}</div>
               </div>
             </div>
 
             {/* Middle: Amount and Date */}
             <div className="text-right w-[15%] flex flex-col justify-center items-center">
-              <div className="font-semibold">{transaction.amount}</div>
-              <div className="text-sm text-gray-400">{transaction.date}</div>
+              <div className="font-semibold">{transaction.membershipAmount}</div>
+              <div className="text-sm text-gray-400">{transaction.createdAt.slice(0, 10)}</div>
             </div>
 
             {/* Right: Email */}
