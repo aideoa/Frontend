@@ -14,13 +14,14 @@ const TransactionPage = () => {
   const [selectAll, setSelectAll] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
   const [showMenu, setShowMenu] = useState(null); // Store index of active menu
+  const [searchTerm, setSearchTerm] = useState("");
 
   const totalPages = pagination?.totalPages || 0;
 
   console.log(currentPage)
   useEffect(() => {
-    fetchData();
-  }, [currentPage]);
+    fetchData(searchTerm, 8 );
+  }, [currentPage , searchTerm]);
 
   // Pagination Data
   // const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -102,6 +103,7 @@ const TransactionPage = () => {
                   type="text"
                   className="px-8 py-2 border w-full rounded-full text-sm border-gray-300"
                   placeholder="Search"
+                  onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
               {/* {selected.length > 1 && <MdDelete size={26} />} */}

@@ -18,18 +18,26 @@ const Notifications = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const limit = 6;
   const totalPages = mailsData?.pagination?.totalPages;
+
+
   const handleSelectAll = () => {
+    const currentPageIds = mailsData?.emails?.slice(0, limit).map((email) => email.id) || [];
+  
     if (selectAll) {
-      setSelectedItems([]);
+      // Deselect only the emails on the current page
+      setSelectedItems((prevSelected) => prevSelected.filter((id) => !currentPageIds.includes(id)));
     } else {
-      setSelectedItems(mailsData.map((_, index) => index));
+      // Select only the emails on the current page that are not already selected
+      setSelectedItems((prevSelected) => [...new Set([...prevSelected, ...currentPageIds])]);
     }
+  
     setSelectAll(!selectAll);
   };
+  
 
   const handleSelectItem = (index) => {
     if (selectedItems.includes(index)) {
-      setSelectedItems(selectedItems.filter((item) => item !== index));
+      setSelectedItems(selectedItems.filter((contact) => contact !== index));
     } else {
       setSelectedItems([...selectedItems, index]);
     }
@@ -138,8 +146,8 @@ const Notifications = () => {
                           <input
                             type="checkbox"
                             className="checked:bg-purple-500 checked:border-purple-500 size-4 bg-col"
-                            checked={selectedItems.includes(index)}
-                            onChange={() => handleSelectItem(index)}
+                            checked={selectedItems.includes(contact.id)}
+                            onChange={() => handleSelectItem(contact.id)}
                           />
                         </td>
                         <td className="py-3 px-4 font-medium text-gray-500">
