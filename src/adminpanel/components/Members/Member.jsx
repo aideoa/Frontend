@@ -61,34 +61,28 @@ const Member = () => {
           : item.type === "Student"
     ) || [];
 
-  const handleSelectItem = (index) => {
-    const newSelectedItems = selectedItems.includes(index)
-      ? selectedItems.filter((item) => item !== index)
-      : [...selectedItems, index];
+    const handleSelectItem = (index) => {
+      if (selectedItems.includes(index)) {
+        setSelectedItems(selectedItems.filter((item) => item !== index));
+      } else {
+        setSelectedItems([...selectedItems, index]);
+      }
+    };
 
-    setSelectedItems(newSelectedItems);
-
-    setSelectAll(
-      newSelectedItems.length === dataList[currentSection]?.users?.length
-    );
-  };
-
-  const handleSelectAll = () => {
-    if (selectAll) {
-      setSelectedItems([]);
-    } else {
-      setSelectedItems(dataList?.users?.map((_, index) => index) || []);
-    }
-
-    if (selectedItems.length + 1 === dataList?.users?.length) {
-      setSelectAll(true);
-    } else {
-      setSelectAll(false);
-    }
-
-    setSelectAll(!selectAll);
-  };
-
+    const handleSelectAll = () => {
+      const currentPageIds = dataList.users.map((item) => item.id);
+      if (selectAll) {
+        setSelectedItems((prevSelected) =>
+          prevSelected.filter((id) => !currentPageIds.includes(id))
+        );
+      } else {
+        setSelectedItems((prevSelected) => [
+          ...prevSelected,
+          ...currentPageIds.filter((id) => !prevSelected.includes(id)),
+        ]);
+      }
+      setSelectAll(!selectAll);
+    };
   const toggleMenu = (event) => {
     event.stopPropagation(); // Prevent click from propagating to parent elements
     
@@ -393,9 +387,8 @@ const Member = () => {
                     <td className="p-2 px-4 font-medium text-sm text-gray-600">
                       <input
                         type="checkbox"
-                        className="checked:bg-purple-500 checked:border-purple-500 size-4 bg-col"
-                        checked={selectedItems.includes(index)}
-                        onChange={() => handleSelectItem(index)}
+                        checked={selectedItems.includes(item.id)}
+                        onChange={() => handleSelectItem(item.id)}
                       />
                     </td>
                     <td className="p-2 font-medium text-sm text-gray-600  max-w-52 ">
