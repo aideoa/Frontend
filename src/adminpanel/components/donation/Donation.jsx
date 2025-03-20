@@ -184,7 +184,7 @@ const Donation = () => {
                   "UTR No",
                   "Amount",
                   "Status",
-                  "Action",
+                  // "Action",
                 ].map((heading) => (
                   <th
                     key={heading}
@@ -234,7 +234,7 @@ const Donation = () => {
                       className="p-2 cursor-pointer"
                       onClick={(e) => toggleMenu(e, index)}
                     >
-                      <BsThreeDotsVertical />
+                      {/* <BsThreeDotsVertical /> */}
                     </td>
                     {showMenu === index && (
                       <div
