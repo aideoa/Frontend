@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
-const useTransaction = (currentPage ) => {
+const useTransaction = (currentPage , limit) => {
   const [dataList, setDataList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [pagination , setPagination] = useState({});
@@ -13,9 +13,9 @@ const useTransaction = (currentPage ) => {
         `${import.meta.env.VITE_API_BACKEND_URL}/api/transactions`,
         {
           params: {
-            searchTerm,
             page: currentPage,
             limit,
+            searchTerm,
           },
         }
       );
@@ -31,8 +31,8 @@ const useTransaction = (currentPage ) => {
   };
 
   useEffect(()=>{
-    fetchData()
-  },[currentPage])
+    fetchData("",limit)
+  },[currentPage , limit])
 
   return { dataList, loading, fetchData,pagination };
 };

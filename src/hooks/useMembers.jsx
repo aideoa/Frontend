@@ -22,7 +22,7 @@ const useMembers = (userType) => {
       const res2 = await axios.get(
         `${
           import.meta.env.VITE_API_BACKEND_URL
-        }/api/members?userType=${"All"}&page=${1}&limit=1000`
+        }/api/members?userType=${"All"}&page=${1}&limit=10000`
       );
       console.log("res2.data", res2.data);
       setAllMembers(res2.data);
