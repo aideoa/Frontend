@@ -52,7 +52,6 @@ const Resources = ({ setActiveComponent, setEventsData }) => {
   };
 
   return (
-
     <div style={{ marginTop: "50px" }}>
       <div className="py-4 bg-white rounded-xl">
         <div className="flex space-x-4 mb-4 max-lg:flex-col-reverse max-lg:gap-2 px-4">
@@ -61,7 +60,6 @@ const Resources = ({ setActiveComponent, setEventsData }) => {
               <p className="text-nowrap">AIDEOA Latest News</p>
               <p className="font-bold">100</p>
             </div>
-
           </div>
 
           <div className="flex justify-end flex-1 items-center space-x-4 ">
