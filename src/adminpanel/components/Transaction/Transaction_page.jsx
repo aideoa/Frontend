@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { CiSearch } from "react-icons/ci";
-// import { MdDelete } from "react-icons/md";
+import { MdDelete } from "react-icons/md"; // Uncomment this since we'll need it
 import { handleDownloadTrans } from "./exportTrans";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import useTransaction from "../../../hooks/useTransaction";
-
-// const ITEMS_PER_PAGE = 8;
+import { FaFileExport } from "react-icons/fa"; // Import export icon
 
 const TransactionPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const { dataList: data = [], fetchData , pagination} = useTransaction(currentPage);
+  const { dataList: data = [], fetchData, pagination } = useTransaction(currentPage);
   const [selected, setSelected] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
@@ -18,14 +17,10 @@ const TransactionPage = () => {
 
   const totalPages = pagination?.totalPages || 0;
 
-  console.log(currentPage)
+  console.log(currentPage);
   useEffect(() => {
-    fetchData(searchTerm, 8 );
-  }, [currentPage , searchTerm]);
-
-  // Pagination Data
-  // const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  // const currentPageData = data.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+    fetchData(searchTerm, 8);
+  }, [currentPage, searchTerm]);
 
   // Select All Logic
   const handleSelectAll = () => {
@@ -64,13 +59,20 @@ const TransactionPage = () => {
     setShowMenu(showMenu === index ? null : index);
   };
 
- const handleExportClick = (data) => {
-    handleDownloadTrans(null , data);
+  const handleExportClick = (data) => {
+    handleDownloadTrans(null, data);
   };
 
-  const handleOneDownload = (transactionId , data) => {
-    handleDownloadTrans(transactionId , data);
+  // New function to export selected transactions
+  const handleExportSelected = () => {
+    const selectedData = data.filter(item => selected.includes(item.id));
+    handleDownloadTrans(null, selectedData);
   };
+
+  const handleOneDownload = (transactionId, data) => {
+    handleDownloadTrans(transactionId, data);
+  };
+
   // Pagination Handlers
   const handlePreviousPage = () => {
     if (currentPage > 1) setCurrentPage((prev) => prev - 1);
@@ -106,10 +108,18 @@ const TransactionPage = () => {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-              {/* {selected.length > 1 && <MdDelete size={26} />} */}
+              {selected.length > 1 && (
+                <button
+                  className="bg-green-600 text-white py-2 px-2 rounded-md flex items-center"
+                  onClick={handleExportSelected}
+                >
+                  <FaFileExport />
+                  Export Selected
+                </button>
+              )}
               <button
                 className="bg-white font-semibold border shadow-md text-black py-2 px-4 rounded-md mr-2"
-                onClick={()=>handleExportClick(data)}
+                onClick={() => handleExportClick(data)}
               >
                 Download All
               </button>
@@ -129,7 +139,7 @@ const TransactionPage = () => {
                   />
                 </th>
                 {[
-                  "Name",               
+                  "Name",
                   "AIDEOA ID",
                   "Mobile Number",
                   "Email",
@@ -156,7 +166,7 @@ const TransactionPage = () => {
                     />
                   </td>
                   <td className="p-2">{item.name}</td>
-                  <td className="p-2 text-gray-400">{item.user? item.user.aideoaIdNo :"N/A"}</td>
+                  <td className="p-2 text-gray-400">{item.user ? item.user.aideoaIdNo : "N/A"}</td>
                   <td className="p-2 text-gray-400">{item.mobileNumber}</td>
                   <td className="p-2 text-gray-400">{item.email}</td>
                   <td className="p-2 text-gray-400">{item.createdAt.slice(0, 10)}</td>
@@ -189,7 +199,7 @@ const TransactionPage = () => {
                       <ul>
                         <li
                           className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                           onClick={() => handleOneDownload(item.transaction , data)}
+                          onClick={() => handleOneDownload(item.transaction, data)}
                         >
                           Download
                         </li>
