@@ -10,22 +10,24 @@ import useMembers from "../../../hooks/useMembers";
 import { handleDownloadAll } from "../Members/exportExcel";
 import SearchBar from "./SearchBar";
 
-
 const Member = () => {
   const [currentSection, setCurrentSection] = useState("All"); // Default section
   const [currentPage, setCurrentPage] = useState(1);
   const [userType, setUserType] = useState("All");
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
-  const { dataList, fetchData , updateMemberStatus } = useMembers(userType, currentPage);
+  const { dataList, fetchData, updateMemberStatus } = useMembers(
+    userType,
+    currentPage
+  );
   const [showPopup, setShowPopup] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
-  const [order, setOrder] = useState('desc');
+  const [order, setOrder] = useState("desc");
   const [viewingPdf, setViewingPdf] = useState(null);
   const [isStudent, setIsStudent] = useState(false);
-  const [studentId , setStudentId] = useState(null);
+  const [studentId, setStudentId] = useState(null);
   const isUrl = (value) => {
     try {
       new URL(value);
@@ -42,7 +44,6 @@ const Member = () => {
     fetchData(userType, currentPage, order, filteredData);
   };
 
-
   const handleOpenPopup = () => {
     setShowPopup(true);
   };
@@ -57,45 +58,45 @@ const Member = () => {
       userType === "All"
         ? true
         : userType === "Employees"
-          ? item.type === "Employee"
-          : item.type === "Student"
+        ? item.type === "Employee"
+        : item.type === "Student"
     ) || [];
 
-    const handleSelectItem = (index) => {
-      if (selectedItems.includes(index)) {
-        setSelectedItems(selectedItems.filter((item) => item !== index));
-      } else {
-        setSelectedItems([...selectedItems, index]);
-      }
-    };
+  const handleSelectItem = (index) => {
+    if (selectedItems.includes(index)) {
+      setSelectedItems(selectedItems.filter((item) => item !== index));
+    } else {
+      setSelectedItems([...selectedItems, index]);
+    }
+  };
 
-    const handleSelectAll = () => {
-      const currentPageIds = dataList.users.map((item) => item.id);
-      if (selectAll) {
-        setSelectedItems((prevSelected) =>
-          prevSelected.filter((id) => !currentPageIds.includes(id))
-        );
-      } else {
-        setSelectedItems((prevSelected) => [
-          ...prevSelected,
-          ...currentPageIds.filter((id) => !prevSelected.includes(id)),
-        ]);
-      }
-      setSelectAll(!selectAll);
-    };
+  const handleSelectAll = () => {
+    const currentPageIds = dataList.users.map((item) => item.id);
+    if (selectAll) {
+      setSelectedItems((prevSelected) =>
+        prevSelected.filter((id) => !currentPageIds.includes(id))
+      );
+    } else {
+      setSelectedItems((prevSelected) => [
+        ...prevSelected,
+        ...currentPageIds.filter((id) => !prevSelected.includes(id)),
+      ]);
+    }
+    setSelectAll(!selectAll);
+  };
   const toggleMenu = (event) => {
     event.stopPropagation(); // Prevent click from propagating to parent elements
-    
+
     const rect = event.target.getBoundingClientRect(); // Get the bounding rectangle of the clicked element
-    
+
     setMenuPosition({
       x: rect.left + window.scrollX, // Horizontal position with scroll offset
       y: rect.bottom + window.scrollY, // Vertical position with scroll offset
     });
-    
+
     setShowMenu((prev) => !prev); // Toggle menu visibility
   };
-  
+
   const onDownloadAllClick = async () => {
     handleDownloadAll(userType);
   };
@@ -104,7 +105,7 @@ const Member = () => {
   const closeMenu = () => setShowMenu(false);
 
   useEffect(() => {
-    console.log(order)
+    console.log(order);
     fetchData(userType, currentPage, order);
   }, [userType, currentPage, order]);
 
@@ -128,10 +129,11 @@ const Member = () => {
     setSelectAll(false);
   };
 
+  //another
   const handleNextPage = () => {
-    console.log(currentPage);
     setCurrentPage((prev) => {
-      if (prev <= dataList.pagination.totalPages) {
+      if (prev < dataList.pagination.totalPages) {
+        // Fix: < instead of <=
         return prev + 1;
       }
       return prev;
@@ -139,12 +141,7 @@ const Member = () => {
   };
 
   const handlePrevPage = () => {
-    setCurrentPage((prev) => {
-      if (prev > 1) {
-        return prev - 1;
-      }
-      return prev;
-    });
+    setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev)); // Shorter & cleaner
   };
 
   const IdDisplay = ({ viewingPdf }) => {
@@ -153,25 +150,25 @@ const Member = () => {
         {isUrl(viewingPdf) ? (
           <img src={viewingPdf} alt="ID Proof" />
         ) : (
-          <p className="text-white text-2xl font-semibold bg-purple-600  rounded-lg py-2 px-4">ID Card Number: {viewingPdf}</p>
+          <p className="text-white text-2xl font-semibold bg-purple-600  rounded-lg py-2 px-4">
+            ID Card Number: {viewingPdf}
+          </p>
         )}
       </div>
     );
   };
 
   const viewIdProof = (pdfUrl) => {
-    console.log(pdfUrl)
+    console.log(pdfUrl);
     setViewingPdf(pdfUrl); // Show PDF modal
   };
 
   return (
     <>
-
       <div
         style={{ marginTop: "50px" }}
         className="bg-white py-4 rounded-xl lightdropshadowbox"
       >
-
         <div className="flex px-2 flex-col">
           <div className="flex  mb-4 items-center">
             <div className="flex w-[34%] h-[40%] items-center gap-2">
@@ -190,12 +187,22 @@ const Member = () => {
                 <span className="font-semibold">sorting</span>
                 <div className="flex space-x-2">
                   {/* Down Arrow (for Sorting) */}
-                  <button className="text-gray-500 hover:text-green-700 " onClick={() => { setOrder('desc') }} >
+                  <button
+                    className="text-gray-500 hover:text-green-700 "
+                    onClick={() => {
+                      setOrder("desc");
+                    }}
+                  >
                     <FaArrowDownLong size={14} />
                   </button>
 
                   {/* Up Arrow (for Sorting) */}
-                  <button className="text-gray-500 hover:text-red-700" onClick={() => { setOrder('asc') }} >
+                  <button
+                    className="text-gray-500 hover:text-red-700"
+                    onClick={() => {
+                      setOrder("asc");
+                    }}
+                  >
                     <FaArrowUpLong size={14} />
                   </button>
                 </div>
@@ -220,18 +227,20 @@ const Member = () => {
             <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-3 items-center justify-center">
               <button
                 onClick={() => handleTableList("All")}
-                className={`${userType === "All"
-                  ? "bg-[#4B0082] text-white"
-                  : "bg-white text-[#4B0082]"
-                  } rounded-t-2xl text-sm py-2 px-4 w-full md:w-40 font-medium flex gap-2 justify-center items-center`}
+                className={`${
+                  userType === "All"
+                    ? "bg-[#4B0082] text-white"
+                    : "bg-white text-[#4B0082]"
+                } rounded-t-2xl text-sm py-2 px-4 w-full md:w-40 font-medium flex gap-2 justify-center items-center`}
               >
                 <span>All</span>
                 {userType === "All" && (
                   <span
-                    className={`text-xs font-bold px-2 rounded-md ${userType === "All"
-                      ? "bg-white text-[#4B0082]"
-                      : "bg-[#4B0082] text-white"
-                      }`}
+                    className={`text-xs font-bold px-2 rounded-md ${
+                      userType === "All"
+                        ? "bg-white text-[#4B0082]"
+                        : "bg-[#4B0082] text-white"
+                    }`}
                   >
                     {dataList?.pagination?.totalUsers || 0}
                   </span>
@@ -239,18 +248,20 @@ const Member = () => {
               </button>
               <button
                 onClick={() => handleTableList("Employees")}
-                className={`${userType === "Employees"
-                  ? "bg-[#4B0082] text-white"
-                  : "bg-white text-[#4B0082]"
-                  } rounded-t-2xl text-sm py-2 px-4 w-full md:w-40 font-medium flex gap-2 justify-center items-center`}
+                className={`${
+                  userType === "Employees"
+                    ? "bg-[#4B0082] text-white"
+                    : "bg-white text-[#4B0082]"
+                } rounded-t-2xl text-sm py-2 px-4 w-full md:w-40 font-medium flex gap-2 justify-center items-center`}
               >
                 <span>Employees</span>
                 {userType === "Employees" && (
                   <span
-                    className={`text-xs font-bold px-2 rounded-md ${userType === "Employees"
-                      ? "bg-white text-[#4B0082]"
-                      : "bg-[#4B0082] text-white"
-                      }`}
+                    className={`text-xs font-bold px-2 rounded-md ${
+                      userType === "Employees"
+                        ? "bg-white text-[#4B0082]"
+                        : "bg-[#4B0082] text-white"
+                    }`}
                   >
                     {dataList?.pagination?.totalUsers || 0}
                   </span>
@@ -258,18 +269,20 @@ const Member = () => {
               </button>
               <button
                 onClick={() => handleTableList("Students")}
-                className={`${userType === "Students"
-                  ? "bg-[#4B0082] text-white"
-                  : "bg-white text-[#4B0082]"
-                  } rounded-t-2xl text-sm py-2 px-4 w-full md:w-40 font-medium flex gap-2 justify-center items-center`}
+                className={`${
+                  userType === "Students"
+                    ? "bg-[#4B0082] text-white"
+                    : "bg-white text-[#4B0082]"
+                } rounded-t-2xl text-sm py-2 px-4 w-full md:w-40 font-medium flex gap-2 justify-center items-center`}
               >
                 <span>Students</span>
                 {userType === "Students" && (
                   <span
-                    className={`text-xs font-bold px-2 rounded-md ${userType === "Students"
-                      ? "bg-white text-[#4B0082]"
-                      : "bg-[#4B0082] text-white"
-                      }`}
+                    className={`text-xs font-bold px-2 rounded-md ${
+                      userType === "Students"
+                        ? "bg-white text-[#4B0082]"
+                        : "bg-[#4B0082] text-white"
+                    }`}
                   >
                     {dataList?.pagination?.totalUsers || 0}
                   </span>
@@ -406,7 +419,7 @@ const Member = () => {
                       {item.email}
                     </td>
                     <td className="p-2 font-medium text-sm text-gray-400">
-                      {item.address?item.address : 'N/A'}
+                      {item.address ? item.address : "N/A"}
                     </td>
                     <td className="p-2 font-medium text-sm text-gray-400 whitespace-nowrap">
                       {item.createdAt.slice(0, 10)}
@@ -416,12 +429,19 @@ const Member = () => {
                     </td>
                     <td className="p-2 font-medium text-xs ">
                       <td
-                        className={` rounded-full px-1 mb-1 ${item.idCardStatus === "APPROVED"
-                          ? "bg-green-100 text-green-700 " :item.idCardStatus == 'PENDING' ?"bg-yellow-100 text-yellow-700"
-                          : "bg-red-100 text-red-700"
-                          }`}
+                        className={` rounded-full px-1 mb-1 ${
+                          item.idCardStatus === "APPROVED"
+                            ? "bg-green-100 text-green-700 "
+                            : item.idCardStatus == "PENDING"
+                            ? "bg-yellow-100 text-yellow-700"
+                            : "bg-red-100 text-red-700"
+                        }`}
                       >
-                        {item.idCardStatus === "APPROVED" ? "APPROVED" : item.idCardStatus == 'PENDING'? "PENDING":"REJECTED"}
+                        {item.idCardStatus === "APPROVED"
+                          ? "APPROVED"
+                          : item.idCardStatus == "PENDING"
+                          ? "PENDING"
+                          : "REJECTED"}
                       </td>
                     </td>
                     <td className="p-2 font-medium text-sm text-gray-600 cursor-pointer">
@@ -435,14 +455,13 @@ const Member = () => {
                     <td
                       className="p-2 font-medium text-sm text-gray-600 cursor-pointer"
                       onClick={(event) => {
-                        toggleMenu(event)
-                        setIsStudent(item.userType === 'student');
+                        toggleMenu(event);
+                        setIsStudent(item.userType === "student");
                         setStudentId(item.id);
                       }}
                     >
                       <BsThreeDotsVertical />
                     </td>
-
                   </tr>
                 ))}
             </tbody>
@@ -453,7 +472,7 @@ const Member = () => {
               <button className="close-btn" onClick={() => setViewingPdf(null)}>
                 Close
               </button>
-            <IdDisplay className="text-white" viewingPdf={viewingPdf} />
+              <IdDisplay className="text-white" viewingPdf={viewingPdf} />
             </div>
           )}
         </div>
@@ -481,8 +500,8 @@ const Member = () => {
               >
                 Download
               </li>
-              {
-                isStudent ? <>
+              {isStudent ? (
+                <>
                   <li
                     className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                     onClick={() => updateMemberStatus(studentId, "APPROVED")}
@@ -495,8 +514,10 @@ const Member = () => {
                   >
                     Reject
                   </li>
-                </> : <></>
-              }
+                </>
+              ) : (
+                <></>
+              )}
               <li
                 className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                 onClick={() => alert("Suspend clicked")}
@@ -524,11 +545,12 @@ const Member = () => {
             {[...Array(totalPages).keys()].map((page) => (
               <button
                 key={page}
-                className={`py-2 px-4 rounded-md shadow-md border ${currentPage === page + 1
-                  ? "bg-purple-700 text-white"
-                  : " bg-white  text-black "
-                  }`}
-                onClick={() => (setCurrentPage(page + 1))}
+                className={`py-2 px-4 rounded-md shadow-md border ${
+                  currentPage === page + 1
+                    ? "bg-purple-700 text-white"
+                    : " bg-white  text-black "
+                }`}
+                onClick={() => setCurrentPage(page + 1)}
               >
                 {page + 1}
               </button>
