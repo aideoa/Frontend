@@ -4,78 +4,94 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { LuUploadCloud } from "react-icons/lu";
 import { CiSearch } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
-import { RiDeleteBin6Line } from "react-icons/ri";
-import { FiEdit2 } from "react-icons/fi";
-import { latestNewgetdata } from "../../../Connection/LatestNewsapi";
+import useLatestNews from "../../../Connection/LatestNewsapi";
 
-const Resources = ({ setActiveComponent, setEventsData }) => {
+const Resources = ({ setActiveComponent }) => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
-  const [d, setd] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchterm] = useState("");
+  const { dataList, fetchData, deleteNewsItem } = useLatestNews();
+
+  const totalPages = dataList?.pagination?.totalPages;
+  const limit = 10;
 
   useEffect(() => {
-    const getdata = async () => {
-      try {
-        const data = await latestNewgetdata();
-        if (Array.isArray(data.data)) {
-          setd(data.data); // Only update if data is an array
-        } else {
-          console.error("Expected data to be an array, but got", data.data);
-          setd([]); // Fallback to an empty array if data is not an array
-        }
-      } catch (error) {
-        console.log(`Error in getdata in Resources.jsx: ${error}`);
-        setd([]); // Fallback to an empty array in case of error
-      }
-    };
-    getdata();
-  }, []);
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = 3;
+    fetchData(searchTerm, currentPage, limit);
+  }, [currentPage, searchTerm]);
 
   const handleSelectAll = () => {
+    const currentPageIds = dataList?.posts?.map((item) => item.id) || [];
     if (selectAll) {
-      setSelectedItems([]);
+      setSelectedItems((prev) =>
+        prev.filter((id) => !currentPageIds.includes(id))
+      );
     } else {
-      setSelectedItems(d.map((_, index) => index)); // Ensure you use `d` for selection
+      setSelectedItems((prev) => [
+        ...prev,
+        ...currentPageIds.filter((id) => !prev.includes(id)),
+      ]);
     }
     setSelectAll(!selectAll);
   };
 
-  const handleSelectItem = (index) => {
-    if (selectedItems.includes(index)) {
-      setSelectedItems(selectedItems.filter((item) => item !== index));
-    } else {
-      setSelectedItems([...selectedItems, index]);
+  const handleSelectItem = (id) => {
+    setSelectedItems((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  const handleDelete = async (newsId) => {
+    if (!window.confirm("Are you sure you want to delete this news item?"))
+      return;
+    try {
+      await deleteNewsItem(newsId);
+      await fetchData(searchTerm, currentPage, limit);
+    } catch (error) {
+      console.error("Error deleting news:", error);
+      alert("Failed to delete news item. Please try again.");
     }
   };
 
-  return (
+  const handlePreviousPage = () => {
+    if (currentPage > 1) setCurrentPage((prev) => prev - 1);
+  };
 
+  const handleNextPage = () => {
+    if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
+  };
+
+  // Handle Page Click for Pagination
+  const handlePageClick = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  return (
     <div style={{ marginTop: "50px" }}>
       <div className="py-4 bg-white rounded-xl">
-        <div className="flex space-x-4 mb-4 max-lg:flex-col-reverse max-lg:gap-2 px-4">
+        <div className="flex space-x-4 mb-4 px-4">
           <div className="flex space-x-4">
             <div className="bg-[#4B0082] w-48 text-center text-white shadow-md rounded-xl flex flex-col justify-center items-center p-2 h-16">
               <p className="text-nowrap">AIDEOA Latest News</p>
-              <p className="font-bold">100</p>
+              <p className="font-bold">
+                {dataList?.pagination?.totalPosts || 0}
+              </p>
             </div>
-
           </div>
 
-          <div className="flex justify-end flex-1 items-center space-x-4 ">
+          <div className="flex justify-end flex-1 items-center space-x-4">
             <div className="relative w-[55%]">
               <CiSearch className="absolute top-3 left-3" />
               <input
                 type="text"
                 className="px-8 py-2 border w-full rounded-full text-sm border-gray-300"
                 placeholder="Search"
+                onChange={(e) => setSearchterm(e.target.value)}
               />
             </div>
-            {selectedItems.length >= 2 && <MdDelete size={26} />}
-            <div className="flex max-lg:flex-col gap-2">
-              <button className="bg-white text-nowrap font-semibold border shadow-md text-black py-2 px-4 rounded-md mr-2">
+
+            <div className="flex gap-2">
+              <button className="bg-white font-semibold border shadow-md text-black py-2 px-4 rounded-md">
                 Download all
               </button>
               <button
@@ -89,87 +105,77 @@ const Resources = ({ setActiveComponent, setEventsData }) => {
           </div>
         </div>
 
-        <div className="overflow-x-scroll w-full">
+        <div className="overflow-x-auto w-full">
           <table className="min-w-full bg-white border border-gray-300">
             <thead>
               <tr className="text-left border-b bg-gray-100 border-gray-200 h-16">
-                <th className="p-2 px-4 font-medium text-sm text-gray-200">
+                <th className="p-2 px-4">
                   <input
                     type="checkbox"
-                    className="checked:bg-purple-500 checked:border-purple-500 size-4 bg-col"
                     checked={selectAll}
                     onChange={handleSelectAll}
                   />
                 </th>
-                <th className="py-3 px-4 text-left font-medium text-sm text-gray-500 w-52">
-                  Title
-                </th>
-                <th className="py-3 px-4 text-left font-medium text-sm text-gray-500">
-                  Description
-                </th>
-                <th className="py-3 px-4 text-left font-medium text-sm text-gray-500 max-w-32">
-                  Url
-                </th>
-                <th className="py-3 px-4 text-left font-medium text-sm text-gray-500">
-                  Actions
-                </th>
+                {["Title", "Description", "Url", "Created At", "Actions"].map(
+                  (heading) => (
+                    <th
+                      key={heading}
+                      className="py-3 px-4 text-left text-gray-500"
+                    >
+                      {heading}
+                    </th>
+                  )
+                )}
               </tr>
             </thead>
+
             <tbody>
-              {Array.isArray(d) && d.length > 0 ? (
-                d.map((item, index) => (
-                  <tr
-                    key={index}
-                    className="border-b border-gray-200 h-16 cursor-pointer"
-                  >
-                    <td className="p-2 px-4 font-medium text-sm text-gray-600">
-                      <input
-                        type="checkbox"
-                        className="checked:bg-purple-500 checked:border-purple-500 size-4 bg-col"
-                        checked={selectedItems.includes(index)}
-                        onChange={() => handleSelectItem(index)}
-                      />
-                    </td>
-                    <td className="p-2 font-medium text-sm text-gray-600 max-w-52 whitespace-nowrap overflow-hidden text-ellipsis">
-                      {item.title}
-                    </td>
-                    <td className="py-3 px-4 text-gray-500 text-sm">
-                      {item.description}
-                    </td>
-                    <td className="p-2 font-medium text-sm text-gray-400 text-nowrap">
-                      <img
-                        src={item.images[0]?.url}
-                        className="h-10"
-                        alt="image here"
-                      />
-                    </td>
-                    <td className="p-2 flex font-medium text-center w-full text-sm justify-around h-16 items-center text-gray-600 cursor-pointer">
-                      <RiDeleteBin6Line />
-                      <FiEdit2
-                        onClick={() => {
-                          setEventsData(item);
-                          setActiveComponent("Events Details");
-                        }}
-                      />
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="5" className="text-center text-gray-500">
-                    No data available
+              {dataList?.posts?.slice(0, limit)?.map((item, index) => (
+                <tr key={index} className="border-b border-gray-200 h-16">
+                  <td className="p-2 px-4">
+                    <input
+                      type="checkbox"
+                      checked={selectedItems.includes(item.id)}
+                      onChange={() => handleSelectItem(item.id)}
+                    />
+                  </td>
+                  <td className="p-2">{item.title}</td>
+                  <td className="p-2 text-gray-400">{item.description}</td>
+                  <td className="p-2 text-gray-400">
+                    {item.images?.length > 0 ? (
+                      <a
+                        href={item.images[0].url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-500 underline"
+                      >
+                        {item.images[0].url}
+                      </a>
+                    ) : (
+                      "No URL"
+                    )}
+                  </td>
+                  <td className="p-2 text-gray-400">
+                    {item.createdAt.slice(0, 10)}
+                  </td>
+                  <td>
+                    <button
+                      className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                      onClick={() => handleDelete(item.id)}
+                    >
+                      <MdDelete size={20} />
+                    </button>
                   </td>
                 </tr>
-              )}
+              ))}
             </tbody>
           </table>
         </div>
-
         <div className="flex justify-between items-center mt-4 px-4">
           <button
             className="py-2 px-4 bg-white shadow-md border text-black rounded-md"
+            onClick={handlePreviousPage}
             disabled={currentPage === 1}
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
           >
             Previous
           </button>
@@ -182,7 +188,7 @@ const Resources = ({ setActiveComponent, setEventsData }) => {
                     ? "bg-purple-700 text-white"
                     : "bg-white text-black"
                 }`}
-                onClick={() => setCurrentPage(page + 1)}
+                onClick={() => handlePageClick(page + 1)}
               >
                 {page + 1}
               </button>
@@ -190,10 +196,8 @@ const Resources = ({ setActiveComponent, setEventsData }) => {
           </div>
           <button
             className="py-2 px-4 bg-white shadow-md border text-black rounded-md"
+            onClick={handleNextPage}
             disabled={currentPage === totalPages}
-            onClick={() =>
-              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-            }
           >
             Next
           </button>

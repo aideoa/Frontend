@@ -12,7 +12,7 @@ import Slider from "../Cards/Slider/Slider";
 import { data } from "../../data/data";
 import { useEffect, useState } from "react";
 import { eventgetdata } from "../../Connection/Api";
-import { latestNewgetdata } from "../../Connection/LatestNewsapi";
+import latestNewgetdata from "../../Connection/LatestNewsapi";
 
 const arr = [
   {
@@ -62,18 +62,17 @@ const EventPage = () => {
     try {
       const data = await eventgetdata();
       const newsCards = await latestNewgetdata();
-      setEventsData(data.data)
+      setEventsData(data.data);
       setNewsCardsData(newsCards.data);
     } catch (error) {
       console.log(`error in Eventpage.jsx ${error}`);
     }
   };
   useEffect(() => {
-    getdata()
-
+    getdata();
   }, []);
-  console.log("ds",eventsData)
-  console.log("newsCard",newsCardsData)
+  console.log("ds", eventsData);
+  console.log("newsCard", newsCardsData);
   return (
     <div className="pt-14">
       <TopImageCard
@@ -81,9 +80,10 @@ const EventPage = () => {
         title={"AIDEOA  Events"}
       />
       <div className=" flex px-5 flex-wrap gap-2 mt-12  content-center max-w-7xl  m-auto">
-        {eventsData&&eventsData?.events?.map((item, idx) => {
-          return <Card key={idx} idx={idx} item={item} />;
-        })}
+        {eventsData &&
+          eventsData?.events?.map((item, idx) => {
+            return <Card key={idx} idx={idx} item={item} />;
+          })}
       </div>
       <div className=" bg-blue-950 ">
         <Slider textColor={"white"} shadowColor={"blue-900"} />

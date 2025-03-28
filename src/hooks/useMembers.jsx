@@ -5,33 +5,42 @@ const useMembers = (userType) => {
   const [dataList, setDataList] = useState();
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [allMembers , setAllMembers] = useState([]);
+  const [allMembers, setAllMembers] = useState([]);
 
   const [selectedMember, setSelectedMember] = useState(null);
 
-  const fetchData = async (userType, currentPage, order , search) => {
+  const fetchData = async (
+    userType,
+    currentPage,
+    order,
+    search,
+    statusOrder
+  ) => {
     setLoading(true);
     try {
       const res = await axios.get(
-        `${
-          import.meta.env.VITE_API_BACKEND_URL
-        }/api/members?userType=${userType || "All"}&page=${currentPage || 1}&limit=8&order=${order}&search=${search}`
+        `${import.meta.env.VITE_API_BACKEND_URL}/api/members?userType=${
+          userType || "All"
+        }&page=${currentPage || 1}&limit=7&order=${order}&search=${search}`
       );
-      console.log("res.data", res.data);
 
-      const res2 = await axios.get(
-        `${
-          import.meta.env.VITE_API_BACKEND_URL
-        }/api/members?userType=${"All"}&page=${1}&limit=10000`
-      );
-      console.log("res2.data", res2.data);
-      setAllMembers(res2.data);
+      let sortedUsers = res.data.users;
 
-      if (res.status === 200) setDataList(res.data);
+      // Apply status sorting if provided
+      if (statusOrder) {
+        sortedUsers = sortedUsers.sort((a, b) => {
+          const statusPriority = { PENDING: 1, APPROVED: 2, REJECTED: 3 };
+          return statusOrder === "asc"
+            ? statusPriority[a.idCardStatus] - statusPriority[b.idCardStatus]
+            : statusPriority[b.idCardStatus] - statusPriority[a.idCardStatus];
+        });
+      }
+
+      setDataList({ ...res.data, users: sortedUsers });
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      throw new Error(error);
+      console.error("Error fetching data:", error);
     }
   };
 
@@ -39,10 +48,12 @@ const useMembers = (userType) => {
     setLoading(true);
     try {
       const res = await axios.patch(
-        `${import.meta.env.VITE_API_BACKEND_URL}/api/members/${memberId}/status`,
+        `${
+          import.meta.env.VITE_API_BACKEND_URL
+        }/api/members/${memberId}/status`,
         { idCardStatus: status }
       );
-      
+
       if (res.status === 200) {
         fetchData(userType);
       }
@@ -70,10 +81,39 @@ const useMembers = (userType) => {
     }
   };
 
+  const deleteMember = async (memberId) => {
+    setLoading(true);
+    try {
+      const res = await axios.delete(
+        `${import.meta.env.VITE_API_BACKEND_URL}/api/members/${memberId}`
+      );
+
+      if (res.status === 200) {
+        alert("Member deleted successfully!");
+        fetchData(userType, 1, "desc", "", "asc"); // Ensure it refreshes correctly
+      }
+    } catch (error) {
+      console.error("Error deleting member:", error);
+      alert("Failed to delete member. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchData(userType);
   }, [userType]);
-  return { dataList, loading, fetchData , allMembers , updateMemberStatus, selectedMember, getMember, };
+
+  return {
+    dataList,
+    loading,
+    fetchData,
+    allMembers,
+    updateMemberStatus,
+    selectedMember,
+    getMember,
+    deleteMember,
+  };
 };
 
 export default useMembers;

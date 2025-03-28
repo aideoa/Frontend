@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { FaArrowDownLong, FaArrowUpLong } from "react-icons/fa6";
+import { FaSort, FaArrowDownLong, FaArrowUpLong } from "react-icons/fa6";
 import { LuUploadCloud } from "react-icons/lu";
 import { FaSearch } from "react-icons/fa";
 import { CiSearch } from "react-icons/ci";
@@ -16,10 +16,8 @@ const Member = () => {
   const [userType, setUserType] = useState("All");
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
-  const { dataList, fetchData, updateMemberStatus } = useMembers(
-    userType,
-    currentPage
-  );
+  const { dataList, fetchData, loading, updateMemberStatus, deleteMember } =
+    useMembers(userType, currentPage);
   const [showPopup, setShowPopup] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -28,6 +26,9 @@ const Member = () => {
   const [viewingPdf, setViewingPdf] = useState(null);
   const [isStudent, setIsStudent] = useState(false);
   const [studentId, setStudentId] = useState(null);
+  const [statusOrder, setStatusOrder] = useState("asc"); // Sorting by status
+  const [sortedData, setSortedData] = useState([]); // Store sorted list
+
   const isUrl = (value) => {
     try {
       new URL(value);
@@ -84,6 +85,7 @@ const Member = () => {
     }
     setSelectAll(!selectAll);
   };
+
   const toggleMenu = (event) => {
     event.stopPropagation(); // Prevent click from propagating to parent elements
 
@@ -99,6 +101,13 @@ const Member = () => {
 
   const onDownloadAllClick = async () => {
     handleDownloadAll(userType);
+  };
+
+  // Function to sort by status
+  const handleSortByStatus = () => {
+    const newStatusOrder = statusOrder === "asc" ? "desc" : "asc";
+    setStatusOrder(newStatusOrder);
+    fetchData(userType, 1, order, "", newStatusOrder);
   };
 
   // Close the menu when clicking outside
@@ -133,7 +142,6 @@ const Member = () => {
   const handleNextPage = () => {
     setCurrentPage((prev) => {
       if (prev < dataList.pagination.totalPages) {
-        // Fix: < instead of <=
         return prev + 1;
       }
       return prev;
@@ -142,6 +150,21 @@ const Member = () => {
 
   const handlePrevPage = () => {
     setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev)); // Shorter & cleaner
+  };
+
+  const handleDelete = async (memberId) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this member?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      await deleteMember(memberId); // Call the delete function
+      fetchData(userType, 1, order, searchTerm, statusOrder); // Refresh data list properly
+    } catch (error) {
+      console.error("Error deleting member:", error);
+      alert("Failed to delete member. Please try again.");
+    }
   };
 
   const IdDisplay = ({ viewingPdf }) => {
@@ -170,120 +193,114 @@ const Member = () => {
         className="bg-white py-4 rounded-xl lightdropshadowbox"
       >
         <div className="flex px-2 flex-col">
-          <div className="flex  mb-4 items-center">
-            <div className="flex w-[34%] h-[40%] items-center gap-2">
-              <h3 className="h-full  text-[18px] font-[500]">Member</h3>
-              <p className="text-[14px] px-3 text-purple-800 rounded-lg bg-purple-200 my-auto">
-                {dataList?.pagination?.totalUsers || 0} users
-              </p>
+          <div className="flex flex-col w-full mb-4">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between w-full mb-4">
+              <div className="flex items-center gap-3">
+                <h3 className="text-lg font-medium">Member</h3>
+                <p className="text-sm px-3 text-purple-800 rounded-lg bg-purple-200">
+                  {dataList?.pagination?.totalUsers || 0} users
+                </p>
+              </div>
             </div>
 
-            <div className="flex justify-end flex-1  items-center space-x-4 ">
-              <div className="relative w-[55%]">
-                <SearchBar onResults={handleResults} />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:flex items-center justify-between gap-4 w-full">
+              <div className="relative w-[90%] md:w-[70%] lg:w-[50%]">
+                <CiSearch className="absolute top-3 left-3" />
+                <input
+                  type="text"
+                  className="px-8 py-2 border w-full rounded-full text-sm border-gray-300"
+                  placeholder="Search"
+                  onChange={(e) => setSearchterm(e.target.value)}
+                />
               </div>
-              {selectedItems.length >= 2 && <MdDelete size={26} />}
-              <div className="py-3 px-4 text-left font-medium text-sm text-gray-500 flex flex-col items-center space-y-1">
-                <span className="font-semibold">sorting</span>
-                <div className="flex space-x-2">
-                  {/* Down Arrow (for Sorting) */}
-                  <button
-                    className="text-gray-500 hover:text-green-700 "
-                    onClick={() => {
-                      setOrder("desc");
-                    }}
-                  >
-                    <FaArrowDownLong size={14} />
-                  </button>
 
-                  {/* Up Arrow (for Sorting) */}
-                  <button
-                    className="text-gray-500 hover:text-red-700"
-                    onClick={() => {
-                      setOrder("asc");
-                    }}
-                  >
-                    <FaArrowUpLong size={14} />
-                  </button>
-                </div>
-              </div>
-              <div className="flex max-lg:flex-col gap-2">
+              <div className="flex items-center gap-4 w-full md:w-auto justify-center">
                 <button
-                  className="bg-white text-nowrap font-semibold border shadow-md text-black py-2 px-4 rounded-md mr-2"
-                  onClick={onDownloadAllClick}
+                  className="text-gray-500 hover:text-blue-700 transition flex items-center space-x-1 text-sm"
+                  onClick={() => setOrder(order === "asc" ? "desc" : "asc")}
                 >
-                  Download all
+                  <FaSort size={14} />
+                  <span>
+                    {order === "asc" ? "Oldest First" : "Newest First"}
+                  </span>
+                </button>
+
+                {/* Status Sorting Button */}
+                <button
+                  className="flex items-center gap-1 text-gray-600 text-xs px-2 py-1 border border-gray-300 rounded-md hover:bg-gray-100 transition"
+                  onClick={handleSortByStatus}
+                >
+                  <span className="text-blue-500 font-semibold text-xs">
+                    {statusOrder === "asc" ? "⬆ Pending" : "⬆ Approved"}
+                  </span>
                 </button>
               </div>
-              <button
-                className="text-sm font-semibold  bg-[#5A00A0] text-white py-2 px-3 w-24 h-10 rounded-lg shadow-lg  hover:shadow-xl "
-                onClick={handleOpenPopup}
-              >
-                Add User
-              </button>
+
+              <div className="flex gap-2 w-full md:w-auto lg:w-auto justify-end">
+                <button
+                  className="bg-white text-nowrap font-semibold border shadow-md text-black py-1.5 px-3 rounded-md hover:bg-gray-100 text-sm w-full md:w-auto"
+                  onClick={onDownloadAllClick}
+                >
+                  Download
+                </button>
+                <button
+                  className="text-sm font-semibold bg-[#5A00A0] text-white py-1.5 px-3 rounded-lg shadow-lg hover:shadow-xl w-full md:w-auto"
+                  onClick={handleOpenPopup}
+                >
+                  Add
+                </button>
+              </div>
             </div>
           </div>
-          <div className="flex justify-between px-4">
-            <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-3 items-center justify-center">
+
+          <div className="flex justify-center px-4">
+            <div className="flex flex-wrap justify-center gap-2 md:gap-3">
+              {/* All Users Button */}
               <button
                 onClick={() => handleTableList("All")}
                 className={`${
                   userType === "All"
                     ? "bg-[#4B0082] text-white"
                     : "bg-white text-[#4B0082]"
-                } rounded-t-2xl text-sm py-2 px-4 w-full md:w-40 font-medium flex gap-2 justify-center items-center`}
+                } rounded-t-2xl text-sm py-2 px-4 w-full sm:w-36 md:w-40 font-medium flex gap-2 justify-center items-center`}
               >
                 <span>All</span>
                 {userType === "All" && (
-                  <span
-                    className={`text-xs font-bold px-2 rounded-md ${
-                      userType === "All"
-                        ? "bg-white text-[#4B0082]"
-                        : "bg-[#4B0082] text-white"
-                    }`}
-                  >
+                  <span className="text-xs font-bold px-2 rounded-md bg-white text-[#4B0082]">
                     {dataList?.pagination?.totalUsers || 0}
                   </span>
                 )}
               </button>
+
+              {/* Employees Button */}
               <button
                 onClick={() => handleTableList("Employees")}
                 className={`${
                   userType === "Employees"
                     ? "bg-[#4B0082] text-white"
                     : "bg-white text-[#4B0082]"
-                } rounded-t-2xl text-sm py-2 px-4 w-full md:w-40 font-medium flex gap-2 justify-center items-center`}
+                } rounded-t-2xl text-sm py-2 px-4 w-full sm:w-36 md:w-40 font-medium flex gap-2 justify-center items-center`}
               >
                 <span>Employees</span>
                 {userType === "Employees" && (
-                  <span
-                    className={`text-xs font-bold px-2 rounded-md ${
-                      userType === "Employees"
-                        ? "bg-white text-[#4B0082]"
-                        : "bg-[#4B0082] text-white"
-                    }`}
-                  >
+                  <span className="text-xs font-bold px-2 rounded-md bg-white text-[#4B0082]">
                     {dataList?.pagination?.totalUsers || 0}
                   </span>
                 )}
               </button>
+
+              {/* Students Button */}
               <button
                 onClick={() => handleTableList("Students")}
                 className={`${
                   userType === "Students"
                     ? "bg-[#4B0082] text-white"
                     : "bg-white text-[#4B0082]"
-                } rounded-t-2xl text-sm py-2 px-4 w-full md:w-40 font-medium flex gap-2 justify-center items-center`}
+                } rounded-t-2xl text-sm py-2 px-4 w-full sm:w-36 md:w-40 font-medium flex gap-2 justify-center items-center`}
               >
                 <span>Students</span>
                 {userType === "Students" && (
-                  <span
-                    className={`text-xs font-bold px-2 rounded-md ${
-                      userType === "Students"
-                        ? "bg-white text-[#4B0082]"
-                        : "bg-[#4B0082] text-white"
-                    }`}
-                  >
+                  <span className="text-xs font-bold px-2 rounded-md bg-white text-[#4B0082]">
                     {dataList?.pagination?.totalUsers || 0}
                   </span>
                 )}
@@ -388,14 +405,25 @@ const Member = () => {
                 </th>
 
                 <th className="py-3 px-4 text-left font-medium text-sm text-gray-500">
-                  Actions
+                  Delete
+                </th>
+
+                <th className="py-3 px-4 text-left font-medium text-sm text-gray-500">
+                  Action
                 </th>
               </tr>
             </thead>
             <tbody>
-              {dataList &&
+              {loading ? (
+                <tr>
+                  <td colSpan="10" className="text-center p-4">
+                    Loading...
+                  </td>
+                </tr>
+              ) : (
+                dataList &&
                 dataList?.users &&
-                dataList?.users?.slice(0, 7).map((item, index) => (
+                dataList?.users?.slice(0, 10).map((item, index) => (
                   <tr key={index} className="border-b border-gray-200 h-16">
                     <td className="p-2 px-4 font-medium text-sm text-gray-600">
                       <input
@@ -404,15 +432,15 @@ const Member = () => {
                         onChange={() => handleSelectItem(item.id)}
                       />
                     </td>
-                    <td className="p-2 font-medium text-sm text-gray-600  max-w-52 ">
-                      <td className="flex items-center gap-1 whitespace-nowrap overflow-hidden text-ellipsis">
+                    <td className="p-2 font-medium text-sm text-gray-600 max-w-52">
+                      <div className="flex items-center gap-1 whitespace-nowrap overflow-hidden text-ellipsis">
                         {item.fullName}
-                      </td>
+                      </div>
                     </td>
-                    <td className="p-2 font-medium text-sm text-gray-400 ">
+                    <td className="p-2 font-medium text-sm text-gray-400">
                       {item.aideoaIdNo}
                     </td>
-                    <td className="p-2 font-medium text-sm text-gray-400 ">
+                    <td className="p-2 font-medium text-sm text-gray-400">
                       {item.mobile}
                     </td>
                     <td className="p-2 font-medium text-sm text-gray-400">
@@ -427,29 +455,33 @@ const Member = () => {
                     <td className="p-2 font-medium text-sm text-gray-400">
                       {item.organization}
                     </td>
-                    <td className="p-2 font-medium text-xs ">
-                      <td
-                        className={` rounded-full px-1 mb-1 ${
+                    <td className="p-2 font-medium text-xs">
+                      <span
+                        className={`rounded-full px-1 mb-1 ${
                           item.idCardStatus === "APPROVED"
-                            ? "bg-green-100 text-green-700 "
-                            : item.idCardStatus == "PENDING"
+                            ? "bg-green-100 text-green-700"
+                            : item.idCardStatus === "PENDING"
                             ? "bg-yellow-100 text-yellow-700"
                             : "bg-red-100 text-red-700"
                         }`}
                       >
-                        {item.idCardStatus === "APPROVED"
-                          ? "APPROVED"
-                          : item.idCardStatus == "PENDING"
-                          ? "PENDING"
-                          : "REJECTED"}
-                      </td>
+                        {item.idCardStatus}
+                      </span>
                     </td>
                     <td className="p-2 font-medium text-sm text-gray-600 cursor-pointer">
                       <button
-                        onClick={() => viewIdProof(item.idCard)} // URL or identifier for the ID proof PDF
+                        onClick={() => viewIdProof(item.idCard)}
                         className="underline text-[#5A00A0] px-4 py-2 rounded"
                       >
                         View
+                      </button>
+                    </td>
+                    <td className="p-2 font-medium text-sm text-gray-600 cursor-pointer">
+                      <button
+                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                        onClick={() => handleDelete(item.id)} // Delete button
+                      >
+                        <MdDelete size={20} />
                       </button>
                     </td>
                     <td
@@ -463,7 +495,8 @@ const Member = () => {
                       <BsThreeDotsVertical />
                     </td>
                   </tr>
-                ))}
+                ))
+              )}
             </tbody>
           </table>
           {viewingPdf && <div className="pdf-modal-overlay"></div>}
@@ -477,7 +510,6 @@ const Member = () => {
           )}
         </div>
 
-        {/* Dropdown menu */}
         {showMenu && (
           <div
             className="absolute bg-white border border-gray-200 rounded shadow-md"
@@ -523,12 +555,6 @@ const Member = () => {
                 onClick={() => alert("Suspend clicked")}
               >
                 Suspend
-              </li>
-              <li
-                className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-red-600"
-                onClick={() => alert("Delete clicked")}
-              >
-                Delete
               </li>
             </ul>
           </div>
