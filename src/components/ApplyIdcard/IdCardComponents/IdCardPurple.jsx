@@ -113,14 +113,14 @@ const IdCardPurple = ({data}) => {
                 <img src="/images/logo.png" className="h-[50px] w-[50px]" alt="logo" />
               </div>
               <p className="absolute top-4 left-6 mx-2 px-3 text-sm text-white text-center font-semibold">
-                All india diploma engineers & Officials Association (AIDEOA)
+                All India Diploma Engineers & Officials Association (AIDEOA)
               </p>
 
               <div className="h-[266px] w-[391px] ">
                 <img
                   // src={userImageBase64}
                   src={data.image}
-                  className="absolute border-[2px] border-purple-400 h-[144px] w-[144px] top-[130px] left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full bg-white"
+                  className="absolute border-[2px] border-purple-400 h-[144px] w-[144px] top-[135px] left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full bg-white"
                   alt="i"
                 />
                 <p className="my-10px absolute text-[20px] top-[220px] left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center font-bold">
@@ -143,7 +143,7 @@ const IdCardPurple = ({data}) => {
                     </div>
                     <div className="flex justify-start items-start">
                       <h4 className="font-bold mx-1">Address :</h4>
-                      <p>{data?.address}</p>
+                      <p className="break-words whitespace-normal w-[180px] text-left">{data?.address}</p>
                     </div>
                   </div>
                 </div>
@@ -186,7 +186,7 @@ const IdCardPurple = ({data}) => {
                 <img src="/images/logo.png" className="h-[50px] w-[50px]" alt="logo" />
               </div>
               <p className="absolute top-4 left-6 mx-2 px-3 text-sm text-white text-center font-semibold">
-                All india diploma engineers & Officials Association (AIDEOA)
+                All India Diploma Engineers & Officials Association (AIDEOA)
               </p>
 
               <div className="max-xsm:w-full max-xsm:p-[10px] relative top-[-40px] px-6 py-4 h-[266px] w-[391px]">

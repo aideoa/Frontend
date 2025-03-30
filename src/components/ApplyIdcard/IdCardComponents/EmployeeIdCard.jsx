@@ -86,13 +86,13 @@ const EmployeeIdCard = ({ data }) => {
             className={`bg-red-200 absolute   ${show ? " z-10" : " z-0"
               } border border-gray-500 rounded-[30px] overflow-hidden max-xsm:w-[90%]`}
           >
-            <div className="relative min-height-[549px]">
+            <div className="relative min-height-[549px] ">
               <img
                 src={"/card/lower.svg"}
                 className="max-xsm:w-full"
                 alt="lower"
               />
-              <div className="absolute flex top-[10px]">
+              <div className="absolute flex top-[10px] ">
                 <img
                   src="/images/logo.png"
                   className="h-[50px] w-[50px]"
@@ -100,13 +100,13 @@ const EmployeeIdCard = ({ data }) => {
                 />
               </div>
               <p className="absolute top-4 left-6 mx-2 px-3 text-sm text-white text-center font-semibold">
-                All india diploma engineers & Officials Association (AIDEOA)
+                All India Diploma Engineers & Officials Association (AIDEOA)
               </p>
 
-              <div className="h-[266px] w-[391px] ">
+              <div className="h-[266px] w-[391px]">
                 <img
                   src={data?.image || "/user1.png"}
-                  className="absolute border-[2px] border-red-200 h-[144px] w-[144px] top-[130px] left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full bg-white"
+                  className="absolute border-[2px] border-red-200 h-[144px] w-[144px] top-[135px] left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full bg-white"
                   alt="i"
                 />
                 <p className="my-10px absolute text-[20px] top-[220px] left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center font-bold">
@@ -128,7 +128,7 @@ const EmployeeIdCard = ({ data }) => {
                     </div>
                     <div className="flex justify-start items-start">
                       <h4 className="font-bold mx-1">Address :</h4>
-                      <p>{data?.address ? data.address : 'N/A'}</p>
+                      <p className="break-words whitespace-normal w-[180px] text-left">{data?.address ? data.address : 'N/A'}</p>
                     </div>
                   </div>
                 </div>
@@ -183,7 +183,7 @@ const EmployeeIdCard = ({ data }) => {
                 />
               </div>
               <p className="absolute top-4 left-6 mx-2 px-3 text-sm text-white text-center font-semibold">
-                All india diploma engineers & Officials Association (AIDEOA)
+                All India Diploma Engineers & Officials Association (AIDEOA)
               </p>
 
               <div className="max-xsm:w-full max-xsm:p-[10px] relative top-[-40px] px-6 py-4 h-[266px] w-[391px]">
