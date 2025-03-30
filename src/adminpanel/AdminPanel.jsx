@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import AdminNavbar from "./AdminNavbar";
 import AdminSidebar from "./AdminSidebar";
 
@@ -22,17 +22,28 @@ import Missions from "./components/missions/Misisions";
 import AddMissions from "./components/missions/AddMission";
 import UpdateMissions from "./components/missions/UpdateMissions";
 import MutualRequest from "./components/mutualrequest/MutualRequest";
-
+import { AdminAuthContext } from "../context/adminAuthContext";
 import LatestNews from "../components/Admin_panel/LatestNews/LatestNews.jsx";
 import AddLatestNews from "../components/Admin_panel/LatestNews/AddLatestNews.jsx";
 import Donation from "./components/donation/Donation";
+import SubAdmin from "./components/SubAdmin/SubAdmin";
 
 const AdminPanel = () => {
   const [activeComponent, setActiveComponent] = useState("Dashboard");
   const [eventsData, setEventsData] = useState();
   const [missionData, setMissionData] = useState();
+  const { admin ,  getUser } = useContext(AdminAuthContext);
+
+  useEffect(()=>{
+    getUser();
+  },[]);
+
+  console.log(admin)
   const renderComponent = () => {
     switch (activeComponent) {
+      case "SubAdmin":
+        if (admin?.role === 'admin')
+          return <SubAdmin />;
       case "Dashboard":
         return <Main setActiveComponent={setActiveComponent} />;
       case "Events":
@@ -125,6 +136,7 @@ const AdminPanel = () => {
         <AdminSidebar
           activeComponent={activeComponent}
           setActiveComponent={setActiveComponent}
+          admin={admin}
         />
       </div>
       <div className="lg:w-[80%] max-lg:w-[90%] h-screen bg-gray-200 overflow-y-auto">
