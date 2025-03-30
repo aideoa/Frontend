@@ -17,18 +17,20 @@ const AdminAuthContextProvider = ({ children }) => {
     return token ? jwtDecode(token) : null;
   });
 
+  const [admin, setAdmin] = useState(null); 
+
   const navigate = useNavigate();
 
   const handleLogin = async (formData) => {
     try {
       const resp = await axios.post(`${db_url}/api/admin/login`, formData);
       const token = resp.data;
-
       if (resp.status === 200 && token) {
         setAuthToken(token);
         setAdminUser(jwtDecode(token));
         localStorage.setItem("adminAuthToken", JSON.stringify(token));
         toast.success("LoggedIn");
+        getUser();
         navigate("/admin/dashboard");
       } else {
         throw new Error("Something went wrong");
@@ -48,12 +50,17 @@ const AdminAuthContextProvider = ({ children }) => {
 
   const getUser = async () => {
     try {
+    
       const user = await axios.get(`${db_url}/api/admin/getuser`, {
         headers: {
-          Authorization: `Bearer ${adminAuthToken}`,
+          Authorization: `Bearer ${localStorage.getItem("adminAuthToken")?.trim().replace(/^"|"$/g, '')}`,
         },
       });
-      if (user.status !== 200) handleLogout();
+      if (user.status === 200) {
+        setAdmin(user.data); 
+      } else {
+        handleLogout();
+      }
     } catch (error) {
       console.error("Failed to fetch user:", error);
       handleLogout();
@@ -75,12 +82,11 @@ const AdminAuthContextProvider = ({ children }) => {
       isTokenExpired();
     }
 
-    
   }, [adminAuthToken]);
 
   return (
     <AdminAuthContext.Provider
-      value={{ handleLogin, adminUser, adminAuthToken, handleLogout }} // Include handleLogout here
+      value={{ handleLogin, adminUser, adminAuthToken, handleLogout , getUser , admin}} // Include handleLogout here
     >
 
       {children}

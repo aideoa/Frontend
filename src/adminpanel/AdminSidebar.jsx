@@ -8,7 +8,8 @@ import { PiIdentificationBadgeDuotone } from "react-icons/pi";
 import { SiChainlink } from "react-icons/si";
 import { BiTransferAlt } from "react-icons/bi";
 import { GoGoal } from "react-icons/go";
-import { FaNewspaper } from "react-icons/fa";  
+import { FaNewspaper } from "react-icons/fa";
+import { TiUserOutline, TiUserAddOutline, TiUserDeleteOutline } from "react-icons/ti";
 
 const sidebar = [
   { icon: IoMdHome, heading: "Dashboard" },
@@ -24,37 +25,62 @@ const sidebar = [
   // { icon: PiIdentificationBadgeDuotone, heading: "ID Card" },
   { icon: FaBell, heading: "Newsletter" },
 
-  // { icon: BiTransferAlt , heading: "Mutual Request" },
-
   { icon: GoGoal, heading: "Our Missions" },
 
 ];
 
-
-const AdminSidebar = ({ sidebarRef, handleScroll, activeComponent, setActiveComponent }) => {
+const AdminSidebar = ({ sidebarRef, handleScroll, activeComponent, setActiveComponent, admin }) => {
   return (
     <div className="bg-white w-full h-screen overflow-y-auto">
       <div className='bg-white w-[10%] lg:w-[20%] h-16 flex justify-center items-center fixed top-0 border-b z-10 left-0'>
-    <div className="flex items-center">
-      <img 
-        src="/AIDEOA LOGO 3.png" 
-        className="w-8" 
-        alt="Logo" 
-      /> 
-      <span className="text-[#5A2175] text-2xl font-bold hidden lg:inline ml-2">AIDEOA</span>
-    </div>
-  </div>
+        <div className="flex items-center">
+          <img
+            src="/AIDEOA LOGO 3.png"
+            className="w-8"
+            alt="Logo"
+          />
+          <span className="text-[#5A2175] text-2xl font-bold hidden lg:inline ml-2">AIDEOA</span>
+        </div>
+      </div>
 
       <div className="pt-20 px-2 lg:px-4" ref={sidebarRef} onScroll={handleScroll}>
         <ul className="flex flex-col gap-1 lg:gap-2">
+          {admin?.role === 'admin' &&
+            <li
+            key={"SubAdmin"}
+              className={`flex justify-between items-center p-2 lg:p-3 rounded-lg cursor-pointer transition-colors ${activeComponent === "SubAdmin"
+                ? "bg-[#5A2175] text-white"
+                : "hover:bg-gray-100"
+                }`}
+              onClick={() => setActiveComponent("SubAdmin")}
+            >
+              <div className="flex items-center justify-start">
+                <TiUserOutline
+                  className={`w-5 h-5 lg:w-6 lg:h-6 ${activeComponent === "SubAdmin" ? "text-white" : "text-black"
+                    }`}
+                  title={"SubAdmin"}
+                />
+                <i className="fas fa-user-gear"></i>
+                <span
+                  className={`ml-3 text-sm lg:text-base font-medium hidden lg:inline ${activeComponent === "SubAdmin"
+                    ? "text-white"
+                    : "text-[#5A2175]"
+                    }`}
+                >
+                  {"SubAdmin"}
+                </span>
+              </div>
+              <span className="max-lg:hidden text-sm">{">"}</span>
+            </li>
+          }
           {sidebar.map((item, index) => {
             const Icon = item.icon;
             return (
               <li
                 key={index}
                 className={`flex justify-between items-center p-2 lg:p-3 rounded-lg cursor-pointer transition-colors ${activeComponent === item.heading
-                    ? "bg-[#5A2175] text-white"
-                    : "hover:bg-gray-100"
+                  ? "bg-[#5A2175] text-white"
+                  : "hover:bg-gray-100"
                   }`}
                 onClick={() => setActiveComponent(item.heading)}
               >
@@ -66,8 +92,8 @@ const AdminSidebar = ({ sidebarRef, handleScroll, activeComponent, setActiveComp
                   />
                   <span
                     className={`ml-3 text-sm lg:text-base font-medium hidden lg:inline ${activeComponent === item.heading
-                        ? "text-white"
-                        : "text-[#5A2175]"
+                      ? "text-white"
+                      : "text-[#5A2175]"
                       }`}
                   >
                     {item.heading}
