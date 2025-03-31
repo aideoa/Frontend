@@ -102,12 +102,6 @@ const Query = () => {
               />
             </div>
             {selectedItems.length >= 2 && <MdDelete size={26} />}
-            {/* <div className="flex max-lg:flex-col gap-2">
-              <button className="bg-white text-nowrap font-semibold border shadow-md text-black py-2 px-4 rounded-md mr-2">
-                Download all
-              </button>
-
-            </div> */}
           </div>
         </div>
 
