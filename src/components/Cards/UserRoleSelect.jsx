@@ -10,7 +10,7 @@ const url = `${import.meta.env.VITE_API_BACKEND_URL}/api/auth`;
 
 const imageKitUrl = "https://upload.imagekit.io/api/v1/files/upload";
 const authEndpoint = `${import.meta.env.VITE_API_BACKEND_URL}/image`;
-const publicKey = "public_H+DpeRbktD9PNybblai4CYtHvGg=";
+const publicKey = "public_d+jYs3JptHK72lo1x+Qe2Ax7V5Y=";
 
 const UserRoleSelect = ({ userTypemodal, setUserTypeModal, formData }) => {
    const [userType, setUserType] = useState("");
