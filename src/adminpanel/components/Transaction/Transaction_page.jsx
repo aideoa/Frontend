@@ -19,8 +19,13 @@ const TransactionPage = () => {
 
   console.log(currentPage);
   useEffect(() => {
-    fetchData(searchTerm, 8);
-  }, [currentPage, searchTerm]);
+
+    fetchData(searchTerm, 8 );
+  }, [currentPage , searchTerm]);
+
+  // Pagination Data
+  // const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  // const currentPageData = data.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   // Select All Logic
   const handleSelectAll = () => {
