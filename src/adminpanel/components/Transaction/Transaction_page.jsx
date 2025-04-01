@@ -98,7 +98,7 @@ const TransactionPage = () => {
         <div className="flex px-4 flex-col">
           <div className="flex space-x-4 mb-4 items-center">
             <div className="flex w-[34%] h-[40%] items-center gap-2">
-              <h3 className="h-full text-[18px] font-[500]">Transactions</h3>
+              <h3 className="h-full text-[18px] font-[500]">Membership</h3>
               <p className="text-[14px] px-3 text-purple-800 rounded-lg bg-purple-200">
                 {pagination?.totalMembershipFees || 0} trans
               </p>

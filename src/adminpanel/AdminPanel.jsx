@@ -67,7 +67,7 @@ const AdminPanel = () => {
             setEventsData={setEventsData}
           />
         );
-      case "Transaction":
+      case "Membership":
         return <Transaction_page />;
       case "Resource":
         return <Resources setActiveComponent={setActiveComponent} />;

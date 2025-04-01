@@ -14,7 +14,7 @@ import { TiUserOutline, TiUserAddOutline, TiUserDeleteOutline } from "react-icon
 const sidebar = [
   { icon: IoMdHome, heading: "Dashboard" },
   { icon: IoIosPersonAdd, heading: "Members" },
-  { icon: RiMoneyRupeeCircleLine, heading: "Transaction" },
+  { icon: RiMoneyRupeeCircleLine, heading: "Membership" },
   { icon: RiMoneyRupeeCircleLine, heading: "Donation" },
   { icon: SlCalender, heading: "Events" },
   { icon: TiDocumentText, heading: "Resource" },

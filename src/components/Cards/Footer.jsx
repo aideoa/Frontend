@@ -129,7 +129,7 @@ const Footer = () => {
             </div>
 
            
-            <div className="  bg-red-200 w-1/2 bg-red-200 lg:min-w-80 bg-gray-400 relative bg-blue-200 lg:rounded-2xl max-h-full max-lg:h-64 rounded-2xl overflow-hidden max-lg:w-full opacity-70 hover:opacity-95  cursor-pointer">
+            <div className="  bg-red-200 w-1/2  lg:min-w-80 relative  lg:rounded-2xl max-h-full max-lg:h-64 rounded-2xl overflow-hidden max-lg:w-full opacity-70 hover:opacity-95  cursor-pointer">
 
 
             
@@ -171,7 +171,7 @@ const Footer = () => {
       </div>
 
       <div className="text-center text-gray-400 text-sm mt-10">
-        © Copyright ©2024 All rights reserved | Powered by AIDEOA
+        © Copyright ©2024 All rights reserved | Powered by <span className="hover:underline hover:text-gray-300"><a href="https://www.hackfusion.in/"> HackFusion Pvt. Ltd.</a></span> 
       </div>
     </footer>
   );
