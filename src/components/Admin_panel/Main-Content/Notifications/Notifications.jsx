@@ -9,6 +9,7 @@ import { LuUploadCloud } from "react-icons/lu";
 import Pagination from "../../Pagination/Pagination";
 import { MdDelete } from "react-icons/md";
 import axios from "axios";
+import * as XLSX from "xlsx";
 
 const Notifications = () => {
   const [mailsData, setMailsData] = useState();
@@ -22,18 +23,13 @@ const Notifications = () => {
 
   const handleSelectAll = () => {
     const currentPageIds = mailsData?.emails?.slice(0, limit).map((email) => email.id) || [];
-  
     if (selectAll) {
-      // Deselect only the emails on the current page
       setSelectedItems((prevSelected) => prevSelected.filter((id) => !currentPageIds.includes(id)));
     } else {
-      // Select only the emails on the current page that are not already selected
       setSelectedItems((prevSelected) => [...new Set([...prevSelected, ...currentPageIds])]);
     }
-  
     setSelectAll(!selectAll);
   };
-  
 
   const handleSelectItem = (index) => {
     if (selectedItems.includes(index)) {
@@ -45,29 +41,21 @@ const Notifications = () => {
 
   const fetchMails = async (currentPage, limit) => {
     try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_API_BACKEND_URL}/api/notification`,
-        {
-          params: {
-            page: currentPage,
-            limit,
-          },
-        }
-      );
-      console.log(res);
+      const res = await axios.get(`${import.meta.env.VITE_API_BACKEND_URL}/api/notification`, {
+        params: { page: currentPage, limit },
+      });
       if (res.status === 200) {
         setMailsData(res.data);
-      } else {
-        console.error(`Unexpected response status: ${res.status}`);
       }
     } catch (error) {
-      console.log(error);
-      throw new Error("Something went wrong");
+      console.error("Error fetching mails:", error);
     }
   };
+
   useEffect(() => {
     fetchMails(currentPage, limit);
   }, [currentPage, limit]);
+
   const handleNextPage = () => {
     console.log(currentPage);
     setCurrentPage((prev) => {
@@ -86,6 +74,47 @@ const Notifications = () => {
       return prev;
     });
   };
+
+  const handleDownloadEmails = async () => {
+    try {
+      let allEmails = [];
+      let currentPage = 1;
+      let totalPages = 1;
+  
+      // Fetch all emails from the API (iterate through all pages)
+      while (currentPage <= totalPages) {
+        const res = await axios.get(`${import.meta.env.VITE_API_BACKEND_URL}/api/notification`, {
+          params: {
+            page: currentPage,
+            limit: 100, // Fetching a large batch of emails per request
+          },
+        });
+  
+        if (res.status === 200) {
+          allEmails = [...allEmails, ...res.data.emails];
+          totalPages = res.data.pagination.totalPages; // Update total pages count
+        } else {
+          console.error(`Unexpected response status: ${res.status}`);
+          return;
+        }
+  
+        currentPage++;
+      }
+  
+      if (allEmails.length === 0) return;
+  
+      // Convert data to an Excel format
+      const worksheet = XLSX.utils.json_to_sheet(allEmails.map((email) => ({ "Email Address": email.address })));
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Emails");
+  
+      // Trigger file download
+      XLSX.writeFile(workbook, "emails.xlsx");
+    } catch (error) {
+      console.error("Error fetching all emails:", error);
+    }
+  };
+
   return (
 
     <div style={{ marginTop: "50px" }}>
@@ -109,6 +138,12 @@ const Notifications = () => {
               />
             </div> */}
               {mailsData?.emails?.length >= 2 && <MdDelete size={26} />}
+              <button
+              onClick={handleDownloadEmails}
+              className="bg-white font-semibold border shadow-md text-black  hover:bg-purple-800 hover:text-white py-2 px-4 rounded-md"
+            >
+              Download All Emails
+            </button>
               <div className="flex max-lg:flex-col gap-2">
                 {/* <button className="bg-white text-nowrap font-semibold border shadow-md text-black py-2 px-4 rounded-md mr-2">
                   Download all
