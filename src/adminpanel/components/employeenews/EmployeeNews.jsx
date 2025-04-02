@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-
 import { CiSearch } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
 
@@ -11,12 +10,12 @@ import useEmployeeNews from "../../../hooks/useEmployeeNews";
 
 import { usePage } from "../../../context/PageContext";
 
-const EmployeeNews = ({ setActiveComponent,setEmployeeData }) => {
+const EmployeeNews = ({ setActiveComponent, setEmployeeData }) => {
   const { currentPage, setCurrentPage } = usePage();
   const { news, pagination, loading, deletenews } = useEmployeeNews();
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
-  const itemsPerPage = 8;
+  const itemsPerPage = 7;
   const totalPages = pagination ? pagination.totalPages : 0;
 
   const handleSelectAll = () => {
@@ -43,7 +42,6 @@ const EmployeeNews = ({ setActiveComponent,setEmployeeData }) => {
     setSelectAll(!selectAll);
   };
 
-
   const handleSelectItem = (index) => {
     const globalIndex = (currentPage - 1) * itemsPerPage + index;
     setSelectedItems((prev) =>
@@ -58,7 +56,7 @@ const EmployeeNews = ({ setActiveComponent,setEmployeeData }) => {
       const globalIndex = index - (currentPage - 1) * itemsPerPage;
       const newsId = news[globalIndex]?.id;
       if (newsId) {
-        deletenews(newsId);  // Deleting each selected news item
+        deletenews(newsId); // Deleting each selected news item
       }
     });
     setSelectedItems([]); // Clear selected items after deletion
@@ -84,13 +82,20 @@ const EmployeeNews = ({ setActiveComponent,setEmployeeData }) => {
               placeholder="Search"
             />
           </div> */}
-          {selectedItems.length >= 2 && <MdDelete size={26} className="cursor-pointer"
-            onClick={handleDeleteSelected} />}
+          {selectedItems.length >= 2 && (
+            <MdDelete
+              size={26}
+              className="cursor-pointer"
+              onClick={handleDeleteSelected}
+            />
+          )}
           <div className="flex max-lg:flex-col gap-2">
-            <button onClick={() => setActiveComponent("Add Employeenews")} className="bg-[#4B0082] text-nowrap font-semibold border shadow-md text-white py-2 px-4 rounded-md mr-2">
+            <button
+              onClick={() => setActiveComponent("Add Employeenews")}
+              className="bg-[#4B0082] text-nowrap font-semibold border shadow-md text-white py-2 px-4 rounded-md mr-2"
+            >
               Create
             </button>
-
           </div>
         </div>
       </div>
@@ -117,40 +122,45 @@ const EmployeeNews = ({ setActiveComponent,setEmployeeData }) => {
                 Category
               </th>
 
-
-              <th className="py-3 px-4 text-left font-medium text-sm text-gray-500">Actions</th>
+              <th className="py-3 px-4 text-left font-medium text-sm text-gray-500">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody>
-            {news.length > 0 ? news.map((item, index) => (
-              <tr key={index} className="border-b border-gray-200 h-16">
-                <td className="p-2 px-4 font-medium text-sm text-gray-600">
-                  <input
-                    type="checkbox"
-                    className="checked:bg-purple-500 checked:border-purple-500 size-4 bg-col"
-                    checked={selectedItems.includes(index)}
-                    onChange={() => handleSelectItem(index)}
-                  />
-                </td>
-                <td className="p-2 font-medium text-sm text-gray-600 max-w-52 whitespace-nowrap overflow-hidden text-ellipsis">
-                  {item.title}
-                </td>
-                <td className="p-2 font-medium text-sm text-gray-400">
-                  {item.description}
-                </td>
-                <td className="p-2 font-medium text-sm text-gray-400">
-                  {item.category}
-                </td>
+            {news.length > 0 ? (
+              news.map((item, index) => (
+                <tr key={index} className="border-b border-gray-200 h-16">
+                  <td className="p-2 px-4 font-medium text-sm text-gray-600">
+                    <input
+                      type="checkbox"
+                      className="checked:bg-purple-500 checked:border-purple-500 size-4 bg-col"
+                      checked={selectedItems.includes(index)}
+                      onChange={() => handleSelectItem(index)}
+                    />
+                  </td>
+                  <td className="p-2 font-medium text-sm text-gray-600 max-w-52 whitespace-nowrap overflow-hidden text-ellipsis">
+                    {item.title}
+                  </td>
+                  <td className="p-2 font-medium text-sm text-gray-400">
+                    {item.description}
+                  </td>
+                  <td className="p-2 font-medium text-sm text-gray-400">
+                    {item.category}
+                  </td>
 
-                <td className="p-2 flex font-medium text-center w-full text-sm justify-around h-16 items-center  text-gray-600 cursor-pointer">
-                  <RiDeleteBin6Line onClick={() => deletenews(item.id)} />
-                  <FiEdit2 onClick={() => {
-                    setActiveComponent("Update Employeenews");
-                    setEmployeeData(item);
-                  }}/>
-                </td>
-              </tr>
-            )) : (
+                  <td className="p-2 flex font-medium text-center w-full text-sm justify-around h-16 items-center  text-gray-600 cursor-pointer">
+                    <RiDeleteBin6Line onClick={() => deletenews(item.id)} />
+                    <FiEdit2
+                      onClick={() => {
+                        setActiveComponent("Update Employeenews");
+                        setEmployeeData(item);
+                      }}
+                    />
+                  </td>
+                </tr>
+              ))
+            ) : (
               <tr>
                 <td colSpan={5} className="text-center py-4 text-gray-500">
                   No news available
@@ -173,10 +183,11 @@ const EmployeeNews = ({ setActiveComponent,setEmployeeData }) => {
           {[...Array(totalPages).keys()].map((page) => (
             <button
               key={page}
-              className={`py-2 px-4 rounded-md shadow-md border ${currentPage === page + 1
+              className={`py-2 px-4 rounded-md shadow-md border ${
+                currentPage === page + 1
                   ? "bg-purple-700 text-white"
                   : "bg-white text-black"
-                }`}
+              }`}
               onClick={() => setCurrentPage(page + 1)}
             >
               {page + 1}

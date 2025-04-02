@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { LuUploadCloud } from "react-icons/lu";
 import { CiSearch } from "react-icons/ci";
-import { MdDelete } from "react-icons/md";
+import { RiDeleteBin6Line } from "react-icons/ri";
 import useLatestNews from "../../../Connection/LatestNewsapi";
 
 const Resources = ({ setActiveComponent }) => {
@@ -160,10 +160,10 @@ const Resources = ({ setActiveComponent }) => {
                   </td>
                   <td>
                     <button
-                      className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                      className="p-2 flex font-medium text-center w-full text-sm justify-around h-16 items-center text-gray-600 cursor-pointer"
                       onClick={() => handleDelete(item.id)}
                     >
-                      <MdDelete size={20} />
+                      <RiDeleteBin6Line size={20} />
                     </button>
                   </td>
                 </tr>

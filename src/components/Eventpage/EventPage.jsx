@@ -99,13 +99,6 @@ const EventPage = () => {
             content={newsItem.description}
           />
         ))}
-        <button
-          className="text-center font-semibold duration-300  text-lg text-gray-100 mx-auto bg-[#9333EA] hover:bg-midpurple p-4 rounded-full"
-          href="#"
-          onClick={() => setLimit(limit + 3)}
-        >
-          Read More...
-        </button>
       </div>
       <EmailNotiCard />
       <Footer />

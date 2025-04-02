@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-// Import MdDelete for deletion
+import React, { useState, useEffect } from "react";
 import OnlineTest from "./onlinetest/OnlineTest";
 import StudentCorner from "../components/studentnews/StudentNews";
 import AddTest from "./onlinetest/AddTest";
@@ -11,7 +10,6 @@ import Education from "./education/Education";
 import UpdateTest from "./onlinetest/Updatetest";
 import UpdateStudentNews from "./studentnews/UpdateStudent";
 import UpdateEmployeeNews from "./employeenews/UpdateNews";
-
 import UpdateVideo from "./education/UpdateVideo";
 import UpdateFile from "./education/UpdateFile";
 
@@ -22,8 +20,49 @@ const Resources = () => {
   const [employeeData, setEmployeeData] = useState();
   const [fileData, setFileData] = useState();
   const [videoData, setVideoData] = useState();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [counts, setCounts] = useState({
+    "Student Corner": 0,
+    "Employee Corner": 0,
+    Education: 0,
+    "Online Test": 0,
+  });
+
+  // Simulate loading counts (replace with actual API calls)
+  useEffect(() => {
+    const fetchCounts = async () => {
+      setIsLoading(true);
+      try {
+        // Simulate API delay
+        await new Promise((resolve) => setTimeout(resolve, 800));
+
+        // Replace with actual API calls to get counts
+        setCounts({
+          "Student Corner": 100,
+          "Employee Corner": 85,
+          Education: 42,
+          "Online Test": 63,
+        });
+      } catch (error) {
+        console.error("Error fetching counts:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCounts();
+  }, []);
 
   const renderComponent = () => {
+    if (isLoading) {
+      return (
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+        </div>
+      );
+    }
+
     switch (activeComponent) {
       case "Online Test":
         return (
@@ -39,21 +78,35 @@ const Resources = () => {
           <UpdateTest data={data} setActiveComponent={setActiveComponent} />
         );
       case "Education":
-        return <Education setFileData={setFileData} setVideoData={setVideoData} setActiveComponent={setActiveComponent} />;
+        return (
+          <Education
+            setFileData={setFileData}
+            setVideoData={setVideoData}
+            setActiveComponent={setActiveComponent}
+          />
+        );
       case "Add Education":
         return <AddEducation setActiveComponent={setActiveComponent} />;
       case "Update Video":
-        return <UpdateVideo  videoData={videoData} setActiveComponent={setActiveComponent} />;
+        return (
+          <UpdateVideo
+            videoData={videoData}
+            setActiveComponent={setActiveComponent}
+          />
+        );
       case "Update File":
-        return <UpdateFile  fileData={fileData} setActiveComponent={setActiveComponent} />;
+        return (
+          <UpdateFile
+            fileData={fileData}
+            setActiveComponent={setActiveComponent}
+          />
+        );
       case "Employee Corner":
         return (
-  
           <Employeecorner
             setEmployeeData={setEmployeeData}
             setActiveComponent={setActiveComponent}
           />
-      
         );
       case "Add Employeenews":
         return <AddEmployeeNews setActiveComponent={setActiveComponent} />;
@@ -66,7 +119,6 @@ const Resources = () => {
         );
       case "Student Corner":
         return (
-      
           <StudentCorner
             setStudentData={setStudentData}
             setActiveComponent={setActiveComponent}
@@ -85,164 +137,84 @@ const Resources = () => {
         return <></>;
     }
   };
+
+  const navItems = [
+    { name: "Student Corner", count: counts["Student Corner"] },
+    { name: "Employee Corner", count: counts["Employee Corner"] },
+    { name: "Education", count: counts["Education"] },
+    { name: "Online Test", count: counts["Online Test"] },
+  ];
+
   return (
-    <div className="rounded-xl pt-4 bg-gray-50 mt-16">
-      <div className="flex space-x-4 mb-4 px-4 max-lg:flex-col-reverse max-lg:gap-2">
-        <div className="flex space-x-4">
-          <div
-            onClick={() => setActiveComponent("Student Corner")}
-            className={`${
-              activeComponent === "Student Corner"
-                ? "bg-[#4B0082] text-white" // Active state
-                : "bg-white text-gray-700" // Inactive state
-            } text-center shadow-md rounded-xl flex flex-col justify-center items-center p-2 h-16 cursor-pointer`}
+    <div className="bg-gray-50 min-h-screen pt-20 px-4 pb-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Mobile Menu Button */}
+        <div className="lg:hidden mb-4">
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="flex items-center justify-between w-full px-4 py-3 bg-white rounded-lg shadow-md text-gray-700 font-medium"
           >
-            <p className="text-nowrap">Student Corner</p>
-            <p className="font-bold">100</p>
+            <span>{activeComponent}</span>
+            <svg
+              className={`w-5 h-5 transition-transform ${
+                mobileMenuOpen ? "transform rotate-180" : ""
+              }`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <div className={`${mobileMenuOpen ? "block" : "hidden"} lg:block mb-8`}>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 lg:flex lg:space-x-3">
+            {navItems.map((item) => (
+              <div
+                key={item.name}
+                onClick={() => {
+                  setActiveComponent(item.name);
+                  setMobileMenuOpen(false);
+                }}
+                className={`${
+                  activeComponent === item.name
+                    ? "bg-[#4B0082] text-white shadow-lg"
+                    : "bg-white text-gray-700 hover:bg-gray-100"
+                } rounded-xl shadow-md p-3 cursor-pointer transition-all duration-200 flex flex-col items-center`}
+              >
+                <p className="text-sm font-medium whitespace-nowrap">
+                  {item.name}
+                </p>
+                {isLoading ? (
+                  <div className="animate-pulse h-6 w-6 rounded-full bg-gray-200 mt-1"></div>
+                ) : (
+                  <p className="font-bold text-xs mt-1 px-2 py-1 bg-white/10 rounded-full">
+                    {item.count}
+                  </p>
+                )}
+              </div>
+            ))}
           </div>
-          <div
-            onClick={() => setActiveComponent("Employee Corner")}
-            className={`${
-              activeComponent === "Employee Corner"
-                ? "bg-[#4B0082] text-white" // Active state
-                : "bg-white text-gray-700" // Inactive state
-            } text-center shadow-md rounded-xl flex flex-col justify-center items-center p-2 h-16 cursor-pointer`}
-          >
-            <p className="text-nowrap">Employee Corner</p>
-            <p className="font-bold">100</p>
-          </div>
-          <div
-            onClick={() => setActiveComponent("Education")}
-            className={`${
-              activeComponent === "Education"
-                ? "bg-[#4B0082] text-white" // Active state
-                : "bg-white text-gray-700" // Inactive state
-            } text-center shadow-md rounded-xl flex flex-col justify-center items-center p-2 h-16 cursor-pointer`}
-          >
-            <p className="text-nowrap">Education</p>
-            <p className="font-bold">100</p>
-          </div>
-          <div
-            onClick={() => setActiveComponent("Online Test")}
-            className={`${
-              activeComponent === "Online Test"
-                ? "bg-[#4B0082] text-white" // Active state
-                : "bg-white text-gray-700" // Inactive state
-            } text-center shadow-md rounded-xl flex flex-col justify-center items-center p-2 h-16 cursor-pointer`}
-          >
-            <p className="text-nowrap">Online Test</p>
-            <p className="font-bold">100</p>
-          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="bg-white rounded-xl shadow-md overflow-hidden">
+          {isLoading ? (
+            <div className="flex justify-center items-center h-64">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+            </div>
+          ) : (
+            renderComponent()
+          )}
         </div>
       </div>
-
-      {/* <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border border-gray-300">
-          <thead>
-            <tr className="text-left border-b bg-gray-100 border-gray-200 h-16">
-              <th className="p-2 px-4 font-medium text-sm text-gray-200">
-                <input
-                  type="checkbox"
-                  className="checked:bg-purple-500 checked:border-purple-500 size-4 bg-col"
-                  checked={selectAll}
-                  onChange={handleSelectAll}
-                />
-              </th>
-              <th className="py-3 px-4 text-left font-medium text-sm text-gray-500  w-52">
-                Title
-              </th>
-             <th className="py-3 px-4 text-left font-medium text-sm text-gray-500 text-nowrap">
-                Event Date & Time
-              </th>
-             <th className="py-3 px-4 text-left font-medium text-sm text-gray-500">Days</th>
-             <th className="py-3 px-4 text-left font-medium text-sm text-gray-500">
-                Location
-              </th>
-             <th className="py-3 px-4 text-left font-medium text-sm text-gray-500">
-                Description
-              </th>
-              <th className="p-2 font-medium text-sm text-gray-600 max-w-32">
-                Url
-              </th>
-             <th className="py-3 px-4 text-left font-medium text-sm text-gray-500">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.slice(0, 7).map((item, index) => (
-              <tr key={index} className="border-b border-gray-200 h-16">
-                <td className="p-2 px-4 font-medium text-sm text-gray-600">
-                  <input
-                    type="checkbox"
-                    className="checked:bg-purple-500 checked:border-purple-500 size-4 bg-col"
-                    checked={selectedItems.includes(index)}
-                    onChange={() => handleSelectItem(index)}
-                  />
-                </td>
-                <td className="p-2 font-medium text-sm text-gray-600 max-w-52 whitespace-nowrap overflow-hidden text-ellipsis">
-                  {item.title}
-                </td>
-                <td className="p-2 font-medium text-sm text-gray-400">
-                  {item.eventDateTime}
-                </td>
-                <td className="p-2 font-medium text-sm text-gray-400">
-                  {item.days}
-                </td>
-                <td className="p-2 font-medium text-sm text-gray-400">
-                  {item.location}
-                </td>
-                <td className="p-2 font-medium text-sm text-gray-400">
-                  {item.description.substring(0, 20)}...
-                </td>
-                <td className="p-2 font-medium text-sm text-gray-400">
-                  <Link
-                    to={item.url}
-                    className="text-blue-500 max-w-32 whitespace-nowrap overflow-hidden text-ellipsis"
-                  >
-                    {item.url}
-                  </Link>
-                </td>
-                <td className="p-2 font-medium text-sm text-gray-600 cursor-pointer">
-                  <BsThreeDotsVertical />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div> */}
-      {renderComponent()}
-      {/* <div className="flex justify-between items-center mt-4 px-4">
-        <button
-          className="py-2 px-4 bg-white shadow-md border text-black rounded-md"
-          disabled={currentPage === 1}
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-        >
-          Previous
-        </button>
-        <div className="space-x-2">
-          {[...Array(totalPages).keys()].map((page) => (
-            <button
-              key={page}
-              className={`py-2 px-4 rounded-md shadow-md border ${
-                currentPage === page + 1
-                  ? "bg-purple-700 text-white"
-                  : "bg-white text-black"
-              }`}
-              onClick={() => setCurrentPage(page + 1)}
-            >
-              {page + 1}
-            </button>
-          ))}
-        </div>
-        <button
-          className="py-2 px-4 bg-white shadow-md border text-black rounded-md"
-          disabled={currentPage === totalPages}
-          onClick={() =>
-            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-          }
-        >
-          Next
-        </button>
-      </div> */}
     </div>
   );
 };
