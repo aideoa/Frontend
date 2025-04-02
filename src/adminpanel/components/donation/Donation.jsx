@@ -13,12 +13,11 @@ const Donation = () => {
   const [searchTerm, setSearchterm] = useState("");
   const [showMenu, setShowMenu] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
-  const { dataList, fetchData } = useDonation();
-
+  const [isDownloading, setIsDownloading] = useState(false);
+  const { dataList, fetchData, fetchAllDonations } = useDonation();
   console.log(dataList);
-
   const limit = 10;
-
+  
   useEffect(() => {
     fetchData(searchTerm, currentPage, limit);
   }, [currentPage, searchTerm]);
@@ -71,9 +70,9 @@ const Donation = () => {
       alert("Please select at least one donation to download.");
       return;
     }
-
-    const selectedData = donations.filter((item) => selectedItems.includes(item.id));
-
+    const selectedData = donations.filter((item) =>
+      selectedItems.includes(item.id)
+    );
     const excelData = selectedData.map((item) => ({
       Name: item.name,
       "AIDEOA ID": item.user ? item.user.aideoaIdNo : "N/A",
@@ -88,50 +87,102 @@ const Donation = () => {
     const worksheet = XLSX.utils.json_to_sheet(excelData);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Donations");
-
-    const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
     const data = new Blob([excelBuffer], {
       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     });
-
     saveAs(data, `donations_${new Date().toISOString().slice(0, 10)}.xlsx`);
+  };
+
+  const handleDownloadAll = async () => {
+    try {
+      setIsDownloading(true);
+      // Fetch all donations data
+      const allDonations = await fetchAllDonations(searchTerm);
+      
+      if (!allDonations || allDonations.length === 0) {
+        alert("No donations data available to download.");
+        setIsDownloading(false);
+        return;
+      }
+
+      // Format all donations for Excel
+      const excelData = allDonations.map((item) => ({
+        Name: item.name,
+        "AIDEOA ID": item.user ? item.user.aideoaIdNo : "N/A",
+        "Mobile Number": item.mobileNumber,
+        Email: item.email,
+        "Date & Time": item.createdAt.slice(0, 10),
+        "UTR No": item.utrNo,
+        Amount: item.donationAmount,
+        Status: item.status,
+      }));
+
+      // Create Excel file
+      const worksheet = XLSX.utils.json_to_sheet(excelData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "All Donations");
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+      const data = new Blob([excelBuffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      
+      // Save the file
+      saveAs(data, `all_donations_${new Date().toISOString().slice(0, 10)}.xlsx`);
+    } catch (error) {
+      console.error("Error downloading all donations:", error);
+      alert("Failed to download all donations. Please try again.");
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   const handleOneDownload = (transaction) => {
     console.log("Downloading transaction:", transaction);
-  
     if (!transaction) {
       alert("Invalid transaction data");
       return;
     }
-  
     // Format the transaction data for Excel
-    const excelData = [{
-      Name: transaction.name,
-      'AIDEOA ID': transaction.user ? transaction.user.aideoaIdNo : "N/A",
-      'Mobile Number': transaction.mobileNumber,
-      Email: transaction.email,
-      'Date & Time': transaction.createdAt.slice(0, 10),
-      'UTR No': transaction.utrNo,
-      Amount: transaction.donationAmount,
-      Status: transaction.status
-    }];
-  
+    const excelData = [
+      {
+        Name: transaction.name,
+        "AIDEOA ID": transaction.user ? transaction.user.aideoaIdNo : "N/A",
+        "Mobile Number": transaction.mobileNumber,
+        Email: transaction.email,
+        "Date & Time": transaction.createdAt.slice(0, 10),
+        "UTR No": transaction.utrNo,
+        Amount: transaction.donationAmount,
+        Status: transaction.status,
+      },
+    ];
     // Create a worksheet
     const worksheet = XLSX.utils.json_to_sheet(excelData);
-  
     // Create a workbook
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Transaction");
-  
     // Generate Excel file
-    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-  
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+    const data = new Blob([excelBuffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
     // Save the file
-    saveAs(data, `transaction_${transaction.utrNo || new Date().toISOString().slice(0, 10)}.xlsx`);
+    saveAs(
+      data,
+      `transaction_${
+        transaction.utrNo || new Date().toISOString().slice(0, 10)
+      }.xlsx`
+    );
   };
-  
 
   return (
     <div style={{ marginTop: "50px" }}>
@@ -151,18 +202,15 @@ const Donation = () => {
                 onChange={(e) => setSearchterm(e.target.value)}
               />
             </div>
-            {selectedItems.length > 1 && (
-  <button
-    className="flex items-center bg-green-500 text-white px-4 py-2 rounded-md"
-    onClick={handleDownloadExcel}
-  >
-    <FaFileExcel className="mr-2" />
-    Download Excel
-  </button>
-)}
+            <button
+              className="bg-white font-semibold border shadow-md text-black py-2 px-4 rounded-md mr-2"
+              onClick={handleDownloadAll}
+              disabled={isDownloading}
+            >
+              {isDownloading ? "Downloading..." : "Download All"}
+            </button>
           </div>
         </div>
-
         <div className="overflow-x-scroll rounded-b-2xl">
           <table className="min-w-full bg-white border border-gray-300 ">
             <thead>
