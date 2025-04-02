@@ -1,7 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import { AdminAuthContext } from "../../context/adminAuthContext";
 import { useNavigate } from "react-router-dom";
+
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { ThreeCircles } from "react-loader-spinner";
 
 const AdminLogin = () => {
   const { handleLogin, adminUser } = useContext(AdminAuthContext);
@@ -9,6 +11,8 @@ const AdminLogin = () => {
     username: "",
     password: "",
   });
+
+  const [loading, setLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const nav = useNavigate();
@@ -16,6 +20,7 @@ const AdminLogin = () => {
   useEffect(() => {
     if (adminUser) nav("/admin/dashboard");
   }, [adminUser]);
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,19 +30,28 @@ const AdminLogin = () => {
     });
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setLoading(true);
     try {
       await handleLogin(formData);
     } finally {
       setIsLoading(false);
+      setLoading(false);
     }
+
   };
+  
 
   return (
+
     <div className="min-h-screen flex items-center justify-center bg-gray-900 relative overflow-hidden p-4">
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-indigo-900 to-gray-900 opacity-95"></div>
+      {loading ? (
+        <ThreeCircles height={80} width={80} color="#ffffff" />
+      ) : (
       <div className="relative z-10 bg-white/95 backdrop-blur-sm p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-md mx-auto">
         <div className="text-center mb-6 sm:mb-8">
           <div className="flex justify-center mb-3 sm:mb-4">
@@ -122,7 +136,8 @@ const AdminLogin = () => {
           </p>
         </div>
       </div>
-    </div>
+
+            )}</div>
   );
 };
 

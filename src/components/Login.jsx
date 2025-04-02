@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { BallTriangle } from "react-loader-spinner";
 
 import {
   FaDribbble,
@@ -25,6 +26,9 @@ const Login = () => {
     email: "",
     password: "",
   });
+
+  const [loading, setLoading] = useState(false);
+
   const navigate=useNavigate()
   const [error, setError] = useState("");
   const [pass, setPass] = useState(false);
@@ -36,6 +40,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     const { email } = formData;
  
@@ -58,10 +63,14 @@ const Login = () => {
         navigate("/")}
     } catch (error) {
       console.log(`error in Login.jsx :- ${error}`);
+      setLoading(false);
     }
   };
   return (
     <div className="min-h-screen mainBackgroundImg pt-14 flex justify-center items-center">
+       {loading ? (
+        <BallTriangle height={80} width={80} color="#ffffff" />
+      ) : (
       <div className=" p-8 w-[50%] max-w-[353px] min-w-[300px]">
         <div className="flex justify-center  ">
           <img src={"/logoback.png"} className=" w-24 " alt="logo" />
@@ -183,7 +192,8 @@ const Login = () => {
           </a>
         </div>
       </div>
-    </div>
+      )}</div>
+  
   );
 };
 
