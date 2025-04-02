@@ -238,7 +238,7 @@ const Member = () => {
 
               <div className="flex gap-2 w-full md:w-auto lg:w-auto justify-end">
                 <button
-                  className="bg-white text-nowrap font-semibold border shadow-md text-black py-1.5 px-3 rounded-md hover:bg-gray-100 text-sm w-full md:w-auto"
+                  className="bg-white text-nowrap font-semibold border shadow-md text-black py-1.5 px-3 rounded-md hover:bg-purple-800 hover:text-white text-sm w-full md:w-auto"
                   onClick={onDownloadAllClick}
                 >
                   Download
