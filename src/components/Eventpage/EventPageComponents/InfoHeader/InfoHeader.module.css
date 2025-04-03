@@ -108,6 +108,21 @@
   overflow: hidden;
 }
 
+.loaderContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 150px; /* Adjust height as needed */
+  width: 100%;
+}
+
+.loadMore .react-loader-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
 .loadMore:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);

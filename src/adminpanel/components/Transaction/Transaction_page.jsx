@@ -6,6 +6,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import useTransaction from "../../../hooks/useTransaction";
 import { FaFileExport } from "react-icons/fa"; // Import export icon
 import { ThreeCircles } from "react-loader-spinner";
+import axios from "axios";
 
 const TransactionPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -16,10 +17,11 @@ const TransactionPage = () => {
   const [showMenu, setShowMenu] = useState(null); // Store index of active menu
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
-
   const totalPages = pagination?.totalPages || 0;
 
-  console.log(currentPage);
+
+
+
   useEffect(() => {
     setLoading(true);
     fetchData(searchTerm, 8)
@@ -45,6 +47,7 @@ const TransactionPage = () => {
     }
     setSelectAll(!selectAll);
   };
+  
 
   // Select Individual Item
   const handleSelectItem = (id) => {
@@ -67,8 +70,27 @@ const TransactionPage = () => {
     setShowMenu(showMenu === index ? null : index);
   };
 
-  const handleExportClick = (data) => {
-    handleDownloadTrans(null, data);
+  const handleExportClick = async () => {
+     try {
+          const res = await axios.get(
+            `${import.meta.env.VITE_API_BACKEND_URL}/api/transactions`,
+            {
+              params: {
+                page: 1,
+                limit: pagination?.totalMembershipFees,
+                searchTerm,
+              },
+            }
+          );
+          if (res.status === 200) {
+            handleDownloadTrans(null,res.data.membershipFees)
+            // console.log("tarush",res.data.membershipFees)
+          }
+        } catch (error) {
+          console.error("Error fetching transactions:", error);
+          
+        } 
+   
   };
 
   // New function to export selected transactions
@@ -127,7 +149,7 @@ const TransactionPage = () => {
               )}
               <button
                 className="bg-white font-semibold border shadow-md text-black py-2 px-4 rounded-md mr-2"
-                onClick={() => handleExportClick(data)}
+                onClick={() => handleExportClick()}
               >
                 Download All
               </button>
