@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import { ThreeCircles } from "react-loader-spinner";
 import { BsThreeDotsVertical } from "react-icons/bs";
 
 import { CiSearch } from "react-icons/ci";
@@ -12,13 +12,23 @@ import useStudentNews from "../../../hooks/useStudentNews";
 import { usePage } from "../../../context/PageContext";
 
 const StudentNews = ({ setActiveComponent, setStudentData }) => {
-  const { currentPage, setCurrentPage } = usePage(); 
-  const { news, pagination, loading, deletenews } = useStudentNews();
+  const { currentPage, setCurrentPage } = usePage();
+  const { news, pagination, deletenews } = useStudentNews();
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
-  
+  const [loading, setLoading] = useState(true);
+
   const itemsPerPage = 8;
   const totalPages = pagination ? pagination.totalPages : 0;
+
+  // Simulate data fetching
+  useEffect(() => {
+    setLoading(true); // Show loader before fetching data
+    setTimeout(() => {
+      setLoading(false); // Hide loader after fetching data
+    }, 1000); // Simulate network delay
+  }, [news]); // Runs when `news` updates
+
 
   const handleSelectAll = () => {
     if (selectAll) {
@@ -38,10 +48,10 @@ const StudentNews = ({ setActiveComponent, setStudentData }) => {
         { length: endIndex - startIndex },
         (_, i) => startIndex + i
       );
-  
+
       setSelectedItems((prev) => [...prev, ...currentPageItems]);
     }
-  
+
     setSelectAll(!selectAll);
   };
 
@@ -55,20 +65,26 @@ const StudentNews = ({ setActiveComponent, setStudentData }) => {
     );
   };
 
-  
-  const handleDeleteSelected = () => {
-    selectedItems.forEach((index) => {
-      const globalIndex = index - (currentPage - 1) * itemsPerPage ;
-      const newsId = news[globalIndex]?.id;
-      if (newsId) {
-        deletenews(newsId);  // Deleting each selected news item
-      }
-    });
-    setSelectedItems([]); // Clear selected items after deletion
+
+  const handleDeleteSelected = async () => {
+    setLoading(true); // Show loader while deleting
+    try {
+      await Promise.all(
+        selectedItems.map(async (index) => {
+          const globalIndex = index - (currentPage - 1) * itemsPerPage;
+          const newsId = news[globalIndex]?.id;
+          if (newsId) await deletenews(newsId);
+        })
+      );
+      setSelectedItems([]);
+    } catch (error) {
+      console.error("Error deleting news:", error);
+    } finally {
+      setLoading(false); // Hide loader after deletion
+    }
   };
 
 
-  if (loading) return <div>Loading...</div>;
 
   return (
     <div className="py-4 bg-white rounded-xl lightdropshadowbox">
@@ -81,8 +97,8 @@ const StudentNews = ({ setActiveComponent, setStudentData }) => {
           </span>
         </div>
         <div className="flex justify-end flex-1 items-center space-x-4">
-          {selectedItems.length >= 2 && <MdDelete size={26} className="cursor-pointer" 
-              onClick={handleDeleteSelected} />}
+          {selectedItems.length >= 2 && <MdDelete size={26} className="cursor-pointer"
+            onClick={handleDeleteSelected} />}
           <div className="flex max-lg:flex-col gap-2">
             <button
               onClick={() => setActiveComponent("Add Studentnews")}
@@ -114,41 +130,50 @@ const StudentNews = ({ setActiveComponent, setStudentData }) => {
             </tr>
           </thead>
           <tbody>
-            {news.length > 0 ? (
-              news.map((item, index) => (
-                <tr key={index} className="border-b border-gray-200 h-16">
-                  <td className="p-2 px-4 font-medium text-sm text-gray-600">
-                    <input
-                      type="checkbox"
-                      className="checked:bg-purple-500 checked:border-purple-500 size-4 bg-col"
-                      checked={selectedItems.includes((currentPage - 1) * itemsPerPage + index)}
-                      onChange={() => handleSelectItem(index)}
-                    />
-                  </td>
-                  <td className="p-2 font-medium text-sm text-gray-600 max-w-52 whitespace-nowrap overflow-hidden text-ellipsis">
-                    {item.title}
-                  </td>
-                  <td className="p-2 font-medium text-sm text-gray-400">{item.description}</td>
-                  <td className="p-2 font-medium text-sm text-gray-400">{item.category}</td>
-                  <td className="p-2 flex font-medium text-center w-full text-sm justify-around h-16 items-center text-gray-600 cursor-pointer">
-                    <RiDeleteBin6Line onClick={() => deletenews(item.id)} />
-                    <FiEdit2
-                      onClick={() => {
-                        setActiveComponent("Update Studentnews");
-                        setStudentData(item);
-                      }}
-                    />
-                  </td>
-                </tr>
-              ))
-            ) : (
+            {loading ? (
               <tr>
-                <td colSpan={5} className="text-center py-4 text-gray-500">
-                  No news available
+                <td colSpan="12" className="p-4">
+                  <div className="flex justify-center items-center h-40">
+                    <ThreeCircles height={60} width={60} color="#4B0082" />
+                  </div>
                 </td>
               </tr>
-            )}
-          </tbody>
+            ) : (
+              news.length > 0 ? (
+                news.map((item, index) => (
+                  <tr key={index} className="border-b border-gray-200 h-16">
+                    <td className="p-2 px-4 font-medium text-sm text-gray-600">
+                      <input
+                        type="checkbox"
+                        className="checked:bg-purple-500 checked:border-purple-500 size-4 bg-col"
+                        checked={selectedItems.includes((currentPage - 1) * itemsPerPage + index)}
+                        onChange={() => handleSelectItem(index)}
+                      />
+                    </td>
+                    <td className="p-2 font-medium text-sm text-gray-600 max-w-52 whitespace-nowrap overflow-hidden text-ellipsis">
+                      {item.title}
+                    </td>
+                    <td className="p-2 font-medium text-sm text-gray-400">{item.description}</td>
+                    <td className="p-2 font-medium text-sm text-gray-400">{item.category}</td>
+                    <td className="p-2 flex font-medium text-center w-full text-sm justify-around h-16 items-center text-gray-600 cursor-pointer">
+                      <RiDeleteBin6Line onClick={() => deletenews(item.id)} />
+                      <FiEdit2
+                        onClick={() => {
+                          setActiveComponent("Update Studentnews");
+                          setStudentData(item);
+                        }}
+                      />
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={5} className="text-center py-4 text-gray-500">
+                    No news available
+                  </td>
+                </tr>
+              )
+            )}</tbody>
         </table>
       </div>
 
@@ -165,11 +190,10 @@ const StudentNews = ({ setActiveComponent, setStudentData }) => {
           {[...Array(totalPages).keys()].map((page) => (
             <button
               key={page}
-              className={`py-2 px-4 rounded-md shadow-md border ${
-                currentPage === page + 1
+              className={`py-2 px-4 rounded-md shadow-md border ${currentPage === page + 1
                   ? "bg-purple-700 text-white"
                   : "bg-white text-black"
-              }`}
+                }`}
               onClick={() => setCurrentPage(page + 1)}
             >
               {page + 1}

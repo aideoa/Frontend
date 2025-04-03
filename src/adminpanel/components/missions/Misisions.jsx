@@ -6,10 +6,13 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { CiSearch } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
 import useMissions from "../../../hooks/useMissions";
+import { ThreeCircles } from "react-loader-spinner";
+
 const Missions = ({ setActiveComponent, setMissionData }) => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
 
   const { dataList: data, deleteMission, fetchData } = useMissions();
 
@@ -19,12 +22,14 @@ const Missions = ({ setActiveComponent, setMissionData }) => {
     await deleteMission(id);
   };
   useEffect(() => {
-    fetchData(currentPage, limit);
+    setLoading(true);
+    fetchData(currentPage, limit)
+      .finally(() => setLoading(false)); // Hide loader after fetching data
   }, [currentPage, limit]);
 
-   const handleSelectAll = () => {
+  const handleSelectAll = () => {
     const currentPageIds = data?.missions?.slice(0, limit).map((missions) => missions.id) || [];
-  
+
     if (selectAll) {
       // Deselect only the emails on the current page
       setSelectedItems((prevSelected) => prevSelected.filter((id) => !currentPageIds.includes(id)));
@@ -32,7 +37,7 @@ const Missions = ({ setActiveComponent, setMissionData }) => {
       // Select only the emails on the current page that are not already selected
       setSelectedItems((prevSelected) => [...new Set([...prevSelected, ...currentPageIds])]);
     }
-  
+
     setSelectAll(!selectAll);
   };
   const handleSelectItem = (index) => {
@@ -113,7 +118,16 @@ const Missions = ({ setActiveComponent, setMissionData }) => {
               </tr>
             </thead>
             <tbody>
-              {data &&
+              {loading ? (
+                <tr>
+                  <td colSpan="12" className="p-4">
+                    <div className="flex justify-center items-center h-40">
+                      <ThreeCircles height={60} width={60} color="#4B0082" />
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                data &&
                 data?.missions?.slice(0, limit)?.map((item, index) => (
                   <tr key={index} className="border-b border-gray-200 h-16 ">
                     <td className="p-2 px-4 font-medium text-sm text-gray-600">
@@ -138,7 +152,8 @@ const Missions = ({ setActiveComponent, setMissionData }) => {
                       />
                     </td>
                   </tr>
-                ))}
+                ))
+              )}
             </tbody>
           </table>
         </div>
@@ -154,11 +169,10 @@ const Missions = ({ setActiveComponent, setMissionData }) => {
               <button
                 key={page}
                 onClick={() => setCurrentPage(page + 1)}
-                className={`py-2 px-4 rounded-md shadow-md border ${
-                  currentPage === page + 1
+                className={`py-2 px-4 rounded-md shadow-md border ${currentPage === page + 1
                     ? "bg-purple-700 text-white"
                     : " bg-white  text-black "
-                }`}
+                  }`}
               >
                 {page + 1}
               </button>

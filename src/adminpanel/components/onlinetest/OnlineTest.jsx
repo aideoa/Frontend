@@ -5,6 +5,7 @@ import { MdDelete } from "react-icons/md";
 import useOnlineTest from "../../../hooks/useOnlineTest";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FiEdit2 } from "react-icons/fi";
+import { ThreeCircles } from "react-loader-spinner";
 
 const OnlineTest = ({ setActiveComponent, setData }) => {
   // const data = [
@@ -30,6 +31,7 @@ const OnlineTest = ({ setActiveComponent, setData }) => {
   const [selectAll, setSelectAll] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+    const [loading, setLoading] = useState(true);
   const itemsPerPage = 5;
 
   const handleSelectAll = () => {
@@ -53,7 +55,11 @@ const OnlineTest = ({ setActiveComponent, setData }) => {
   const quizzes = dataList?.quizzes || [];
 
   useEffect(() => {
+    setLoading(true);
     setTotalPages(Math.ceil(quizzes.length / itemsPerPage));
+    setTimeout(() => {
+      setLoading(false); // Hide loader after fetching data
+    }, 1000); // Simulate network delay
   }, [quizzes]);
 
   const paginatedQuizzes = quizzes.slice(
@@ -113,7 +119,16 @@ const OnlineTest = ({ setActiveComponent, setData }) => {
             </tr>
           </thead>
           <tbody>
-            {paginatedQuizzes.map((item, index) => (
+             {loading ? (
+                          <tr>
+                            <td colSpan="12" className="p-4">
+                              <div className="flex justify-center items-center h-40">
+                                <ThreeCircles height={60} width={60} color="#4B0082" />
+                              </div>
+                            </td>
+                          </tr>
+                        ) : (
+            paginatedQuizzes.map((item, index) => (
               <tr key={index} className="border-b border-gray-200 h-16">
                 <td className="p-2 px-4 font-medium text-sm text-gray-600">
                   <input
@@ -145,7 +160,8 @@ const OnlineTest = ({ setActiveComponent, setData }) => {
                   />
                 </td>
               </tr>
-            ))}
+            ))
+            )}
           </tbody>
         </table>
       </div>

@@ -5,6 +5,7 @@ import { handleDownloadTrans } from "./exportTrans";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import useTransaction from "../../../hooks/useTransaction";
 import { FaFileExport } from "react-icons/fa"; // Import export icon
+import { ThreeCircles } from "react-loader-spinner";
 
 const TransactionPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -14,14 +15,16 @@ const TransactionPage = () => {
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
   const [showMenu, setShowMenu] = useState(null); // Store index of active menu
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const totalPages = pagination?.totalPages || 0;
 
   console.log(currentPage);
   useEffect(() => {
-
-    fetchData(searchTerm, 8 );
-  }, [currentPage , searchTerm]);
+    setLoading(true);
+    fetchData(searchTerm, 8)
+      .finally(() => setLoading(false)); // Hide loader after fetching data
+  }, [currentPage, searchTerm]);
 
   // Pagination Data
   // const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -161,59 +164,67 @@ const TransactionPage = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((item, index) => (
-                <tr key={index} className="border-b border-gray-200 h-16">
-                  <td className="p-2 px-4">
-                    <input
-                      type="checkbox"
-                      checked={selected.includes(item.id)}
-                      onChange={() => handleSelectItem(item.id)}
-                    />
-                  </td>
-                  <td className="p-2">{item.name}</td>
-                  <td className="p-2 text-gray-400">{item.user ? item.user.aideoaIdNo : "N/A"}</td>
-                  <td className="p-2 text-gray-400">{item.mobileNumber}</td>
-                  <td className="p-2 text-gray-400">{item.email}</td>
-                  <td className="p-2 text-gray-400">{item.createdAt.slice(0, 10)}</td>
-                  <td className="p-2 text-gray-400">{item.utrNo}</td>
-                  <td className="p-2 text-gray-400">{item.membershipAmount}</td>
-                  <td className="p-2 text-gray-400">
-                    <span
-                      className={`rounded-full px-1 ${
-                        item.status === "success"
-                          ? "bg-green-100 text-green-700"
-                          : item.status === "Pending"
-                          ? "bg-yellow-100 text-yellow-700"
-                          : "bg-red-100 text-red-700"
-                      }`}
-                    >
-                      {item.status}
-                    </span>
-                  </td>
-                  <td
-                    className="p-2 cursor-pointer"
-                    onClick={(e) => toggleMenu(e, index)}
-                  >
-                    <BsThreeDotsVertical />
-                  </td>
-                  {showMenu === index && (
-                    <div
-                      className="absolute bg-white border rounded shadow-md"
-                      style={{ left: menuPosition.x, top: menuPosition.y }}
-                    >
-                      <ul>
-                        <li
-                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                          onClick={() => handleOneDownload(item.transaction, data)}
-                        >
-                          Download
-                        </li>
-                      </ul>
+              {loading ? (
+                <tr>
+                  <td colSpan="12" className="p-4">
+                    <div className="flex justify-center items-center h-40">
+                      <ThreeCircles height={60} width={60} color="#4B0082" />
                     </div>
-                  )}
+                  </td>
                 </tr>
-              ))}
-            </tbody>
+              ) : (
+                data.map((item, index) => (
+                  <tr key={index} className="border-b border-gray-200 h-16">
+                    <td className="p-2 px-4">
+                      <input
+                        type="checkbox"
+                        checked={selected.includes(item.id)}
+                        onChange={() => handleSelectItem(item.id)}
+                      />
+                    </td>
+                    <td className="p-2">{item.name}</td>
+                    <td className="p-2 text-gray-400">{item.user ? item.user.aideoaIdNo : "N/A"}</td>
+                    <td className="p-2 text-gray-400">{item.mobileNumber}</td>
+                    <td className="p-2 text-gray-400">{item.email}</td>
+                    <td className="p-2 text-gray-400">{item.createdAt.slice(0, 10)}</td>
+                    <td className="p-2 text-gray-400">{item.utrNo}</td>
+                    <td className="p-2 text-gray-400">{item.membershipAmount}</td>
+                    <td className="p-2 text-gray-400">
+                      <span
+                        className={`rounded-full px-1 ${item.status === "success"
+                            ? "bg-green-100 text-green-700"
+                            : item.status === "Pending"
+                              ? "bg-yellow-100 text-yellow-700"
+                              : "bg-red-100 text-red-700"
+                          }`}
+                      >
+                        {item.status}
+                      </span>
+                    </td>
+                    <td
+                      className="p-2 cursor-pointer"
+                      onClick={(e) => toggleMenu(e, index)}
+                    >
+                      <BsThreeDotsVertical />
+                    </td>
+                    {showMenu === index && (
+                      <div
+                        className="absolute bg-white border rounded shadow-md"
+                        style={{ left: menuPosition.x, top: menuPosition.y }}
+                      >
+                        <ul>
+                          <li
+                            className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                            onClick={() => handleOneDownload(item.transaction, data)}
+                          >
+                            Download
+                          </li>
+                        </ul>
+                      </div>
+                    )}
+                  </tr>
+                ))
+              )} </tbody>
           </table>
         </div>
 
@@ -229,11 +240,10 @@ const TransactionPage = () => {
             {[...Array(totalPages).keys()].map((page) => (
               <button
                 key={page}
-                className={`py-2 px-4 rounded-md shadow-md border ${
-                  currentPage === page + 1
+                className={`py-2 px-4 rounded-md shadow-md border ${currentPage === page + 1
                     ? "bg-purple-700 text-white"
                     : "bg-white text-black"
-                }`}
+                  }`}
                 onClick={() => handlePageClick(page + 1)}
               >
                 {page + 1}

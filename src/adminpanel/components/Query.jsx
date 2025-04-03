@@ -6,6 +6,7 @@ import { CiSearch } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
 import useQuery from "../../hooks/useQuery";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { ThreeCircles } from "react-loader-spinner";
 
 const Query = () => {
   const data = [
@@ -31,6 +32,7 @@ const Query = () => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
   const { dataList, fetchData, deleteQuery } = useQuery()
   const totalPages = dataList?.pagination?.totalPages
   const limit = 6;
@@ -54,7 +56,9 @@ const Query = () => {
   };
 
   useEffect(() => {
-    fetchData(searchTerm, currentPage, limit);
+    setLoading(true);
+    fetchData(searchTerm, currentPage, limit)
+      .finally(() => setLoading(false)); // Hide loader after fetching data
   }, [searchTerm, currentPage]);
   const handleNextPage = () => {
     console.log(currentPage);
@@ -68,7 +72,7 @@ const Query = () => {
 
   const viewIdProof = (query) => {
     console.log(query)
-    setViewQuery(query); 
+    setViewQuery(query);
   };
 
   const handlePrevPage = () => {
@@ -143,45 +147,55 @@ const Query = () => {
               </tr>
             </thead>
             <tbody>
-              {dataList && dataList?.queries?.slice(0, limit).map((item, index) => (
-                <tr key={index} className="border-b border-gray-200 h-16">
-                  <td className="p-2 px-4 font-medium text-sm text-gray-600">
-                    <input
-                      type="checkbox"
-                      className="checked:bg-purple-500 checked:border-purple-500 size-4 bg-col"
-                      checked={selectedItems.includes(index)}
-                      onChange={() => handleSelectItem(index)}
-                    />
-                  </td>
-                  <td className="p-2 font-medium text-sm text-gray-600 max-w-52 whitespace-nowrap overflow-hidden text-ellipsis">
-                    {item.name}
-                  </td>
-                  <td className="p-2 font-medium text-sm text-gray-400">
-                    {item.mobile}
-                  </td>
-                  <td className="p-2 font-medium text-sm text-gray-400">
-                    {item.email}
-                  </td>
-                  <td className="p-2 font-medium text-sm text-gray-400">
-                    {item.companyName}
-                  </td>
-                  <td className="p-2 font-medium text-sm text-gray-400">
-                    {item.workingArea}
-                  </td>
-                  <td className="p-2 font-medium text-sm text-gray-400">
-                    <button
-                      onClick={() => viewIdProof(item.query)}
-                      className="underline text-[#5A00A0] px-4 py-2 rounded"
-                    >
-                      View
-                    </button>
-                  </td>
-
-                  <td className="p-2 font-medium text-sm text-gray-600 cursor-pointer">
-                    <RiDeleteBin6Line onClick={() => deleteQuery(item.id)} />
+              {loading ? (
+                <tr>
+                  <td colSpan="12" className="p-4">
+                    <div className="flex justify-center items-center h-40">
+                      <ThreeCircles height={60} width={60} color="#4B0082" />
+                    </div>
                   </td>
                 </tr>
-              ))}
+              ) : (
+                dataList && dataList?.queries?.slice(0, limit).map((item, index) => (
+                  <tr key={index} className="border-b border-gray-200 h-16">
+                    <td className="p-2 px-4 font-medium text-sm text-gray-600">
+                      <input
+                        type="checkbox"
+                        className="checked:bg-purple-500 checked:border-purple-500 size-4 bg-col"
+                        checked={selectedItems.includes(index)}
+                        onChange={() => handleSelectItem(index)}
+                      />
+                    </td>
+                    <td className="p-2 font-medium text-sm text-gray-600 max-w-52 whitespace-nowrap overflow-hidden text-ellipsis">
+                      {item.name}
+                    </td>
+                    <td className="p-2 font-medium text-sm text-gray-400">
+                      {item.mobile}
+                    </td>
+                    <td className="p-2 font-medium text-sm text-gray-400">
+                      {item.email}
+                    </td>
+                    <td className="p-2 font-medium text-sm text-gray-400">
+                      {item.companyName}
+                    </td>
+                    <td className="p-2 font-medium text-sm text-gray-400">
+                      {item.workingArea}
+                    </td>
+                    <td className="p-2 font-medium text-sm text-gray-400">
+                      <button
+                        onClick={() => viewIdProof(item.query)}
+                        className="underline text-[#5A00A0] px-4 py-2 rounded"
+                      >
+                        View
+                      </button>
+                    </td>
+
+                    <td className="p-2 font-medium text-sm text-gray-600 cursor-pointer">
+                      <RiDeleteBin6Line onClick={() => deleteQuery(item.id)} />
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
           {viewQuery && <div className="pdf-modal-overlay"></div>}
@@ -191,7 +205,7 @@ const Query = () => {
                 Close
               </button>
               <h3 className="text-slate-800 text-2xl">
-              {viewQuery}
+                {viewQuery}
               </h3>
             </div>
           )}

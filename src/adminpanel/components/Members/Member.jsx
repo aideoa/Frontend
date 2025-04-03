@@ -8,6 +8,8 @@ import { CiSearch } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
 import useMembers from "../../../hooks/useMembers";
 import { handleDownloadAll } from "../Members/exportExcel";
+import { ThreeCircles } from "react-loader-spinner";
+
 import SearchBar from "./SearchBar";
 
 const Member = () => {
@@ -16,7 +18,7 @@ const Member = () => {
   const [userType, setUserType] = useState("All");
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
-  const { dataList, fetchData, loading, updateMemberStatus, deleteMember } =
+  const { dataList, fetchData, updateMemberStatus, deleteMember } =
     useMembers(userType, currentPage);
   const [showPopup, setShowPopup] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
@@ -28,6 +30,7 @@ const Member = () => {
   const [studentId, setStudentId] = useState(null);
   const [statusOrder, setStatusOrder] = useState("asc"); // Sorting by status
   const [sortedData, setSortedData] = useState([]); // Store sorted list
+  const [loading, setLoading] = useState(false);
 
   const isUrl = (value) => {
     try {
@@ -107,7 +110,9 @@ const Member = () => {
   const handleSortByStatus = () => {
     const newStatusOrder = statusOrder === "asc" ? "desc" : "asc";
     setStatusOrder(newStatusOrder);
-    fetchData(userType, 1, order, "", newStatusOrder);
+    setLoading(true);
+    fetchData(userType, 1, order, "", newStatusOrder)
+    .finally(() => setLoading(false));
   };
 
   // Close the menu when clicking outside
@@ -115,7 +120,9 @@ const Member = () => {
 
   useEffect(() => {
     console.log(order);
-    fetchData(userType, currentPage, order);
+    setLoading(true);
+    fetchData(userType, currentPage, order)
+    .finally(() => setLoading(false));
   }, [userType, currentPage, order]);
 
   React.useEffect(() => {
@@ -158,12 +165,17 @@ const Member = () => {
     );
     if (!confirmDelete) return;
 
+    setLoading(true);
+
     try {
       await deleteMember(memberId); // Call the delete function
       fetchData(userType, 1, order, searchTerm, statusOrder); // Refresh data list properly
     } catch (error) {
       console.error("Error deleting member:", error);
       alert("Failed to delete member. Please try again.");
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -415,11 +427,13 @@ const Member = () => {
             </thead>
             <tbody>
               {loading ? (
-                <tr>
-                  <td colSpan="10" className="text-center p-4">
-                    Loading...
-                  </td>
-                </tr>
+                 <tr>
+                 <td colSpan="12" className="p-4">
+                   <div className="flex justify-center items-center h-40">
+                     <ThreeCircles height={60} width={60} color="#4B0082" />
+                   </div>
+                 </td>
+               </tr>
               ) : (
                 dataList &&
                 dataList?.users &&

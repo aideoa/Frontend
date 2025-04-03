@@ -1,5 +1,5 @@
 import useMutualTransfer from "../../../hooks/useMutualTransfer";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { CiSearch } from "react-icons/ci";
@@ -7,16 +7,31 @@ import { FiEdit2 } from "react-icons/fi";
 import { LuUploadCloud } from "react-icons/lu";
 import { MdDelete } from "react-icons/md";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { ThreeCircles } from "react-loader-spinner";
 
 const MutualTransfer = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [userType, setUserType] = useState("Executive");
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const totalPages = 3;
   const NonExecutive = new Array(20).fill("");
   const executive = new Array(30).fill("");
+
+
+
+  useEffect(() => {
+    setLoading(true); // Start loading
+
+    // Simulating a data fetch
+    setTimeout(() => {
+      setLoading(false); // Stop loading after data is fetched
+    }, 1000);
+
+  }, [userType, searchTerm]); // Run when userType or searchTerm changes
+
 
   const handleSelectAll = () => {
     if (selectAll) {
@@ -35,7 +50,7 @@ const MutualTransfer = () => {
     }
   };
 
-  const { dataList: data, loading } = useMutualTransfer(userType, searchTerm);
+  const { dataList: data } = useMutualTransfer(userType, searchTerm);
 
   return (
     <div className="bg-white rounded-xl py-4 lightdropshadowbox mt-16">
@@ -57,7 +72,7 @@ const MutualTransfer = () => {
               <button className="bg-white text-nowrap font-semibold border shadow-md text-black py-2 px-4 rounded-md mr-2">
                 Download all
               </button>
-             
+
             </div>
           </div>
         </div>
@@ -66,20 +81,18 @@ const MutualTransfer = () => {
           <div className="flex space-x-3 items-center">
             <button
               onClick={() => setUserType("Executive")}
-              className={` ${
-                userType === "Executive"
-                  ? "bg-[#4B0082] text-white"
-                  : "bg-white text-[#4B0082]"
-              } rounded-t-2xl text-sm py-2 w-40 font-medium flex gap-2 justify-center items-center`}
+              className={` ${userType === "Executive"
+                ? "bg-[#4B0082] text-white"
+                : "bg-white text-[#4B0082]"
+                } rounded-t-2xl text-sm py-2 w-40 font-medium flex gap-2 justify-center items-center`}
             >
               <span>Executive</span>
               {userType !== "Non-Executive" && (
                 <span
-                  className={`text-xs font-bold px-2 rounded-md ${
-                    userType === "Executive"
-                      ? "bg-white text-[#4B0082]"
-                      : "bg-[#4B0082] text-white"
-                  }`}
+                  className={`text-xs font-bold px-2 rounded-md ${userType === "Executive"
+                    ? "bg-white text-[#4B0082]"
+                    : "bg-[#4B0082] text-white"
+                    }`}
                 >
                   {data.length}
                 </span>
@@ -87,20 +100,18 @@ const MutualTransfer = () => {
             </button>
             <button
               onClick={() => setUserType("Non-Executive")}
-              className={` ${
-                userType !== "Executive"
-                  ? "bg-[#4B0082] text-white"
-                  : "bg-white text-[#4B0082]"
-              } rounded-t-2xl text-sm py-2 w-40 font-medium flex gap-2 justify-center items-center`}
+              className={` ${userType !== "Executive"
+                ? "bg-[#4B0082] text-white"
+                : "bg-white text-[#4B0082]"
+                } rounded-t-2xl text-sm py-2 w-40 font-medium flex gap-2 justify-center items-center`}
             >
               <span>Non Executive</span>
               {userType === "Non-Executive" && (
                 <span
-                  className={`text-xs font-bold px-2 rounded-md ${
-                    userType !== "Executive"
-                      ? "bg-white text-[#4B0082]"
-                      : "bg-[#4B0082] text-white"
-                  }`}
+                  className={`text-xs font-bold px-2 rounded-md ${userType !== "Executive"
+                    ? "bg-white text-[#4B0082]"
+                    : "bg-[#4B0082] text-white"
+                    }`}
                 >
                   {data.length}
                 </span>
@@ -163,56 +174,66 @@ const MutualTransfer = () => {
           </thead>
 
           <tbody>
-            {data?.slice(0, 7)?.map((item, index) => (
-              <tr key={index} className="border-b border-gray-200 h-16">
-                <td className="p-2 px-4 font-medium text-sm text-gray-600">
-                  <input
-                    type="checkbox"
-                    checked={selectedItems.includes(index)}
-                    onChange={() => handleSelectItem(index)}
-                    className="checked:bg-purple-500 checked:border-purple-500 size-4 bg-col"
-                  />
+            {loading ? (
+              <tr>
+                <td colSpan="12" className="p-4">
+                  <div className="flex justify-center items-center h-40">
+                    <ThreeCircles height={60} width={60} color="#4B0082" />
+                  </div>
                 </td>
-                <td className="p-2 font-medium text-sm text-gray-600 max-w-52">
-                  {item.name}
-                </td>
-                <td className="p-2 font-medium text-sm text-gray-400">
-                  {item.aideoaIdNo}
-                </td>
-                <td className="p-2 font-medium text-sm text-gray-400">
-                  {item.mobileNumber}
-                </td>
-                <td className="p-2 font-medium text-sm text-gray-400">
-                  {item.currentSubsidiary}
-                </td>
-                <td className="p-2 font-medium text-sm text-gray-400">
-                  {item.currentPostedArea}
-                </td>
-                <td className="text-gray-400 max-w-32 p-2 font-medium text-sm whitespace-nowrap overflow-hidden text-ellipsis">
-                  {item.currentMinesName}
-                </td>
-                <td className="p-2 font-medium text-xs text-gray-400">
-                  {item.grade}
-                </td>
-                <td className="text-gray-400 max-w-32 p-2 font-medium text-sm whitespace-nowrap overflow-hidden text-ellipsis">
-                  {item.designation}
-                </td>
-                <td className="p-2 font-medium text-xs text-gray-400">
-                  {item.preferredTransferSubsidiary}
-                </td>
-                <td className="p-2 font-medium text-xs text-gray-400">
-                  {item.preferredTransferArea}
-                </td>
-                <td className="p-2 font-medium text-xs text-gray-400">
-                  {item.preferredTransferMine}
-                </td>
-                <td className="py-3 px-4 font-medium">
-                      <button className="text-gray-500 flex gap-x-5 hover:text-gray-700">
-                        <RiDeleteBinLine /> <FiEdit2 />
-                      </button>
-                    </td>
               </tr>
-            ))}
+            ) : (
+              data?.slice(0, 7)?.map((item, index) => (
+                <tr key={index} className="border-b border-gray-200 h-16">
+                  <td className="p-2 px-4 font-medium text-sm text-gray-600">
+                    <input
+                      type="checkbox"
+                      checked={selectedItems.includes(index)}
+                      onChange={() => handleSelectItem(index)}
+                      className="checked:bg-purple-500 checked:border-purple-500 size-4 bg-col"
+                    />
+                  </td>
+                  <td className="p-2 font-medium text-sm text-gray-600 max-w-52">
+                    {item.name}
+                  </td>
+                  <td className="p-2 font-medium text-sm text-gray-400">
+                    {item.aideoaIdNo}
+                  </td>
+                  <td className="p-2 font-medium text-sm text-gray-400">
+                    {item.mobileNumber}
+                  </td>
+                  <td className="p-2 font-medium text-sm text-gray-400">
+                    {item.currentSubsidiary}
+                  </td>
+                  <td className="p-2 font-medium text-sm text-gray-400">
+                    {item.currentPostedArea}
+                  </td>
+                  <td className="text-gray-400 max-w-32 p-2 font-medium text-sm whitespace-nowrap overflow-hidden text-ellipsis">
+                    {item.currentMinesName}
+                  </td>
+                  <td className="p-2 font-medium text-xs text-gray-400">
+                    {item.grade}
+                  </td>
+                  <td className="text-gray-400 max-w-32 p-2 font-medium text-sm whitespace-nowrap overflow-hidden text-ellipsis">
+                    {item.designation}
+                  </td>
+                  <td className="p-2 font-medium text-xs text-gray-400">
+                    {item.preferredTransferSubsidiary}
+                  </td>
+                  <td className="p-2 font-medium text-xs text-gray-400">
+                    {item.preferredTransferArea}
+                  </td>
+                  <td className="p-2 font-medium text-xs text-gray-400">
+                    {item.preferredTransferMine}
+                  </td>
+                  <td className="py-3 px-4 font-medium">
+                    <button className="text-gray-500 flex gap-x-5 hover:text-gray-700">
+                      <RiDeleteBinLine /> <FiEdit2 />
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
@@ -226,25 +247,22 @@ const MutualTransfer = () => {
         </button>
         <button
           onClick={() => setCurrentPage(1)}
-          className={`${
-            currentPage === 1 ? "bg-[#4B0082] text-white" : "bg-gray-100"
-          } rounded-full h-6 w-6 flex items-center justify-center border`}
+          className={`${currentPage === 1 ? "bg-[#4B0082] text-white" : "bg-gray-100"
+            } rounded-full h-6 w-6 flex items-center justify-center border`}
         >
           1
         </button>
         <button
           onClick={() => setCurrentPage(2)}
-          className={`${
-            currentPage === 2 ? "bg-[#4B0082] text-white" : "bg-gray-100"
-          } rounded-full h-6 w-6 flex items-center justify-center border`}
+          className={`${currentPage === 2 ? "bg-[#4B0082] text-white" : "bg-gray-100"
+            } rounded-full h-6 w-6 flex items-center justify-center border`}
         >
           2
         </button>
         <button
           onClick={() => setCurrentPage(3)}
-          className={`${
-            currentPage === 3 ? "bg-[#4B0082] text-white" : "bg-gray-100"
-          } rounded-full h-6 w-6 flex items-center justify-center border`}
+          className={`${currentPage === 3 ? "bg-[#4B0082] text-white" : "bg-gray-100"
+            } rounded-full h-6 w-6 flex items-center justify-center border`}
         >
           3
         </button>
