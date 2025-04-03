@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { CiSearch } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
-
+import { ThreeCircles } from "react-loader-spinner";
 import useOnlineTest from "../../../hooks/useOnlineTest";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FiEdit2 } from "react-icons/fi";
@@ -12,11 +12,20 @@ import { usePage } from "../../../context/PageContext";
 
 const EmployeeNews = ({ setActiveComponent, setEmployeeData }) => {
   const { currentPage, setCurrentPage } = usePage();
-  const { news, pagination, loading, deletenews } = useEmployeeNews();
+  const { news, pagination, deletenews } = useEmployeeNews();
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
+  const [loading, setLoading] = useState(true);
   const itemsPerPage = 7;
   const totalPages = pagination ? pagination.totalPages : 0;
+
+  // Simulate data fetching
+  useEffect(() => {
+    setLoading(true); // Show loader before fetching data
+    setTimeout(() => {
+      setLoading(false); // Hide loader after fetching data
+    }, 1000); // Simulate network delay
+  }, [news]); // Runs when `news` updates
 
   const handleSelectAll = () => {
     if (selectAll) {
@@ -51,18 +60,25 @@ const EmployeeNews = ({ setActiveComponent, setEmployeeData }) => {
     );
   };
 
-  const handleDeleteSelected = () => {
-    selectedItems.forEach((index) => {
-      const globalIndex = index - (currentPage - 1) * itemsPerPage;
-      const newsId = news[globalIndex]?.id;
-      if (newsId) {
-        deletenews(newsId); // Deleting each selected news item
-      }
-    });
-    setSelectedItems([]); // Clear selected items after deletion
+  const handleDeleteSelected = async () => {
+    setLoading(true); // Show loader while deleting
+    try {
+      await Promise.all(
+        selectedItems.map(async (index) => {
+          const globalIndex = index - (currentPage - 1) * itemsPerPage;
+          const newsId = news[globalIndex]?.id;
+          if (newsId) await deletenews(newsId);
+        })
+      );
+      setSelectedItems([]);
+    } catch (error) {
+      console.error("Error deleting news:", error);
+    } finally {
+      setLoading(false); // Hide loader after deletion
+    }
   };
 
-  if (loading) return <div>Loading...</div>;
+
 
   return (
     <div className="py-4 bg-white rounded-xl lightdropshadowbox">
@@ -74,14 +90,7 @@ const EmployeeNews = ({ setActiveComponent, setEmployeeData }) => {
           </span>
         </div>
         <div className="flex justify-end flex-1 items-center space-x-4">
-          {/* <div className="relative w-[55%]">
-            <CiSearch className="absolute top-3 left-3" />
-            <input
-              type="text"
-              className="px-8 py-2 border w-full rounded-full text-sm border-gray-300"
-              placeholder="Search"
-            />
-          </div> */}
+
           {selectedItems.length >= 2 && (
             <MdDelete
               size={26}
@@ -128,44 +137,54 @@ const EmployeeNews = ({ setActiveComponent, setEmployeeData }) => {
             </tr>
           </thead>
           <tbody>
-            {news.length > 0 ? (
-              news.map((item, index) => (
-                <tr key={index} className="border-b border-gray-200 h-16">
-                  <td className="p-2 px-4 font-medium text-sm text-gray-600">
-                    <input
-                      type="checkbox"
-                      className="checked:bg-purple-500 checked:border-purple-500 size-4 bg-col"
-                      checked={selectedItems.includes(index)}
-                      onChange={() => handleSelectItem(index)}
-                    />
-                  </td>
-                  <td className="p-2 font-medium text-sm text-gray-600 max-w-52 whitespace-nowrap overflow-hidden text-ellipsis">
-                    {item.title}
-                  </td>
-                  <td className="p-2 font-medium text-sm text-gray-400">
-                    {item.description}
-                  </td>
-                  <td className="p-2 font-medium text-sm text-gray-400">
-                    {item.category}
-                  </td>
-
-                  <td className="p-2 flex font-medium text-center w-full text-sm justify-around h-16 items-center  text-gray-600 cursor-pointer">
-                    <RiDeleteBin6Line onClick={() => deletenews(item.id)} />
-                    <FiEdit2
-                      onClick={() => {
-                        setActiveComponent("Update Employeenews");
-                        setEmployeeData(item);
-                      }}
-                    />
-                  </td>
-                </tr>
-              ))
-            ) : (
+            {loading ? (
               <tr>
-                <td colSpan={5} className="text-center py-4 text-gray-500">
-                  No news available
+                <td colSpan="12" className="p-4">
+                  <div className="flex justify-center items-center h-40">
+                    <ThreeCircles height={60} width={60} color="#4B0082" />
+                  </div>
                 </td>
               </tr>
+            ) : (
+              news.length > 0 ? (
+                news.map((item, index) => (
+                  <tr key={index} className="border-b border-gray-200 h-16">
+                    <td className="p-2 px-4 font-medium text-sm text-gray-600">
+                      <input
+                        type="checkbox"
+                        className="checked:bg-purple-500 checked:border-purple-500 size-4 bg-col"
+                        checked={selectedItems.includes(index)}
+                        onChange={() => handleSelectItem(index)}
+                      />
+                    </td>
+                    <td className="p-2 font-medium text-sm text-gray-600 max-w-52 whitespace-nowrap overflow-hidden text-ellipsis">
+                      {item.title}
+                    </td>
+                    <td className="p-2 font-medium text-sm text-gray-400">
+                      {item.description}
+                    </td>
+                    <td className="p-2 font-medium text-sm text-gray-400">
+                      {item.category}
+                    </td>
+
+                    <td className="p-2 flex font-medium text-center w-full text-sm justify-around h-16 items-center  text-gray-600 cursor-pointer">
+                      <RiDeleteBin6Line onClick={() => deletenews(item.id)} />
+                      <FiEdit2
+                        onClick={() => {
+                          setActiveComponent("Update Employeenews");
+                          setEmployeeData(item);
+                        }}
+                      />
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={5} className="text-center py-4 text-gray-500">
+                    No news available
+                  </td>
+                </tr>
+              )
             )}
           </tbody>
         </table>
@@ -183,11 +202,10 @@ const EmployeeNews = ({ setActiveComponent, setEmployeeData }) => {
           {[...Array(totalPages).keys()].map((page) => (
             <button
               key={page}
-              className={`py-2 px-4 rounded-md shadow-md border ${
-                currentPage === page + 1
+              className={`py-2 px-4 rounded-md shadow-md border ${currentPage === page + 1
                   ? "bg-purple-700 text-white"
                   : "bg-white text-black"
-              }`}
+                }`}
               onClick={() => setCurrentPage(page + 1)}
             >
               {page + 1}
@@ -206,6 +224,7 @@ const EmployeeNews = ({ setActiveComponent, setEmployeeData }) => {
       </div>
     </div>
   );
+
 };
 
 export default EmployeeNews;

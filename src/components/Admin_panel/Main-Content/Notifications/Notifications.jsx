@@ -10,12 +10,13 @@ import Pagination from "../../Pagination/Pagination";
 import { MdDelete } from "react-icons/md";
 import axios from "axios";
 import * as XLSX from "xlsx";
+import { ThreeCircles } from "react-loader-spinner";
 
 const Notifications = () => {
   const [mailsData, setMailsData] = useState();
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
-
+  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const limit = 6;
   const totalPages = mailsData?.pagination?.totalPages;
@@ -40,6 +41,7 @@ const Notifications = () => {
   };
 
   const fetchMails = async (currentPage, limit) => {
+    setLoading(true);
     try {
       const res = await axios.get(`${import.meta.env.VITE_API_BACKEND_URL}/api/notification`, {
         params: { page: currentPage, limit },
@@ -49,6 +51,9 @@ const Notifications = () => {
       }
     } catch (error) {
       console.error("Error fetching mails:", error);
+    }
+    finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -80,7 +85,7 @@ const Notifications = () => {
       let allEmails = [];
       let currentPage = 1;
       let totalPages = 1;
-  
+
       // Fetch all emails from the API (iterate through all pages)
       while (currentPage <= totalPages) {
         const res = await axios.get(`${import.meta.env.VITE_API_BACKEND_URL}/api/notification`, {
@@ -89,7 +94,7 @@ const Notifications = () => {
             limit: 100, // Fetching a large batch of emails per request
           },
         });
-  
+
         if (res.status === 200) {
           allEmails = [...allEmails, ...res.data.emails];
           totalPages = res.data.pagination.totalPages; // Update total pages count
@@ -97,17 +102,17 @@ const Notifications = () => {
           console.error(`Unexpected response status: ${res.status}`);
           return;
         }
-  
+
         currentPage++;
       }
-  
+
       if (allEmails.length === 0) return;
-  
+
       // Convert data to an Excel format
       const worksheet = XLSX.utils.json_to_sheet(allEmails.map((email) => ({ "Email Address": email.address })));
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "Emails");
-  
+
       // Trigger file download
       XLSX.writeFile(workbook, "emails.xlsx");
     } catch (error) {
@@ -139,11 +144,11 @@ const Notifications = () => {
             </div> */}
               {mailsData?.emails?.length >= 2 && <MdDelete size={26} />}
               <button
-              onClick={handleDownloadEmails}
-              className="bg-white font-semibold border shadow-md text-black  hover:bg-purple-800 hover:text-white py-2 px-4 rounded-md"
-            >
-              Download All Emails
-            </button>
+                onClick={handleDownloadEmails}
+                className="bg-white font-semibold border shadow-md text-black  hover:bg-purple-800 hover:text-white py-2 px-4 rounded-md"
+              >
+                Download All Emails
+              </button>
               <div className="flex max-lg:flex-col gap-2">
                 {/* <button className="bg-white text-nowrap font-semibold border shadow-md text-black py-2 px-4 rounded-md mr-2">
                   Download all
@@ -171,7 +176,16 @@ const Notifications = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {mailsData &&
+                  {loading ? (
+                    <tr>
+                      <td colSpan="12" className="p-4">
+                        <div className="flex justify-center items-center h-40">
+                          <ThreeCircles height={60} width={60} color="#4B0082" />
+                        </div>
+                      </td>
+                    </tr>
+                  ) : (
+                    mailsData &&
                     mailsData?.emails?.slice(0, limit).map((contact, index) => (
                       <tr
                         key={index}
@@ -189,8 +203,8 @@ const Notifications = () => {
                           {contact?.address}
                         </td>
                       </tr>
-                    ))}
-                </tbody>
+                    ))
+                  )} </tbody>
               </table>
             </div>
             <div className="flex justify-between px-4 items-center mt-4">
@@ -205,11 +219,10 @@ const Notifications = () => {
                   <button
                     key={page}
                     onClick={() => setCurrentPage(page + 1)}
-                    className={`py-2 px-4 rounded-md shadow-md border ${
-                      currentPage === page + 1
+                    className={`py-2 px-4 rounded-md shadow-md border ${currentPage === page + 1
                         ? "bg-purple-700 text-white"
                         : " bg-white  text-black "
-                    }`}
+                      }`}
                   >
                     {page + 1}
                   </button>

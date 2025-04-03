@@ -5,6 +5,7 @@ import { LuUploadCloud } from "react-icons/lu";
 import { CiSearch } from "react-icons/ci";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import useLatestNews from "../../../Connection/LatestNewsapi";
+import { ThreeCircles } from "react-loader-spinner";
 
 const Resources = ({ setActiveComponent }) => {
   const [selectedItems, setSelectedItems] = useState([]);
@@ -12,12 +13,15 @@ const Resources = ({ setActiveComponent }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchterm] = useState("");
   const { dataList, fetchData, deleteNewsItem } = useLatestNews();
+    const [loading, setLoading] = useState(true);
 
   const totalPages = dataList?.pagination?.totalPages;
   const limit = 10;
 
   useEffect(() => {
-    fetchData(searchTerm, currentPage, limit);
+    setLoading(true);
+    fetchData(searchTerm, currentPage, limit)
+    .finally(() => setLoading(false)); // Hide loader after fetching data
   }, [currentPage, searchTerm]);
 
   const handleSelectAll = () => {
@@ -130,7 +134,16 @@ const Resources = ({ setActiveComponent }) => {
             </thead>
 
             <tbody>
-              {dataList?.posts?.slice(0, limit)?.map((item, index) => (
+               {loading ? (
+                            <tr>
+                              <td colSpan="12" className="p-4">
+                                <div className="flex justify-center items-center h-40">
+                                  <ThreeCircles height={60} width={60} color="#4B0082" />
+                                </div>
+                              </td>
+                            </tr>
+                          ) : (
+              dataList?.posts?.slice(0, limit)?.map((item, index) => (
                 <tr key={index} className="border-b border-gray-200 h-16">
                   <td className="p-2 px-4">
                     <input
@@ -167,7 +180,8 @@ const Resources = ({ setActiveComponent }) => {
                     </button>
                   </td>
                 </tr>
-              ))}
+              ))
+              )}
             </tbody>
           </table>
         </div>

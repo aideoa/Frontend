@@ -9,12 +9,14 @@ import { FiEdit2 } from "react-icons/fi";
 import { eventgetdata } from "../../../Connection/Api";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { ThreeCircles } from "react-loader-spinner";
 
 const Resources = ({ setActiveComponent, setEventsData }) => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [d, setd] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const getdata = async (searchTerm) => {
     try {
@@ -27,7 +29,9 @@ const Resources = ({ setActiveComponent, setEventsData }) => {
   };
 
   useEffect(() => {
-    getdata(searchTerm);
+    setLoading(true);
+    getdata(searchTerm)
+      .finally(() => setLoading(false)); // Hide loader after fetching data
   }, [searchTerm]);
 
   const handleDeleteEvent = async (id) => {
@@ -129,55 +133,65 @@ const Resources = ({ setActiveComponent, setEventsData }) => {
             </tr>
           </thead>
           <tbody>
-            {d.length > 0 ? (
-              d.map((item, index) => (
-                <tr
-                  key={index}
-                  className="border-b border-gray-200 h-16 cursor-pointer"
-                >
-                  <td className="p-2 px-4 font-medium text-sm text-gray-600">
-                    <input
-                      type="checkbox"
-                      className="checked:bg-purple-500 checked:border-purple-500 size-4 bg-col"
-                      checked={selectedItems.includes(index)}
-                      onChange={() => handleSelectItem(index)}
-                    />
-                  </td>
-                  <td className="p-2 font-medium text-sm text-gray-600 max-w-52 whitespace-nowrap overflow-hidden text-ellipsis">
-                    {item.title}
-                  </td>
-                  <td className="py-3 px-4 text-gray-500 text-sm">
-                    {item.date}-{item.time}
-                  </td>
-                  <td className="p-2 font-medium text-sm text-gray-400">
-                    {item.days}
-                  </td>
-                  <td className="p-2 font-medium text-sm text-gray-400">
-                    {item.location}
-                  </td>
-                  <td className="p-2 font-medium text-sm text-gray-400">
-                    {item.description.substring(0, 20)}...
-                  </td>
-                  <td className="p-2 flex font-medium text-center w-full text-sm justify-around h-16 items-center text-gray-600 cursor-pointer">
-                    <RiDeleteBin6Line
-                      onClick={() => handleDeleteEvent(item.id)}
-                    />
-                    <FiEdit2
-                      onClick={() => {
-                        setEventsData(item);
-                        setActiveComponent("Events Details");
-                      }}
-                    />
-                  </td>
-                </tr>
-              ))
-            ) : (
+            {loading ? (
               <tr>
-                <td colSpan={7} className="text-center py-4 text-gray-500">
-                  {/* Want of content: Customize this message if required */}
-                  No events available
+                <td colSpan="12" className="p-4">
+                  <div className="flex justify-center items-center h-40">
+                    <ThreeCircles height={60} width={60} color="#4B0082" />
+                  </div>
                 </td>
               </tr>
+            ) : (
+              d.length > 0 ? (
+                d.map((item, index) => (
+                  <tr
+                    key={index}
+                    className="border-b border-gray-200 h-16 cursor-pointer"
+                  >
+                    <td className="p-2 px-4 font-medium text-sm text-gray-600">
+                      <input
+                        type="checkbox"
+                        className="checked:bg-purple-500 checked:border-purple-500 size-4 bg-col"
+                        checked={selectedItems.includes(index)}
+                        onChange={() => handleSelectItem(index)}
+                      />
+                    </td>
+                    <td className="p-2 font-medium text-sm text-gray-600 max-w-52 whitespace-nowrap overflow-hidden text-ellipsis">
+                      {item.title}
+                    </td>
+                    <td className="py-3 px-4 text-gray-500 text-sm">
+                      {item.date}-{item.time}
+                    </td>
+                    <td className="p-2 font-medium text-sm text-gray-400">
+                      {item.days}
+                    </td>
+                    <td className="p-2 font-medium text-sm text-gray-400">
+                      {item.location}
+                    </td>
+                    <td className="p-2 font-medium text-sm text-gray-400">
+                      {item.description.substring(0, 20)}...
+                    </td>
+                    <td className="p-2 flex font-medium text-center w-full text-sm justify-around h-16 items-center text-gray-600 cursor-pointer">
+                      <RiDeleteBin6Line
+                        onClick={() => handleDeleteEvent(item.id)}
+                      />
+                      <FiEdit2
+                        onClick={() => {
+                          setEventsData(item);
+                          setActiveComponent("Events Details");
+                        }}
+                      />
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={7} className="text-center py-4 text-gray-500">
+                    {/* Want of content: Customize this message if required */}
+                    No events available
+                  </td>
+                </tr>
+              )
             )}
           </tbody>
         </table>

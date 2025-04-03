@@ -5,6 +5,7 @@ import { FaFileExcel } from "react-icons/fa"; // Import Excel icon
 import * as XLSX from "xlsx"; // Import xlsx library
 import { saveAs } from "file-saver"; // Import file-saver
 import useDonation from "../../../hooks/useDonation";
+import { ThreeCircles } from "react-loader-spinner";
 
 const Donation = () => {
   const [selectedItems, setSelectedItems] = useState([]);
@@ -15,11 +16,14 @@ const Donation = () => {
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
   const [isDownloading, setIsDownloading] = useState(false);
   const { dataList, fetchData, fetchAllDonations } = useDonation();
+  const [loading, setLoading] = useState(false);
   console.log(dataList);
   const limit = 10;
   
   useEffect(() => {
-    fetchData(searchTerm, currentPage, limit);
+    setLoading(true);
+    fetchData(searchTerm, currentPage, limit)
+    .finally(() => setLoading(false)); // Hide loader after fetching data
   }, [currentPage, searchTerm]);
 
   const totalPages = dataList?.pagination?.totalPages || 1;
@@ -244,7 +248,16 @@ const Donation = () => {
               </tr>
             </thead>
             <tbody>
-              {dataList &&
+              {loading ? (
+                              <tr>
+                                <td colSpan="12" className="p-4">
+                                  <div className="flex justify-center items-center h-40">
+                                    <ThreeCircles height={60} width={60} color="#4B0082" />
+                                  </div>
+                                </td>
+                              </tr>
+                            ) : (
+              dataList &&
                 dataList?.donations?.slice(0, limit)?.map((item, index) => (
                   <tr key={index} className="border-b border-gray-200 h-16">
                     <td className="p-2 px-4">
@@ -300,8 +313,8 @@ const Donation = () => {
                       </div>
                     )}
                   </tr>
-                ))}
-            </tbody>
+                ))
+               )} </tbody>
           </table>
         </div>
         <div className="flex justify-between px-4 items-center mt-4">

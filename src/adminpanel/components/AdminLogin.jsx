@@ -50,7 +50,7 @@ const AdminLogin = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-900 relative overflow-hidden p-4">
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-indigo-900 to-gray-900 opacity-95"></div>
       {loading ? (
-        <ThreeCircles height={80} width={80} color="#ffffff" />
+        <ThreeCircles height={100} width={100} color="#ffffff"/>
       ) : (
       <div className="relative z-10 bg-white/95 backdrop-blur-sm p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-md mx-auto">
         <div className="text-center mb-6 sm:mb-8">
