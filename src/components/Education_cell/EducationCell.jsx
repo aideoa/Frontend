@@ -11,7 +11,8 @@ import Slider from "../Cards/Slider/Slider";
 const EducationCell = () => {
   const data3 = [
     ["Shri Rajeev Kumar Tiwari", "National General Secretary", "./aideoapics/rktiwary.jpg"],
-    ["Shri Bikash Das", "National President", "./aideoapics/BIKASHFDAS.jpg"],
+    ["Shri Aanand Kumar Prajapati", "National President AIDEOA", "./aideoapics/AanandKumarPrajapati.jpg"],
+    // ["Shri Bikash Das", "National President", "./aideoapics/BIKASHFDAS.jpg"],
     // ["Shri Sunil Kumar", "Founder Board Member","./aideoapics/Sunil kumar.jpg"],
     // ["Shri Sovan Chatterjee ", "Founder Board Member","./aideoapics/sovan chatterjee.jpeg"],
     // ["Shri Niranjan Kumar Verma", "Founder Board Member","./aideoapics/NIRANJAN KUMAR VERMA.jpeg"],
